@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.2
+- Kamera-fliken ligger nu längst till höger, efter Inställningar.
+
 ## 0.1.1
 - Signerad med Alifs egen nyckel. Har du 0.1.0 installerad: avinstallera den en gång och installera 0.1.1; därefter fungerar uppdateringarna i appen.
 

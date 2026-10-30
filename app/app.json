@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -26,7 +26,7 @@
       "allowBackup": false,
       "permissions": ["CAMERA", "INTERNET", "REQUEST_INSTALL_PACKAGES"],
       "blockedPermissions": ["android.permission.RECORD_AUDIO"],
-      "versionCode": 101
+      "versionCode": 102
     },
     "web": { "favicon": "./assets/favicon.png" },
     "plugins": [

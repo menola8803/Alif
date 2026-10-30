@@ -205,7 +205,7 @@ function TabIcon({ tab, color }: { tab: TabName; color: string }) {
 
 export function TabBar({ tab, setTab }: { tab: TabName; setTab: (t: TabName) => void }) {
   const { theme, t } = useApp();
-  const items: [TabName, string][] = [['camera', t.tabCamera], ['text', t.tabText], ['quran', t.tabQuran], ['history', t.tabHistory], ['settings', t.tabSettings]];
+  const items: [TabName, string][] = [['text', t.tabText], ['quran', t.tabQuran], ['history', t.tabHistory], ['settings', t.tabSettings], ['camera', t.tabCamera]];
   return (
     <View style={{ flexDirection: 'row', gap: 2, backgroundColor: theme.card, borderColor: theme.line, borderWidth: 1, borderRadius: 22, padding: 5 }}>
       {items.map(([k, label]) => {
