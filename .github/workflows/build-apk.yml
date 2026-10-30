@@ -58,11 +58,8 @@ jobs:
           ALIF_KEYSTORE_PASSWORD: ${{ secrets.ALIF_KEYSTORE_PASSWORD }}
           ALIF_KEY_ALIAS: ${{ secrets.ALIF_KEY_ALIAS }}
           ALIF_KEY_PASSWORD: ${{ secrets.ALIF_KEY_PASSWORD }}
-          SECRET_NAMES: ${{ toJSON(secrets) }}
         run: |
           # Clear messages (never the values) when a secret does not fit the key file.
-          # Names (not values) of the secrets this repository has, to spot a misspelt or misplaced one.
-          echo "::notice::Secrets available to this build: $(echo "$SECRET_NAMES" | jq -r 'keys - ["github_token"] | join(", ")')"
           [ -n "$ALIF_KEYSTORE_PASSWORD" ] || { echo "::error::The secret ALIF_KEYSTORE_PASSWORD is empty."; exit 1; }
           [ -n "$ALIF_KEY_ALIAS" ] || { echo "::error::The secret ALIF_KEY_ALIAS is empty."; exit 1; }
           [ "$ALIF_KEY_PASSWORD" = "$ALIF_KEYSTORE_PASSWORD" ] || echo "::warning::ALIF_KEY_PASSWORD differs from ALIF_KEYSTORE_PASSWORD (for this key they must be the same)."
