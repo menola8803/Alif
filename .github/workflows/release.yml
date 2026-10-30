@@ -1,29 +1,48 @@
 name: Release
+# A release is made for a tag vX.Y.Z, and also automatically when the version in app/package.json changes on main
+# (the tag is then created here). The APK is built and attached as Alif-vX.Y.Z.apk and Alif.apk.
 on:
   push:
     tags: ['v*']
+    branches: [main]
+    paths: ['app/package.json', '.github/workflows/release.yml']
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      build: ${{ steps.tag.outputs.build }}
     steps:
       - uses: actions/checkout@v4
-      - name: Create release with zip
+      - name: Which version
+        id: tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then TAG="${GITHUB_REF_NAME}"; else TAG="v$(node -p "require('./app/package.json').version")"; fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          # On main: only when there is no release for this version yet.
+          if [ "${GITHUB_REF_TYPE}" != "tag" ] && gh release view "$TAG" >/dev/null 2>&1; then echo "build=false" >> "$GITHUB_OUTPUT"; else echo "build=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Create release with zip
+        if: steps.tag.outputs.build == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
           zip -qr "alif-${TAG}.zip" . -x '.git/*'
           # The release may already exist (e.g. created by hand with an APK): then only add the zip.
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "alif-${TAG}.zip" --clobber
           else
-            gh release create "$TAG" "alif-${TAG}.zip" --title "Alif ${TAG}" --generate-notes
+            gh release create "$TAG" "alif-${TAG}.zip" --target "${GITHUB_SHA}" --title "Alif ${TAG}" --generate-notes
           fi
 
   apk:
     needs: release
+    if: needs.release.outputs.build == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -80,7 +99,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${{ needs.release.outputs.tag }}"
           cp app/android/app/build/outputs/apk/release/app-release.apk "Alif-${TAG}.apk"
           # Fixed name: https://github.com/<owner>/<repo>/releases/latest/download/Alif.apk always points at the newest release.
           cp "Alif-${TAG}.apk" Alif.apk
