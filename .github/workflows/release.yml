@@ -24,8 +24,9 @@ jobs:
         run: |
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then TAG="${GITHUB_REF_NAME}"; else TAG="v$(node -p "require('./app/package.json').version")"; fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          # On main: only when there is no release for this version yet.
-          if [ "${GITHUB_REF_TYPE}" != "tag" ] && gh release view "$TAG" >/dev/null 2>&1; then echo "build=false" >> "$GITHUB_OUTPUT"; else echo "build=true" >> "$GITHUB_OUTPUT"; fi
+          # On main: only when this version has no release with an APK yet (a failed build is retried by the next push).
+          APKS=$(gh release view "$TAG" --json assets -q '[.assets[].name | select(endswith(".apk"))] | length' 2>/dev/null || echo 0)
+          if [ "${GITHUB_REF_TYPE}" != "tag" ] && [ "$APKS" != "0" ]; then echo "build=false" >> "$GITHUB_OUTPUT"; else echo "build=true" >> "$GITHUB_OUTPUT"; fi
       - name: Create release with zip
         if: steps.tag.outputs.build == 'true'
         env:
@@ -86,6 +87,20 @@ jobs:
           else
             echo "::warning::No signing key is stored: this release is signed with the public debug key."
           fi
+      - name: Check the signing key
+        if: env.ALIF_KEYSTORE_FILE != ''
+        env:
+          ALIF_KEYSTORE_PASSWORD: ${{ secrets.ALIF_KEYSTORE_PASSWORD }}
+          ALIF_KEY_ALIAS: ${{ secrets.ALIF_KEY_ALIAS }}
+          ALIF_KEY_PASSWORD: ${{ secrets.ALIF_KEY_PASSWORD }}
+        run: |
+          # Clear messages (never the values) when a secret does not fit the key file.
+          [ -n "$ALIF_KEYSTORE_PASSWORD" ] || { echo "::error::The secret ALIF_KEYSTORE_PASSWORD is empty."; exit 1; }
+          [ -n "$ALIF_KEY_ALIAS" ] || { echo "::error::The secret ALIF_KEY_ALIAS is empty."; exit 1; }
+          [ "$ALIF_KEY_PASSWORD" = "$ALIF_KEYSTORE_PASSWORD" ] || echo "::warning::ALIF_KEY_PASSWORD differs from ALIF_KEYSTORE_PASSWORD (for this key they must be the same)."
+          LIST=$(keytool -list -keystore "$ALIF_KEYSTORE_FILE" -storetype PKCS12 -storepass:env ALIF_KEYSTORE_PASSWORD 2>&1) || { echo "::error::The key file could not be opened: ALIF_KEYSTORE_BASE64 is not the whole line, or ALIF_KEYSTORE_PASSWORD is wrong. $(printf %s "$LIST" | grep -i 'keytool error' | head -1)"; exit 1; }
+          printf %s "$LIST" | grep -qi "^${ALIF_KEY_ALIAS}," || { echo "::error::The alias in ALIF_KEY_ALIAS was not found in the key file (it should be: alif)."; exit 1; }
+          echo "Signing key OK."
       - name: Build release APK
         working-directory: app/android
         env:
