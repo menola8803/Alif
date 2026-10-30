@@ -99,6 +99,15 @@ const sv = {
   awradSource: 'Ordning och antal enligt naqshbandi.org och Shaykh Nāẓims häfte. Översättningarna av Koranen hämtas från den valda översättningen.',
   loadingQuran: 'Koranens text laddas…',
   // engines
+  engInfoTitle: 'Bra att veta om valen',
+  engInfo: [
+    ['Claude', 'Bäst kvalitet: klassisk arabiska, vokaltecken, ord för ord, grammatik och kalligrafi. Kostar en liten summa per översättning på ditt eget Anthropic-konto. Texten och bilderna skickas till Anthropic för att behandlas.'],
+    ['På telefonen (ML Kit)', 'Gratis. Översättningen görs på telefonen och texten lämnar den inte. Språkmodellerna (ca 30 MB per språk) hämtas från Google en gång, sedan fungerar det utan nät. Tränad på modern arabiska: klassisk text och Koranens språk blir ofta förenklat eller fel, och det blir inga vokaltecken eller ord-för-ord.'],
+    ['MyMemory', 'Gratis utan nyckel, men texten skickas över internet till MyMemory (Translated, Italien). Använd den inte för privata texter. Har en daglig gräns och ojämn kvalitet.'],
+    ['Kameran på telefonen (Tesseract)', 'Gratis och utan nät; bilden lämnar inte telefonen. Läser tydlig tryckt text. Kalligrafi, dekor och små vokaltecken läses ofta fel – då ger Claude ett mycket bättre resultat.'],
+    ['Koranen och Daily Awrad', 'Påverkas inte av valet. Koranens text kommer alltid ur muṣḥaf, och känns en text igen som en koranvers visas den med den översättning du valt. En översättning av Koranen är alltid en tolkning av betydelsen.'],
+    ['Translitterationen', 'Görs alltid på telefonen enligt tajwīd-reglerna. Den blir exakt bara när texten har vokaltecken – annars visas konsonanter och långa vokaler, eller Claudes vokalisering om du använder Claude.'],
+  ] as [string, string][],
   engines: 'Översättning', enginesSub: 'Välj hur appen översätter och läser bilder',
   engineText: 'Översättning av text', engineOcr: 'Läsa text i bilder',
   engAuto: 'Automatiskt', engAutoSub: 'Claude om du har en nyckel, annars gratis på telefonen.',
@@ -211,6 +220,15 @@ const en: Strings = {
   awradSource: "Order and counts as in naqshbandi.org and Shaykh Nāẓim's booklet. Qurʾān translations come from the chosen translation.",
   loadingQuran: 'Loading the Qurʾān text…',
   // engines
+  engInfoTitle: 'Good to know about the choices',
+  engInfo: [
+    ['Claude', 'Best quality: Classical Arabic, vowel marks, word by word, grammar and calligraphy. Costs a small amount per translation on your own Anthropic account. The text and pictures are sent to Anthropic to be processed.'],
+    ['On the phone (ML Kit)', 'Free. The translation is done on the phone and the text does not leave it. The language models (about 30 MB per language) are fetched from Google once, after that it works offline. Trained on modern Arabic: classical text and the language of the Qurʾān often come out simplified or wrong, and there are no vowel marks or word by word.'],
+    ['MyMemory', 'Free without a key, but the text is sent over the internet to MyMemory (Translated, Italy). Do not use it for private texts. Has a daily limit and uneven quality.'],
+    ['Camera on the phone (Tesseract)', 'Free and offline; the picture does not leave the phone. Reads clear printed text. Calligraphy, decoration and small vowel marks are often misread – Claude gives a much better result there.'],
+    ['The Qurʾān and Daily Awrad', 'Not affected by the choice. The Qurʾān text always comes from the muṣḥaf, and a text recognized as a Qurʾān verse is shown with the translation you chose. A translation of the Qurʾān is always an interpretation of its meaning.'],
+    ['Transliteration', 'Always done on the phone by the rules of tajwīd. It is exact only when the text has vowel marks – otherwise consonants and long vowels are shown, or Claude\'s vocalization when you use Claude.'],
+  ] as [string, string][],
   engines: 'Translation', enginesSub: 'Choose how the app translates and reads pictures',
   engineText: 'Translating text', engineOcr: 'Reading text in pictures',
   engAuto: 'Automatic', engAutoSub: 'Claude if you have a key, otherwise free on the phone.',

@@ -1,6 +1,6 @@
 # Alif · أَلِف
 
-**Version 0.3.0** (se `CHANGELOG.md`)
+**Version 0.3.1** (se `CHANGELOG.md`)
 
 En app för att läsa klassisk arabiska och Koranen. Kameran läser arabisk text, appen vokaliserar den, translittererar den
 enligt reglerna för hur ord börjar och slutar (tajwīd) och översätter till svenska eller engelska. Skriver du svenska eller

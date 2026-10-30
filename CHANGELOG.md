@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1
+- Inställningar → Översättning förklarar vad varje val innebär: kvalitet, kostnad, om texten lämnar telefonen och vart den skickas, och vad som gäller för Koranen och translitterationen.
+
 ## 0.3.0
 - **Flera översättningsmotorer** (Inställningar → Översättning): Automatiskt, Claude (bäst, API-nyckel), På telefonen (Google ML Kit, gratis och utan nät när språkmodellen är nedladdad) och MyMemory (gratis online).
 - **Översättning i realtid** medan du skriver med de gratis motorerna.

@@ -148,6 +148,15 @@ export function AiScreen({ onBack }: { onBack: () => void }) {
     <Screen>
       <Header title={t.engines} sub={t.enginesSub} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 8 }} keyboardShouldPersistTaps="handled">
+        <Card style={{ borderColor: theme.primary }}>
+          <Label color={theme.primary}>{t.engInfoTitle}</Label>
+          {t.engInfo.map(([title, body]) => (
+            <View key={title} style={{ gap: 2 }}>
+              <Text style={{ fontSize: 15, fontWeight: '700', color: theme.ink }}>{title}</Text>
+              <Text style={{ fontSize: 13.5, lineHeight: 20, color: theme.muted }}>{body}</Text>
+            </View>
+          ))}
+        </Card>
         <Label>{t.engineText}</Label>
         <Choice title={t.engAuto} sub={`${t.engAutoSub} → ${engineLabel(t, textEngine({ engine: 'auto', apiKey }))}`} on={engine === 'auto'} onPress={() => setPrefs({ engine: 'auto' })} />
         <Choice title={t.engClaude} sub={t.engClaudeSub} on={engine === 'claude'} onPress={() => setPrefs({ engine: 'claude' })} />
