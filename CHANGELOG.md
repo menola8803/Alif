@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.1
+- Signerad med Alifs egen nyckel. Har du 0.1.0 installerad: avinstallera den en gång och installera 0.1.1; därefter fungerar uppdateringarna i appen.
+
 ## 0.1.0
 - Första versionen: kamera, skriv, Koranen, historik och inställningar.
 - Offline-translitteration av klassisk arabiska enligt tajwīd (waṣl, sol-/månbokstäver, nūn-regler, waqf, uthmaniska tecken).
