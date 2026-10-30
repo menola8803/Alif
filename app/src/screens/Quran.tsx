@@ -8,19 +8,19 @@ import { useQuran } from '../library';
 import { Card, H1, SmallBtn, Sub, Text, TextInput } from '../ui';
 
 /** Eight-pointed star with a number in it (verse and sūra numbers). */
-export function StarNum({ n, size = 40 }: { n: number; size?: number }) {
+export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number; hideNumber?: boolean }) {
   const { theme } = useApp();
   const r = size / 2 - 1, c = size / 2, s = r / Math.SQRT2;
   const d = `M${c - s} ${c - s}H${c + s}V${c + s}H${c - s}ZM${c} ${c - r}L${c + r} ${c}L${c} ${c + r}L${c - r} ${c}Z`;
   return (
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
       <Svg width={size} height={size} style={{ position: 'absolute' }}><Path d={d} stroke={theme.primary} strokeOpacity={0.7} strokeWidth={1.2} fill="none" /></Svg>
-      <Text style={{ fontSize: size > 34 ? 12 : 10, fontWeight: '700', color: theme.ink }}>{n}</Text>
+      {hideNumber ? <View style={{ width: 8, height: 8, backgroundColor: theme.primary, transform: [{ rotate: '45deg' }] }} /> : <Text style={{ fontSize: size > 34 ? 12 : 10, fontWeight: '700', color: theme.ink }}>{n}</Text>}
     </View>
   );
 }
 
-export default function Quran({ open }: { open: (n: number) => void }) {
+export default function Quran({ open, onAwrad }: { open: (n: number) => void; onAwrad: () => void }) {
   const { t, theme } = useApp();
   const lib = useQuran();
   const [q, setQ] = useState('');
@@ -33,6 +33,15 @@ export default function Quran({ open }: { open: (n: number) => void }) {
   return (
     <View style={{ flex: 1, gap: 12 }}>
       <View><H1>{t.quranTitle}</H1><Sub>{t.quranSub}</Sub></View>
+      <Pressable accessibilityRole="button" onPress={onAwrad}
+        style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, borderRadius: 20, borderWidth: 1, borderColor: theme.primary, backgroundColor: theme.chip, opacity: pressed ? 0.85 : 1 })}>
+        <StarNum n={0} hideNumber />
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{t.awrad}</Text>
+          <Text style={{ fontSize: 13, color: theme.muted }}>{t.awradSub}</Text>
+        </View>
+        <Text style={{ fontFamily: theme.fonts.arabic, fontSize: 18, lineHeight: 32, color: theme.arabicInk }}>أَوْرَاد</Text>
+      </Pressable>
       <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 }}>
         {lib.status === 'loading' ? <ActivityIndicator color={theme.primary} /> : <View style={{ width: 10, height: 10, backgroundColor: lib.status === 'ready' ? theme.good : theme.danger, transform: [{ rotate: '45deg' }] }} />}
         <View style={{ flex: 1 }}>

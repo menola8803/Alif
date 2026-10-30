@@ -16,14 +16,17 @@ import TextScreen from './src/screens/TextScreen';
 import Quran from './src/screens/Quran';
 import Surah from './src/screens/Surah';
 import History, { EntryScreen } from './src/screens/History';
+import Awrad, { ReminderScreen } from './src/screens/Awrad';
+import { ReminderManager } from './src/reminder';
 import Settings, { AboutScreen, AiScreen, EditionScreen, LanguageScreen, ThemeScreen, TranslitScreen, UpdateScreen } from './src/screens/Settings';
 
-function Content() {
+function Content({ splashDone }: { splashDone: boolean }) {
   const [stack, setStack] = useState<Route[]>([{ name: 'tabs' }]);
   const [tab, setTab] = useState<TabName>('camera');
   const push = useCallback((r: Route) => setStack(s => [...s, r]), []);
   const pop = useCallback(() => setStack(s => (s.length > 1 ? s.slice(0, -1) : s)), []);
   const openSurah = useCallback((n: number, ayah?: number) => setStack([{ name: 'tabs' }, { name: 'surah', n, ayah }]), []);
+  const openAwrad = useCallback(() => setStack([{ name: 'tabs' }, { name: 'awrad' }]), []);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -35,6 +38,9 @@ function Content() {
   }, [stack.length, pop, tab]);
 
   const r = stack[stack.length - 1];
+  const reminder = <ReminderManager openAwrad={openAwrad} active={splashDone && r.name !== 'awrad'} />;
+  return <>{reminder}{screen()}</>;
+  function screen() {
   switch (r.name) {
     case 'surah': return <Surah key={`${r.n}`} n={r.n} ayah={r.ayah} onBack={pop} go={push} />;
     case 'entry': return <EntryScreen id={r.id} onBack={pop} openSurah={openSurah} />;
@@ -45,19 +51,22 @@ function Content() {
     case 'ai': return <AiScreen onBack={pop} />;
     case 'update': return <UpdateScreen onBack={pop} />;
     case 'about': return <AboutScreen onBack={pop} />;
+    case 'awrad': return <Awrad onBack={pop} onReminder={() => push({ name: 'reminder' })} />;
+    case 'reminder': return <ReminderScreen onBack={pop} />;
     default:
       return (
         <Screen>
           <View style={{ flex: 1 }}>
             {tab === 'camera' && <CameraScreen go={push} openSurah={openSurah} />}
             {tab === 'text' && <TextScreen go={push} openSurah={openSurah} />}
-            {tab === 'quran' && <Quran open={n => push({ name: 'surah', n })} />}
+            {tab === 'quran' && <Quran open={n => push({ name: 'surah', n })} onAwrad={() => push({ name: 'awrad' })} />}
             {tab === 'history' && <History open={id => push({ name: 'entry', id })} />}
             {tab === 'settings' && <Settings go={push} />}
           </View>
           <TabBar tab={tab} setTab={setTab} />
         </Screen>
       );
+  }
   }
 }
 
@@ -74,7 +83,7 @@ function Root() {
   return (
     <View style={{ flex: 1, backgroundColor: theme.bg }}>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
-      <Content />
+      <Content splashDone={splashDone} />
       {!splashDone && <Splash onDone={() => setSplashDone(true)} />}
     </View>
   );

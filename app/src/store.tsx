@@ -7,6 +7,7 @@ import { dict, Lang, Strings } from './i18n';
 import { Mode, Scheme } from './core/translit';
 import { DEFAULT_MODEL, Result } from './core/engine';
 import { SurahText } from './core/quran';
+import { Level } from './core/awrad';
 
 export type EntryKind = 'camera' | 'text' | 'quran';
 export type Entry = { id: string; at: number; kind: EntryKind; result: Result };
@@ -21,6 +22,11 @@ type Saved = {
   arabicSize: number;                  // font size for Arabic text
   showTranslit: boolean; showTranslation: boolean; // in the Qur'an reader
   history: Entry[];
+  // Daily Awrad
+  awradLevel: Level;
+  reminderOn: boolean; reminderHour: number; reminderMinute: number; // local time on the phone (default 21:00 = 9:00 PM)
+  awradDay: string; awradCounts: Record<string, number>; // today's progress
+  popupDay: string;                    // the day the reminder popup was last closed
 };
 
 const KEY = 'alif.state.v1';
@@ -32,6 +38,7 @@ const phoneLang = (): Lang => { try { return getLocales()[0]?.languageCode === '
 const empty = (): Saved => ({
   themeName: 'dark', lang: phoneLang(), scheme: 'academic', mode: 'tajwid', model: DEFAULT_MODEL, editions: {},
   arabicSize: 30, showTranslit: true, showTranslation: true, history: [],
+  awradLevel: 'mubtadi', reminderOn: true, reminderHour: 21, reminderMinute: 0, awradDay: '', awradCounts: {}, popupDay: '',
 });
 
 type Prefs = Omit<Saved, 'history'>;

@@ -12,9 +12,11 @@ import { isNewer, latestRelease, Release } from '../update';
 import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview } from '../ui';
 import { themes, ThemeName } from '../theme';
 import { Pressable } from 'react-native';
+import { formatTime } from '../core/awrad';
+import { uses12h } from '../reminder';
 
 export default function Settings({ go }: { go: (r: Route) => void }) {
-  const { t, theme, lang, scheme, mode, model, apiKey, editions } = useApp();
+  const { t, theme, lang, scheme, mode, model, apiKey, editions, reminderOn, reminderHour, reminderMinute } = useApp();
   const version = Constants.expoConfig?.version ?? '0.0.0';
   return (
     <ScrollView contentContainerStyle={{ gap: 14, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
@@ -22,6 +24,7 @@ export default function Settings({ go }: { go: (r: Route) => void }) {
       <Card>
         <Row title={t.language} sub={t.languageSub} right={lang === 'sv' ? t.swedish : t.english} onPress={() => go({ name: 'language' })} />
         <Row title={t.translitSet} sub={t.translitSetSub} right={`${mode === 'tajwid' ? t.modeTajwid : t.modeWords} · ${scheme === 'academic' ? t.schemeAcademic : t.schemeSimple}`} onPress={() => go({ name: 'translit' })} />
+        <Row title={`${t.awrad} · ${t.reminder}`} sub={t.reminderSub} right={reminderOn ? formatTime(reminderHour, reminderMinute, uses12h()) : t.off} onPress={() => go({ name: 'reminder' })} />
         <Row title={t.quranEdition} sub={t.quranEditionSub} right={pickEdition(lang, editions[lang])} onPress={() => go({ name: 'edition' })} />
         <Row title={t.ai} sub={t.aiSub} right={apiKey ? MODELS.find(m => m.id === model)?.label ?? model : t.keyMissing} onPress={() => go({ name: 'ai' })} />
         <Row title={t.theme} sub={t.themeSub} right={theme.name === 'dark' ? t.themeDark : t.themeBeige} onPress={() => go({ name: 'theme' })} />

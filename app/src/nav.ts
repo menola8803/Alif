@@ -8,4 +8,6 @@ export type Route =
   | { name: 'edition' }
   | { name: 'ai' }
   | { name: 'update' }
-  | { name: 'about' };
+  | { name: 'about' }
+  | { name: 'awrad' }
+  | { name: 'reminder' };

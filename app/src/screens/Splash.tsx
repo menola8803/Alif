@@ -90,10 +90,9 @@ function starPath(cx: number, cy: number, r: number) {
 // ---- Background: faint khātam stars joined by thin lines ----
 
 const STARS: [number, number, number, number][] = [
-  [28, 40, 9, 0], [362, 34, 8, 900], [372, 196, 7, 1500], [22, 214, 7, 600],
-  [30, 640, 7, 1200], [366, 650, 8, 300], [190, 830, 9, 1800], [20, 820, 7, 2100], [370, 826, 7, 700],
+  [22, 214, 7, 600], [372, 196, 7, 1500], [24, 420, 6, 300], [366, 440, 6, 1100], [28, 612, 7, 1200], [364, 620, 7, 300],
 ];
-const EDGES = 'M28 40L190 22L362 34M28 40L22 214M362 34L372 196M30 640L20 820L190 830L370 826L366 650';
+const EDGES = 'M22 214L24 420L28 612M372 196L366 440L364 620';
 
 function Star({ x, y, r, delay, reduce }: { x: number; y: number; r: number; delay: number; reduce: boolean }) {
   const v = useLoop('pingpong', 3600, delay, reduce);
@@ -294,16 +293,94 @@ function Connectors({ reduce }: { reduce: boolean }) {
   );
 }
 
-// "Read!" — the first word that was revealed — in Arabic, transliterated and translated.
-function Iqra({ word, reduce }: { word: string; reduce: boolean }) {
-  const v = useEntrance(1600, 800, reduce);
+// ---- Sufi art: hanging lanterns, a pointed arch (miḥrāb) around the mark, a mosque on the horizon ----
+
+// A lantern hanging on a chain from the top edge, swinging gently around its hook. The view is twice the hanging length
+// high so that its center (the rotation point) is the hook.
+function Lantern({ x, len, delay, reduce }: { x: number; len: number; delay: number; reduce: boolean }) {
+  const enter = useEntrance(200 + delay / 2, 900, reduce);
+  const swing = useLoop('pingpong', 4600, delay, reduce);
+  const glow = useLoop('pingpong', 2400, delay + 300, reduce);
+  const H = len + 64;
   return (
-    <Animated.View style={{ position: 'absolute', left: 0, top: 660, width: W0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, opacity: v }}>
-      <Text allowFontScaling={false} style={{ fontFamily: ARABIC, fontSize: 20, lineHeight: 34, color: C.gold }}>ٱقْرَأْ</Text>
-      <View style={{ width: 4, height: 4, backgroundColor: C.dim, transform: [{ rotate: '45deg' }] }} />
-      <Text allowFontScaling={false} style={{ fontFamily: SANS_REG, fontSize: 12, color: C.mint }}>iqraʾ</Text>
-      <View style={{ width: 4, height: 4, backgroundColor: C.dim, transform: [{ rotate: '45deg' }] }} />
-      <Spaced text={word} spacing={2} style={{ fontFamily: SANS, fontSize: 10, color: C.dim }} />
+    <Animated.View pointerEvents="none" style={{
+      position: 'absolute', left: x - 20, top: -H, width: 40, height: H * 2, opacity: enter,
+      transform: [{ rotate: swing.interpolate({ inputRange: [0, 1], outputRange: ['-3.5deg', '3.5deg'] }) }],
+    }}>
+      <View style={{ position: 'absolute', left: 19.5, top: H, width: 1, height: len, backgroundColor: C.goldDim }} />
+      <Animated.View style={{ position: 'absolute', left: 4, top: H + len + 12, width: 32, height: 34, borderRadius: 16, backgroundColor: C.gold, opacity: lerp(glow, 0.08, 0.22) }} />
+      <Svg width={40} height={64} style={{ position: 'absolute', left: 0, top: H + len }}>
+        <G fill="none" stroke={C.gold} strokeWidth={1.4} strokeLinejoin="round">
+          <Path d="M20 0V4M14 10L20 4L26 10Z" />
+          <Path d="M10 10H30V14H10Z" />
+          <Path d="M11 14H29V40Q29 48 20 52Q11 48 11 40Z" fill={C.panel} />
+          <Path d="M20 52V58" />
+        </G>
+        <Path d="M15 19H25V37Q20 43 15 37Z" fill={C.goldPale} fillOpacity={0.85} />
+        <Path d="M20 19V40" stroke={C.goldDim} strokeWidth={1} />
+        <Circle cx={20} cy={60} r={2} fill={C.gold} />
+      </Svg>
+    </Animated.View>
+  );
+}
+
+// Pointed (ogee) arch around the mark and the name, drawn in two thin lines like a carved miḥrāb.
+function Arch({ reduce }: { reduce: boolean }) {
+  const v = useEntrance(300, 1100, reduce);
+  return (
+    <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity: v }]}>
+      <Svg width={W0} height={H0}>
+        <Path d="M64 508V262Q64 214 112 196Q170 176 195 136Q220 176 278 196Q326 214 326 262V508" stroke={C.goldDim} strokeWidth={1.2} fill="none" />
+        <Path d="M74 508V266Q74 224 118 208Q172 190 195 154Q218 190 272 208Q316 224 316 266V508" stroke={C.goldDim} strokeOpacity={0.45} strokeWidth={0.8} fill="none" />
+        <Path d={starPath(195, 124, 7)} stroke={C.gold} strokeWidth={1} fill="none" />
+        <Path d="M56 508H334" stroke={C.goldDim} strokeOpacity={0.5} strokeWidth={0.8} />
+      </Svg>
+    </Animated.View>
+  );
+}
+
+// Mosque silhouette on the horizon: a large dome, two small domes and four minarets with crescents.
+function Mosque({ reduce }: { reduce: boolean }) {
+  const v = useEntrance(900, 1000, reduce);
+  const crescent = (cx: number, cy: number, r: number) => `M${cx + r * 0.2} ${cy - r}A${r} ${r} 0 1 0 ${cx + r * 0.2} ${cy + r}A${r * 0.78} ${r * 0.78} 0 1 1 ${cx + r * 0.2} ${cy - r}Z`;
+  const minaret = (x: number, top: number, w: number) =>
+    `M${x - w / 2} 110V${top}H${x + w / 2}V110Z M${x - w / 2 - 2} ${top + 22}H${x + w / 2 + 2}V${top + 25}H${x - w / 2 - 2}Z M${x - w / 2} ${top}L${x} ${top - 13}L${x + w / 2} ${top}Z`;
+  const windows = [118, 146, 174, 216, 244, 272].map(x => `M${x - 5} 110V100Q${x} 92 ${x + 5} 100V110Z`).join('');
+  return (
+    <Animated.View pointerEvents="none" style={{ position: 'absolute', left: 0, top: 734, width: W0, height: 110, opacity: v, transform: [{ translateY: lerp(v, 12, 0) }] }}>
+      <Svg width={W0} height={110}>
+        <G fill={C.panel} stroke={C.goldDim} strokeWidth={1}>
+          <Path d={minaret(62, 26, 10)} />
+          <Path d={minaret(328, 26, 10)} />
+          <Path d={minaret(88, 50, 8)} />
+          <Path d={minaret(302, 50, 8)} />
+          <Path d="M98 110V72H292V110Z" />
+          <Path d="M104 80Q104 58 125 55Q146 58 146 80Z" />
+          <Path d="M244 80Q244 58 265 55Q286 58 286 80Z" />
+          <Path d="M156 72V62H234V72Z" />
+          <Path d="M150 62C150 38 172 32 195 14C218 32 240 38 240 62Z" />
+        </G>
+        <Path d={windows} fill={C.bg} stroke={C.goldDim} strokeWidth={0.8} />
+        <Path d="M195 16V6M62 13V4M328 13V4" stroke={C.gold} strokeWidth={1.2} />
+        <G fill={C.gold}>
+          <Path d={crescent(195, 1, 4)} />
+          <Path d={crescent(62, 0, 3)} />
+          <Path d={crescent(328, 0, 3)} />
+        </G>
+        <Path d="M0 110H390" stroke={C.goldDim} strokeWidth={1} />
+      </Svg>
+    </Animated.View>
+  );
+}
+
+// Ṣalawāt upon the Prophet ﷺ in Arabic, transliterated, and its meaning.
+function Salawat({ meaning, reduce }: { meaning: string; reduce: boolean }) {
+  const v = useEntrance(1500, 900, reduce);
+  return (
+    <Animated.View style={{ position: 'absolute', left: 0, top: 646, width: W0, alignItems: 'center', opacity: v, transform: [{ translateY: lerp(v, 8, 0) }] }}>
+      <Text allowFontScaling={false} style={{ fontFamily: ARABIC, fontSize: 21, lineHeight: 38, color: C.gold, writingDirection: 'rtl' }}>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ ﷺ</Text>
+      <Text allowFontScaling={false} style={{ fontFamily: SANS_REG, fontSize: 11, color: C.mint, marginTop: -2 }}>allāhumma ṣalli ʿalā sayyidinā muḥammad</Text>
+      <Text allowFontScaling={false} style={{ fontFamily: SANS_REG, fontSize: 9.5, color: C.dim, letterSpacing: 1.2, marginTop: 2 }}>{meaning.toUpperCase()}</Text>
     </Animated.View>
   );
 }
@@ -339,14 +416,9 @@ export default function Splash({ onDone }: { onDone: () => void }) {
   // English and Swedish meanings are mixed on purpose: the app works in both.
   const sv = lang === 'sv';
   const words: FW[] = [
-    { ar: 'عِلْم', tr: 'ʿilm', gloss: sv ? 'kunskap' : 'knowledge', x: 74, y: 52, delay: 0 },
-    { ar: 'كِتَاب', tr: 'kitāb', gloss: sv ? 'book' : 'bok', x: 196, y: 24, delay: 700 },
-    { ar: 'نُور', tr: 'nūr', gloss: sv ? 'ljus' : 'light', x: 316, y: 66, delay: 1400 },
-    { ar: 'قَلَم', tr: 'qalam', gloss: sv ? 'pen' : 'penna', x: 92, y: 132, delay: 2100 },
-    { ar: 'حِكْمَة', tr: 'ḥikmah', gloss: sv ? 'visdom' : 'wisdom', x: 298, y: 140, delay: 500 },
-    { ar: 'سَلَام', tr: 'salām', gloss: sv ? 'peace' : 'fred', x: 72, y: 708, delay: 1100 },
-    { ar: 'لُغَة', tr: 'lughah', gloss: sv ? 'språk' : 'language', x: 196, y: 744, delay: 1800 },
-    { ar: 'قَمَر', tr: 'qamar', gloss: sv ? 'moon' : 'måne', x: 318, y: 704, delay: 300 },
+    { ar: 'عِلْم', tr: 'ʿilm', gloss: sv ? 'kunskap' : 'knowledge', x: 112, y: 26, delay: 0 },
+    { ar: 'نُور', tr: 'nūr', gloss: sv ? 'light' : 'ljus', x: 196, y: 34, delay: 900 },
+    { ar: 'حِكْمَة', tr: 'ḥikmah', gloss: sv ? 'visdom' : 'wisdom', x: 280, y: 26, delay: 1600 },
   ];
 
   const s = Math.min(W / W0, H / H0, 1.3);
@@ -375,6 +447,10 @@ export default function Splash({ onDone }: { onDone: () => void }) {
         {reduce !== null && (
           <View style={{ position: 'absolute', left: (W - W0) / 2, top: (H - H0) / 2, width: W0, height: H0, transform: [{ scale: s }] }}>
             <Pattern reduce={r} />
+            <Arch reduce={r} />
+            <Lantern x={38} len={64} delay={0} reduce={r} />
+            <Lantern x={352} len={84} delay={700} reduce={r} />
+            <Mosque reduce={r} />
             {words.map((w, i) => <Floating key={i} w={w} reduce={r} />)}
             <Ripple delay={0} color={C.mint} reduce={r} />
             <Ripple delay={1700} color={C.gold} reduce={r} />
@@ -384,7 +460,7 @@ export default function Splash({ onDone }: { onDone: () => void }) {
             <Feature x={51} label={t.splashCamera} enter={850} glow={1300} reduce={r}><CameraIcon reduce={r} /></Feature>
             <Feature x={159} label={t.splashTranslit} enter={1000} glow={2000} reduce={r}><TranslitIcon reduce={r} /></Feature>
             <Feature x={267} label={t.splashTranslate} enter={1150} glow={2700} reduce={r}><TranslateIcon reduce={r} /></Feature>
-            <Iqra word={sv ? 'LÄS' : 'READ'} reduce={r} />
+            <Salawat meaning={t.salawatMeaning} reduce={r} />
           </View>
         )}
       </Pressable>

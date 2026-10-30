@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -24,17 +24,56 @@
       "predictiveBackGestureEnabled": false,
       "package": "se.sncab.alif",
       "allowBackup": false,
-      "permissions": ["CAMERA", "INTERNET", "REQUEST_INSTALL_PACKAGES"],
-      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
-      "versionCode": 102
+      "permissions": [
+        "CAMERA",
+        "INTERNET",
+        "REQUEST_INSTALL_PACKAGES",
+        "POST_NOTIFICATIONS",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "versionCode": 200
     },
-    "web": { "favicon": "./assets/favicon.png" },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
     "plugins": [
-      ["expo-splash-screen", { "backgroundColor": "#0B1416", "image": "./assets/splash-blank.png", "imageWidth": 200, "resizeMode": "contain" }],
-      ["expo-camera", { "cameraPermission": "Alif uses the camera to read Arabic text.", "recordAudioAndroid": false }],
-      ["expo-image-picker", { "photosPermission": "Alif reads Arabic text in pictures you choose.", "microphonePermission": false }],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B1416",
+          "image": "./assets/splash-blank.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Alif uses the camera to read Arabic text.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Alif reads Arabic text in pictures you choose.",
+          "microphonePermission": false
+        }
+      ],
       "expo-secure-store",
-      "./plugins/withReleaseSigning"
+      "./plugins/withReleaseSigning",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#E8B04A",
+          "defaultChannel": "awrad"
+        }
+      ]
     ],
     "scheme": "alif"
   }

@@ -1,6 +1,6 @@
 # Alif · أَلِف
 
-**Version 0.1.2** (se `CHANGELOG.md`)
+**Version 0.2.0** (se `CHANGELOG.md`)
 
 En app för att läsa klassisk arabiska och Koranen. Kameran läser arabisk text, appen vokaliserar den, translittererar den
 enligt reglerna för hur ord börjar och slutar (tajwīd) och översätter till svenska eller engelska. Skriver du svenska eller
@@ -16,12 +16,15 @@ engelska får du det på arabiska.
   översättning till svenska eller engelska efter språket i Inställningar. Den arabiska texten byggs in i APK:n
   (`scripts/fetch-quran.js` körs i Actions); översättningen hämtas en gång och sparas, så hela Koranen kan läsas utan nät.
   Byter man språk eller översättning hämtas den nya. Varje vers kan förklaras ord för ord.
+- **Daily Awrad (naqshbandi):** dagens awrād i rätt ordning med arabiska, translitteration enligt tajwīd och betydelse,
+  tre nivåer, räknare och påminnelse varje dag på vald tid (standard 21:00 / 9:00 PM) på låsskärmen och i appen.
 - **Historik:** allt du läst och översatt sparas på telefonen.
 - **Inställningar:** språk (svenska eller engelska – både appens språk och översättningsspråket), translitteration
   (uttal enligt tajwīd eller ord för ord, akademisk eller enkel stavning), storlek på arabisk text, koranöversättning,
   AI-nyckel och modell, tema (Mörk/Beige), **uppdatering från GitHub Releases** (laddar ner och installerar APK) och Om.
-- **Startbild:** animerad, mörk, med en gyllene alif i en åttauddig stjärna (khātam), svävande arabiska ord med
-  translitteration och engelsk/svensk betydelse, och de tre funktionerna Kamera · Translitterera · Översätt.
+- **Startbild:** animerad, mörk, med en gyllene alif i en åttauddig stjärna (khātam) under en spetsbåge, hängande lyktor,
+  en moské vid horisonten, svävande arabiska ord med translitteration och engelsk/svensk betydelse, de tre funktionerna
+  Kamera · Translitterera · Översätt och ṣalawāt över Profeten ﷺ.
 
 ## Translitterationen (offline)
 `app/src/core/translit.ts` läser vokaliserad text som sammanhängande tal:

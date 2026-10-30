@@ -2,7 +2,7 @@ export type Lang = 'sv' | 'en';
 
 const sv = {
   tagline: 'LÄS · FÖRSTÅ · ÖVERSÄTT',
-  splashCamera: 'KAMERA', splashTranslit: 'TRANSLITTERERA', splashTranslate: 'ÖVERSÄTT',
+  salawatMeaning: 'O Gud, välsigna vår mästare Muhammad', splashCamera: 'KAMERA', splashTranslit: 'TRANSLITTERERA', splashTranslate: 'ÖVERSÄTT',
   tabCamera: 'Kamera', tabText: 'Skriv', tabQuran: 'Koranen', tabHistory: 'Historik', tabSettings: 'Inställningar',
 
   // camera
@@ -83,13 +83,28 @@ const sv = {
   aboutBody: 'Alif hjälper dig att läsa klassisk arabiska och Koranen: kameran läser texten, appen vokaliserar, translittererar enligt tajwīd och översätter till svenska eller engelska. Du kan också skriva svenska eller engelska och få det på arabiska.',
   aboutQuran: 'Koranens arabiska text är Tanzils uthmaniska text (tanzil.net). Översättningarna hämtas från AlQuran Cloud (alquran.cloud) och sparas på telefonen. En översättning av Koranen är alltid en tolkning av betydelsen.',
   aboutAi: 'Översättningar från Claude kan innehålla fel. Kontrollera viktiga texter mot en lärd källa.',
+  // Daily Awrad
+  awrad: 'Daily Awrad', awradSub: 'De dagliga awrād i den naqshbandiska ṭarīqan',
+  awradIntro: 'Läses en gång var 24:e timme, gärna på kvällen. Tryck på en rad för att räkna. Följ de antal din shaykh ger dig.',
+  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Murīd',
+  levelHelp: 'Nivå: nybörjare (mubtadiʾ), förberedd (mustaʿidd) eller murīd.',
+  awradProgress: 'Idag', awradDone: 'Dagens awrād är klara. Allāhumma taqabbal.', awradReset: 'Börja om idag', awradResetConfirm: 'Räkningen för idag nollställs.',
+  tapToCount: 'Tryck för att räkna', countDone: 'Klar', optional: 'Valfritt', mtfNote: 'Måndag, torsdag och fredag: fler ṣalawāt.',
+  reminder: 'Påminnelse', reminderSub: 'Varje dag på din tid, även på låsskärmen', reminderOn: 'Påminn mig', reminderTime: 'Tid',
+  reminderZone: 'Tiden följer telefonens tidszon', reminderHelp: 'En notis visas på låsskärmen vid den här tiden varje dag. Öppnar du appen efter tiden och dagens awrād inte är klara visas en påminnelse i appen.',
+  reminderDenied: 'Notiser är avstängda för Alif. Slå på dem i telefonens inställningar.', reminderDefault: 'Standard 21:00 (9:00 PM)',
+  awradNotifTitle: 'Daily Awrad', awradNotifBody: 'Dags för dagens awrād. ﷺ اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ',
+  awradPopupTitle: 'Dags för Daily Awrad', awradPopupBody: 'Ta en stund för shahāda, istighfār, Koranen, ṣalawāt och dhikr innan dagen tar slut.',
+  awradOpen: 'Öppna Daily Awrad', awradLater: 'Senare',
+  awradSource: 'Ordning och antal enligt naqshbandi.org och Shaykh Nāẓims häfte. Översättningarna av Koranen hämtas från den valda översättningen.',
+  loadingQuran: 'Koranens text laddas…',
   back: 'Tillbaka', on: 'På', off: 'Av',
 };
 export type Strings = typeof sv;
 
 const en: Strings = {
   tagline: 'READ · UNDERSTAND · TRANSLATE',
-  splashCamera: 'CAMERA', splashTranslit: 'TRANSLITERATE', splashTranslate: 'TRANSLATE',
+  salawatMeaning: 'O God, bless our master Muhammad', splashCamera: 'CAMERA', splashTranslit: 'TRANSLITERATE', splashTranslate: 'TRANSLATE',
   tabCamera: 'Camera', tabText: 'Write', tabQuran: 'Qurʾān', tabHistory: 'History', tabSettings: 'Settings',
 
   cameraTitle: 'Read with the camera', cameraSub: 'Point at Arabic text and take a photo',
@@ -163,6 +178,21 @@ const en: Strings = {
   aboutBody: 'Alif helps you read Classical Arabic and the Qurʾān: the camera reads the text, the app vocalizes it, transliterates it by the rules of tajwīd and translates it into Swedish or English. You can also write Swedish or English and get it in Arabic.',
   aboutQuran: 'The Arabic text of the Qurʾān is the Tanzil Uthmani text (tanzil.net). Translations come from AlQuran Cloud (alquran.cloud) and are kept on the phone. A translation of the Qurʾān is always an interpretation of its meaning.',
   aboutAi: 'Translations by Claude can contain mistakes. Check important texts against a learned source.',
+  // Daily Awrad
+  awrad: 'Daily Awrad', awradSub: 'The daily awrād of the Naqshbandi ṭarīqa',
+  awradIntro: 'Recited once every 24 hours, preferably in the evening. Tap a row to count. Follow the counts your shaykh gives you.',
+  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Murīd',
+  levelHelp: 'Level: beginner (mubtadiʾ), prepared (mustaʿidd) or murīd.',
+  awradProgress: 'Today', awradDone: "Today's awrād are complete. Allāhumma taqabbal.", awradReset: 'Start today over', awradResetConfirm: "Today's count is reset.",
+  tapToCount: 'Tap to count', countDone: 'Done', optional: 'Optional', mtfNote: 'Monday, Thursday and Friday: more ṣalawāt.',
+  reminder: 'Reminder', reminderSub: 'Every day at your time, also on the lock screen', reminderOn: 'Remind me', reminderTime: 'Time',
+  reminderZone: "The time follows the phone's time zone", reminderHelp: "A notification is shown on the lock screen at this time every day. If you open the app after the time and today's awrād are not done, a reminder pops up in the app.",
+  reminderDenied: 'Notifications are turned off for Alif. Turn them on in the phone settings.', reminderDefault: 'Default 9:00 PM (21:00)',
+  awradNotifTitle: 'Daily Awrad', awradNotifBody: "Time for today's awrād. ﷺ اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ",
+  awradPopupTitle: 'Time for the Daily Awrad', awradPopupBody: 'Take a moment for shahāda, istighfār, the Qurʾān, ṣalawāt and dhikr before the day ends.',
+  awradOpen: 'Open Daily Awrad', awradLater: 'Later',
+  awradSource: "Order and counts as in naqshbandi.org and Shaykh Nāẓim's booklet. Qurʾān translations come from the chosen translation.",
+  loadingQuran: 'Loading the Qurʾān text…',
   back: 'Back', on: 'On', off: 'Off',
 };
 
