@@ -56,7 +56,7 @@ cd app && npm install && npx expo start
 npm run typecheck && npm test
 ```
 Kameran kräver en utvecklingsbuild eller APK. Varje push till `main` bygger en APK (Actions → körningen → Artifacts).
-En tagg `vX.Y.Z` skapar en release med `Alif.apk`, som appens uppdateringsfunktion hittar.
+När versionen i `app/package.json` höjs på `main` (eller en tagg `vX.Y.Z` pushas) byggs och signeras APK:n, och först därefter publiceras releasen med `Alif.apk`, `Alif-vX.Y.Z.apk` och källkoden som zip. En release finns alltså aldrig utan APK, och appens uppdateringsfunktion hittar den.
 Egen signeringsnyckel: lägg in hemligheterna `ALIF_KEYSTORE_BASE64`, `ALIF_KEYSTORE_PASSWORD`, `ALIF_KEY_ALIAS`, `ALIF_KEY_PASSWORD`;
 utan dem signeras APK:n med den publika debug-nyckeln.
 
