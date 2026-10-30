@@ -12,8 +12,10 @@ engelska får du det på arabiska.
   översättningen, och man kan öppna suran direkt.
 - **Skriv:** arabiska blir translitteration direkt på telefonen (även utan nät) och sedan översättning; svenska/engelska
   blir arabiska med vokaltecken och translitteration.
-- **Koranen:** alla 114 suror med uthmanisk text, translitteration och översättning (AlQuran Cloud). Lästa suror sparas för
-  läsning utan nät. Varje vers kan förklaras ord för ord.
+- **Koranen i appen:** alla 114 suror med klassisk arabiska (Tanzils uthmaniska text), translitteration enligt tajwīd och
+  översättning till svenska eller engelska efter språket i Inställningar. Den arabiska texten byggs in i APK:n
+  (`scripts/fetch-quran.js` körs i Actions); översättningen hämtas en gång och sparas, så hela Koranen kan läsas utan nät.
+  Byter man språk eller översättning hämtas den nya. Varje vers kan förklaras ord för ord.
 - **Historik:** allt du läst och översatt sparas på telefonen.
 - **Inställningar:** språk (svenska eller engelska – både appens språk och översättningsspråket), translitteration
   (uttal enligt tajwīd eller ord för ord, akademisk eller enkel stavning), storlek på arabisk text, koranöversättning,

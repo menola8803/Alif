@@ -1,5 +1,5 @@
 import { parseAnswer, verseMatch, askClaude, systemPrompt } from '../src/core/engine';
-import { SURAHS, TOTAL_AYAHS, parseRef, splitBismillah, fetchSurah, pickEdition } from '../src/core/quran';
+import { SURAHS, TOTAL_AYAHS, parseRef, splitBismillah, fetchSurah, pickEdition, compactQuran, completeQuran, localSurah, localAyahs, fetchWholeQuran } from '../src/core/quran';
 
 let fail = 0;
 const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m); } };
@@ -50,6 +50,18 @@ ok(pickEdition('en', undefined, [{ identifier: 'en.x', name: '', englishName: ''
   };
   const s = await fetchSurah(112, 'sv.bernstrom', fakeQuran);
   ok(s.bismillah && s.ayahs[0].arabic === 'قُلْ هُوَ ٱللَّهُ أَحَدٌ' && s.ayahs[1].translation === 'Gud...', 'fetchSurah');
+
+  // whole Qur'an on the phone
+  const api = (edition: string, text: (s: number, a: number) => string) => ({ surahs: SURAHS.map(s => ({ number: s.number, name: `name${s.number}`, englishNameTranslation: 'm', ayahs: Array.from({ length: s.ayahs }, (_, i) => ({ text: text(s.number, i + 1) })) })) });
+  const ar = compactQuran('quran-uthmani', api('quran-uthmani', (s, a) => s === 112 && a === 1 ? 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ هُوَ ٱللَّهُ أَحَدٌ' : `ar ${s}:${a}`));
+  const sv = compactQuran('sv.bernstrom', api('sv', (s, a) => `sv ${s}:${a}`));
+  ok(completeQuran(ar) && completeQuran(sv) && !completeQuran({ edition: 'x', surahs: ar.surahs.slice(1) }), 'completeQuran');
+  const ls = localSurah(112, ar, sv)!;
+  ok(ls.bismillah && ls.ayahs[0].arabic === 'قُلْ هُوَ ٱللَّهُ أَحَدٌ' && ls.ayahs[0].translation === 'sv 112:1' && ls.edition === 'sv.bernstrom', 'localSurah');
+  ok(!localSurah(1, ar, null)!.bismillah && localSurah(1, ar, null)!.ayahs[0].translation === '', 'localSurah Fatiha without translation');
+  ok(JSON.stringify(localAyahs(ar, sv, 2, 255, 256)!.map(a => a.n)) === '[255,256]', 'localAyahs');
+  const whole: any = async (url: string) => ({ ok: true, json: async () => ({ code: 200, data: api('x', (s, a) => url.includes('/quran/en.sahih') ? `en ${s}:${a}` : '') }) });
+  ok((await fetchWholeQuran('en.sahih', whole)).surahs[1].ayahs[254] === 'en 2:255', 'fetchWholeQuran');
 
   if (fail) { console.log(`${fail} engine test(s) failed`); process.exit(1); }
   console.log('engine: all ok');

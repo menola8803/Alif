@@ -7,6 +7,7 @@ import { Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/store';
+import { QuranProvider } from './src/library';
 import { Route } from './src/nav';
 import { Screen, TabBar, TabName } from './src/ui';
 import Splash from './src/screens/Splash';
@@ -82,7 +83,7 @@ function Root() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AppProvider><Root /></AppProvider>
+      <AppProvider><QuranProvider><Root /></QuranProvider></AppProvider>
     </SafeAreaProvider>
   );
 }

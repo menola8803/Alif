@@ -10,6 +10,7 @@ import { ResultView } from '../result';
 import { Arabic, Body, Btn, Card, Header, Screen, SmallBtn, Text, Toggle } from '../ui';
 import { StarNum } from './Quran';
 import { Route } from '../nav';
+import { useQuran } from '../library';
 
 const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 
@@ -60,6 +61,7 @@ function Verse({ a, surah }: { a: Ayah; surah: number }) {
 
 export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: number; onBack: () => void; go: (r: Route) => void }) {
   const app = useApp();
+  const lib = useQuran();
   const { t, theme, lang, editions, scheme, mode, showTranslit, showTranslation, setPrefs } = app;
   const info = SURAHS[n - 1];
   const edition = pickEdition(lang, editions[lang]);
@@ -68,18 +70,23 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
   const [cached, setCached] = useState(false);
   const list = useRef<FlatList<Ayah>>(null);
 
+  const local = lib.arabicReady ? lib.surah(n) : null;
+  const localFull = !!local && lib.translationReady;
+
   const load = useCallback(async () => {
     setErr('');
+    if (localFull) { setData(local); setCached(true); return; }
     const c = await app.loadSurah(n, edition);
     if (c) { setData(c); setCached(true); }
+    if (!c && local) { setData(local); setCached(true); } // Arabic on the phone, translation still coming
     try {
       const fresh = await fetchSurah(n, edition);
       setData(fresh); app.saveSurah(fresh); setCached(true);
     } catch (e) {
-      if (!c) setErr(t.loadFail);
+      if (!c && !local) setErr(t.loadFail);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [n, edition]);
+  }, [n, edition, localFull]);
   useEffect(() => { load(); }, [load]);
 
   useEffect(() => {

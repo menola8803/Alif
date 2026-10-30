@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useApp } from '../store';
 import { SURAHS } from '../core/quran';
 import { arabicDigits } from '../translate';
-import { H1, Sub, Text, TextInput } from '../ui';
+import { useQuran } from '../library';
+import { Card, H1, SmallBtn, Sub, Text, TextInput } from '../ui';
 
 /** Eight-pointed star with a number in it (verse and sūra numbers). */
 export function StarNum({ n, size = 40 }: { n: number; size?: number }) {
@@ -21,6 +22,7 @@ export function StarNum({ n, size = 40 }: { n: number; size?: number }) {
 
 export default function Quran({ open }: { open: (n: number) => void }) {
   const { t, theme } = useApp();
+  const lib = useQuran();
   const [q, setQ] = useState('');
   const list = useMemo(() => {
     const k = q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[ʿʾ'-]/g, '');
@@ -31,6 +33,16 @@ export default function Quran({ open }: { open: (n: number) => void }) {
   return (
     <View style={{ flex: 1, gap: 12 }}>
       <View><H1>{t.quranTitle}</H1><Sub>{t.quranSub}</Sub></View>
+      <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 }}>
+        {lib.status === 'loading' ? <ActivityIndicator color={theme.primary} /> : <View style={{ width: 10, height: 10, backgroundColor: lib.status === 'ready' ? theme.good : theme.danger, transform: [{ rotate: '45deg' }] }} />}
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 13, color: theme.ink, lineHeight: 18 }}>
+            {lib.status === 'ready' ? t.libReady : lib.status === 'loading' ? (lib.arabicReady ? t.libArabicOnly : t.libLoading) : t.libError}
+          </Text>
+          <Text style={{ fontSize: 11, color: theme.muted }}>{lib.edition} · {t.libSource}</Text>
+        </View>
+        {lib.status === 'error' ? <SmallBtn title={t.libDownload} tone="accent" onPress={lib.ensure} /> : null}
+      </Card>
       <TextInput value={q} onChangeText={setQ} placeholder={t.searchSurah} placeholderTextColor={theme.muted}
         style={{ minHeight: 46, borderRadius: 14, borderWidth: 1, borderColor: theme.line, backgroundColor: theme.card, paddingHorizontal: 14, color: theme.ink, fontSize: 15 }} />
       <FlatList
@@ -46,7 +58,7 @@ export default function Quran({ open }: { open: (n: number) => void }) {
               <Text style={{ fontSize: 16, fontWeight: '600', color: theme.ink }}>{s.name}</Text>
               <Text style={{ fontSize: 13, color: theme.muted }}>{s.ayahs} {t.verses}</Text>
             </View>
-            <Text style={{ fontFamily: theme.fonts.arabic, fontSize: 18, color: theme.arabicInk }}>{arabicDigits(s.number)}</Text>
+            <Text style={{ fontFamily: theme.fonts.arabic, fontSize: 19, lineHeight: 34, color: theme.arabicInk }}>{lib.surahName(s.number) ?? arabicDigits(s.number)}</Text>
           </Pressable>
         )}
       />

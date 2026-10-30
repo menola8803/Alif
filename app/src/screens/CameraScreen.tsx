@@ -9,10 +9,12 @@ import { errorText, translateImage } from '../translate';
 import { ResultView } from '../result';
 import { Body, Btn, Card, H1, SmallBtn, Sub, Text } from '../ui';
 import { Route } from '../nav';
+import { useQuran } from '../library';
 
 export default function CameraScreen({ go, openSurah }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void }) {
   const app = useApp();
   const { t, theme } = app;
+  const quran = useQuran();
   const [perm, requestPerm] = useCameraPermissions();
   const cam = useRef<CameraView>(null);
   const [torch, setTorch] = useState(false);
@@ -25,7 +27,7 @@ export default function CameraScreen({ go, openSurah }: { go: (r: Route) => void
   const run = async (uri: string) => {
     setPhoto(uri); setResult(null); setErr(''); setNoKey(false); setBusy(true);
     try {
-      const r = await translateImage(uri, app);
+      const r = await translateImage(uri, app, quran.ayahs);
       setResult(r);
       if (r.arabic) app.addHistory('camera', r);
     } catch (e) {

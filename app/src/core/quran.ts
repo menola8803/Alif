@@ -113,3 +113,50 @@ export function parseRef(ref: string): { surah: number; from: number; to: number
   const surah = +m[1], from = +m[2], to = m[3] ? +m[3] : from;
   return validRef(surah, from, to) ? { surah, from, to } : null;
 }
+
+// ---- The whole Qur'an on the phone ----
+// Compact form: one string per verse, as the API gives it (verse 1 still carries the basmala; `localSurah` splits it).
+export type QuranData = { edition: string; source?: string; surahs: { n: number; name?: string; meaning?: string; ayahs: string[] }[] };
+
+/** Turns the API's /quran/{edition} answer into the compact form. */
+export function compactQuran(edition: string, data: any): QuranData {
+  const surahs = ((data?.surahs ?? []) as any[]).map(s => ({
+    n: Number(s.number), name: s.name ? String(s.name) : undefined, meaning: s.englishNameTranslation ? String(s.englishNameTranslation) : undefined,
+    ayahs: ((s.ayahs ?? []) as any[]).map(a => String(a.text)),
+  }));
+  return { edition, surahs };
+}
+
+/** True when every sūra is there with the right number of verses. */
+export function completeQuran(q: QuranData | null | undefined): q is QuranData {
+  return !!q && q.surahs.length === 114 && q.surahs.every((s, i) => s.n === i + 1 && s.ayahs.length === SURAHS[i].ayahs);
+}
+
+/** Downloads a whole edition (Arabic or a translation) in one request. */
+export async function fetchWholeQuran(edition: string, f: typeof fetch = fetch): Promise<QuranData> {
+  const q = compactQuran(edition, await get(`/quran/${encodeURIComponent(edition)}`, f));
+  if (!completeQuran(q)) throw new Error('incomplete');
+  return q;
+}
+
+/** A sūra from data on the phone. */
+export function localSurah(n: number, arabic: QuranData, translation: QuranData | null): SurahText | null {
+  const ar = arabic.surahs[n - 1];
+  if (!ar) return null;
+  const tr = translation?.surahs[n - 1];
+  let bism = n !== 1 && n !== 9;
+  const ayahs: Ayah[] = ar.ayahs.map((text, i) => {
+    let t = text;
+    if (i === 0) { const s = splitBismillah(n, text); t = s.text || text; }
+    return { n: i + 1, arabic: t, translation: tr?.ayahs[i] ?? '' };
+  });
+  if (n === 1) bism = false;
+  return { number: n, arabicName: ar.name ?? '', meaning: tr?.meaning ?? ar.meaning ?? '', edition: translation?.edition ?? '', bismillah: bism, ayahs };
+}
+
+/** Verses from data on the phone (used to confirm a verse the camera read). */
+export function localAyahs(arabic: QuranData, translation: QuranData | null, surah: number, from: number, to: number): Ayah[] | null {
+  const s = localSurah(surah, arabic, translation);
+  if (!s) return null;
+  return s.ayahs.slice(from - 1, to);
+}

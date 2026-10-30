@@ -42,6 +42,9 @@ const sv = {
   retry: 'Försök igen', offlineCached: 'Sparad för läsning utan nät', explainVerse: 'Förklara ord för ord',
   showTranslit: 'Translitteration', showTranslation: 'Översättning', verseTo: 'Gå till vers',
   bismillahNote: 'Basmala',
+  libReady: 'Hela Koranen finns på telefonen och kan läsas utan nät.', libArabicOnly: 'Den arabiska texten finns på telefonen. Översättningen hämtas…',
+  libLoading: 'Hämtar Koranen till telefonen (en gång, några MB)…', libError: 'Kunde inte hämta allt. Det som finns visas; anslut till internet och försök igen.',
+  libDownload: 'Hämta igen', libSource: 'Arabisk text: Tanzil (uthmanisk). Översättning: AlQuran Cloud.',
 
   // history
   historyTitle: 'Historik', historySub: 'Det du har läst och översatt, sparat på telefonen', noHistory: 'Inget sparat än.',
@@ -78,7 +81,7 @@ const sv = {
   installFail: 'Kunde inte installera. Öppna releasesidan och ladda ner APK-filen där.', noRelease: 'Ingen release hittades än.', checking: 'Söker…', updateFail: 'Kunde inte kontrollera uppdatering.', version: 'Version',
   about: 'Om Alif', aboutSub: 'Utvecklare: Claes Sundman S.N.C AB - 2026',
   aboutBody: 'Alif hjälper dig att läsa klassisk arabiska och Koranen: kameran läser texten, appen vokaliserar, translittererar enligt tajwīd och översätter till svenska eller engelska. Du kan också skriva svenska eller engelska och få det på arabiska.',
-  aboutQuran: 'Koranens text och översättningar hämtas från AlQuran Cloud (alquran.cloud). En översättning av Koranen är alltid en tolkning av betydelsen.',
+  aboutQuran: 'Koranens arabiska text är Tanzils uthmaniska text (tanzil.net). Översättningarna hämtas från AlQuran Cloud (alquran.cloud) och sparas på telefonen. En översättning av Koranen är alltid en tolkning av betydelsen.',
   aboutAi: 'Översättningar från Claude kan innehålla fel. Kontrollera viktiga texter mot en lärd källa.',
   back: 'Tillbaka', on: 'På', off: 'Av',
 };
@@ -121,6 +124,9 @@ const en: Strings = {
   retry: 'Try again', offlineCached: 'Saved for offline reading', explainVerse: 'Explain word by word',
   showTranslit: 'Transliteration', showTranslation: 'Translation', verseTo: 'Go to verse',
   bismillahNote: 'Basmala',
+  libReady: 'The whole Qurʾān is on the phone and can be read offline.', libArabicOnly: 'The Arabic text is on the phone. The translation is being fetched…',
+  libLoading: 'Fetching the Qurʾān to the phone (once, a few MB)…', libError: 'Could not fetch everything. What is there is shown; connect to the internet and try again.',
+  libDownload: 'Try again', libSource: 'Arabic text: Tanzil (Uthmani). Translation: AlQuran Cloud.',
 
   historyTitle: 'History', historySub: 'What you have read and translated, kept on the phone', noHistory: 'Nothing saved yet.',
   clearHistory: 'Clear history', clearHistoryConfirm: 'Everything in the history is deleted from the phone.', delete: 'Delete', cancel: 'Cancel',
@@ -155,7 +161,7 @@ const en: Strings = {
   installFail: 'Could not install. Open the release page and download the APK there.', noRelease: 'No release found yet.', checking: 'Checking…', updateFail: 'Could not check for an update.', version: 'Version',
   about: 'About Alif', aboutSub: 'Developer: Claes Sundman S.N.C AB - 2026',
   aboutBody: 'Alif helps you read Classical Arabic and the Qurʾān: the camera reads the text, the app vocalizes it, transliterates it by the rules of tajwīd and translates it into Swedish or English. You can also write Swedish or English and get it in Arabic.',
-  aboutQuran: 'The Qurʾān text and translations come from AlQuran Cloud (alquran.cloud). A translation of the Qurʾān is always an interpretation of its meaning.',
+  aboutQuran: 'The Arabic text of the Qurʾān is the Tanzil Uthmani text (tanzil.net). Translations come from AlQuran Cloud (alquran.cloud) and are kept on the phone. A translation of the Qurʾān is always an interpretation of its meaning.',
   aboutAi: 'Translations by Claude can contain mistakes. Check important texts against a learned source.',
   back: 'Back', on: 'On', off: 'Off',
 };

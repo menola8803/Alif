@@ -8,10 +8,12 @@ import { directionOf, errorText, translateText } from '../translate';
 import { ResultView } from '../result';
 import { Body, Btn, Card, H1, Label, Segmented, SmallBtn, Sub, Text, TextInput } from '../ui';
 import { Route } from '../nav';
+import { useQuran } from '../library';
 
 export default function TextScreen({ go, openSurah }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void }) {
   const app = useApp();
   const { t, theme, scheme, mode } = app;
+  const quran = useQuran();
   const [text, setText] = useState('');
   const [manual, setManual] = useState<Direction | null>(null);
   const [busy, setBusy] = useState(false);
@@ -29,7 +31,7 @@ export default function TextScreen({ go, openSurah }: { go: (r: Route) => void; 
     Keyboard.dismiss();
     setBusy(true); setErr(''); setNoKey(false); setResult(null);
     try {
-      const r = await translateText(text.trim(), app, dir);
+      const r = await translateText(text.trim(), app, dir, quran.ayahs);
       setResult(r);
       if (r.arabic) app.addHistory('text', r);
     } catch (e) {
