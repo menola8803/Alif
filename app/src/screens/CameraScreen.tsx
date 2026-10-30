@@ -27,7 +27,7 @@ export default function CameraScreen({ go, openSurah }: { go: (r: Route) => void
   const run = async (uri: string) => {
     setPhoto(uri); setResult(null); setErr(''); setNoKey(false); setBusy(true);
     try {
-      const r = await translateImage(uri, app, quran.ayahs);
+      const r = await translateImage(uri, app, quran);
       setResult(r);
       if (r.arabic) app.addHistory('camera', r);
     } catch (e) {

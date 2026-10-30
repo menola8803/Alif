@@ -107,7 +107,15 @@ jobs:
           ALIF_KEYSTORE_PASSWORD: ${{ secrets.ALIF_KEYSTORE_PASSWORD }}
           ALIF_KEY_ALIAS: ${{ secrets.ALIF_KEY_ALIAS }}
           ALIF_KEY_PASSWORD: ${{ secrets.ALIF_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --no-daemon
+        run: |
+          set -o pipefail
+          if ! ./gradlew assembleRelease --no-daemon 2>&1 | tee "$RUNNER_TEMP/gradle.log"; then
+            # Put the reason in the run summary as an error, so it can be read without the full log.
+            MSG=$(grep -A 15 -m 2 "What went wrong" "$RUNNER_TEMP/gradle.log" | head -40 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            [ -n "$MSG" ] || MSG=$(grep -iE "error:|e: " "$RUNNER_TEMP/gradle.log" | head -20 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=Gradle build failed::$MSG"
+            exit 1
+          fi
       - name: Check the signature
         run: bash scripts/check-apk-signature.sh app/android/app/build/outputs/apk/release/app-release.apk
       - name: Attach APK to the release

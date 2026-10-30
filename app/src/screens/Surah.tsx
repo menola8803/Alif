@@ -5,7 +5,7 @@ import { useApp } from '../store';
 import { Ayah, SURAHS, SurahText, fetchSurah, pickEdition } from '../core/quran';
 import { Result } from '../core/engine';
 import { transliterate } from '../core/translit';
-import { arabicDigits, errorText, translateText } from '../translate';
+import { arabicDigits, errorText, textEngine, translateText } from '../translate';
 import { ResultView } from '../result';
 import { Arabic, Body, Btn, Card, Header, Screen, SmallBtn, Text, Toggle } from '../ui';
 import { StarNum } from './Quran';
@@ -48,7 +48,7 @@ function Verse({ a, surah }: { a: Ayah; surah: number }) {
       <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
         <SmallBtn title={open ? '–' : '…'} onPress={() => setOpen(o => !o)} />
         {open ? <>
-          <SmallBtn title={t.explainVerse} tone="accent" onPress={explain} disabled={busy} />
+          {textEngine(app) === 'claude' ? <SmallBtn title={t.explainVerse} tone="accent" onPress={explain} disabled={busy} /> : null}
           <SmallBtn title={t.copy} onPress={() => Clipboard.setStringAsync(`${a.arabic}\n${translit}\n${a.translation}\n(${SURAHS[surah - 1].name} ${surah}:${a.n})`).catch(() => {})} />
         </> : null}
       </View>

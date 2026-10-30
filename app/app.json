@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -35,7 +35,7 @@
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 200
+      "versionCode": 300
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -72,6 +72,16 @@
           "icon": "./assets/notification-icon.png",
           "color": "#E8B04A",
           "defaultChannel": "awrad"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": [
+              "https://jitpack.io"
+            ]
+          }
         }
       ]
     ],

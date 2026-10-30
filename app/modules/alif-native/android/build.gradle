@@ -1,0 +1,22 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'se.sncab.alif'
+version = '1.0.0'
+
+android {
+  namespace "se.sncab.alifnative"
+  defaultConfig {
+    versionCode 1
+    versionName '1.0.0'
+  }
+}
+
+dependencies {
+  // On-device translation (Google ML Kit). Language models (~30 MB each) are downloaded on first use.
+  implementation 'com.google.mlkit:translate:17.0.3'
+  // On-device text recognition of Arabic script (Tesseract, from JitPack; see expo-build-properties in app.json).
+  implementation 'cz.adaptech.tesseract4android:tesseract4android:4.9.0'
+}

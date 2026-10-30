@@ -1,6 +1,6 @@
 # Alif · أَلِف
 
-**Version 0.2.0** (se `CHANGELOG.md`)
+**Version 0.3.0** (se `CHANGELOG.md`)
 
 En app för att läsa klassisk arabiska och Koranen. Kameran läser arabisk text, appen vokaliserar den, translittererar den
 enligt reglerna för hur ord börjar och slutar (tajwīd) och översätter till svenska eller engelska. Skriver du svenska eller
@@ -37,9 +37,14 @@ engelska får du det på arabiska.
 
 Ovokaliserad text kan bara ge konsonanter och långa vokaler; då vokaliserar Claude texten först.
 
-## AI
-Kameraläsning och översättning görs av Claude via Anthropics API med användarens egen nyckel (Inställningar → AI-översättning).
-Nyckeln sparas i telefonens säkra lagring. Translitteration och Koranläsning fungerar utan nyckel.
+## Översättning
+Inställningar → Översättning:
+- **Automatiskt:** Claude om en nyckel finns, annars gratis på telefonen.
+- **Claude:** bäst på klassisk arabiska, vokaltecken, ord för ord och kalligrafi (egen API-nyckel, sparas i telefonens säkra lagring).
+- **På telefonen:** Google ML Kit, gratis, utan nät när språkmodellen är nedladdad; översätter medan du skriver.
+- **MyMemory:** gratis onlinetjänst utan nyckel, med daglig gräns.
+- **Kameran:** Claude, eller Tesseract på telefonen (tryckt text, gratis, utan nät).
+Koranverser känns igen mot Koranen i appen oavsett motor. Native-koden finns i `app/modules/alif-native` (Kotlin).
 
 ## Tema
 Färger och typsnitt delas med Direct (mörk petrol med guld och mint, Plus Jakarta Sans, Cinzel) plus Amiri för arabiska.

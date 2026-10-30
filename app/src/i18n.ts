@@ -27,7 +27,7 @@ const sv = {
   save: 'Spara', saved: 'Sparat i historiken',
 
   // errors
-  errNoKey: 'Lägg in din API-nyckel under Inställningar, AI-översättning, för att läsa bilder och översätta.',
+  errNoKey: 'Claude kräver en API-nyckel. Lägg in den under Inställningar, Översättning – eller välj en gratis motor där.',
   errBadKey: 'API-nyckeln godtogs inte. Kontrollera den under Inställningar.',
   errBusy: 'Tjänsten är upptagen just nu. Försök igen om en stund.',
   errNetwork: 'Ingen kontakt. Kontrollera internet och försök igen.',
@@ -98,6 +98,23 @@ const sv = {
   awradOpen: 'Öppna Daily Awrad', awradLater: 'Senare',
   awradSource: 'Ordning och antal enligt naqshbandi.org och Shaykh Nāẓims häfte. Översättningarna av Koranen hämtas från den valda översättningen.',
   loadingQuran: 'Koranens text laddas…',
+  // engines
+  engines: 'Översättning', enginesSub: 'Välj hur appen översätter och läser bilder',
+  engineText: 'Översättning av text', engineOcr: 'Läsa text i bilder',
+  engAuto: 'Automatiskt', engAutoSub: 'Claude om du har en nyckel, annars gratis på telefonen.',
+  engClaude: 'Claude (bäst)', engClaudeSub: 'Klassisk arabiska, vokaltecken, ord för ord och kalligrafi. Kräver API-nyckel.',
+  engDevice: 'På telefonen (gratis)', engDeviceSub: 'Google ML Kit. Utan nät när språkmodellen är nedladdad (ca 30 MB per språk). Bäst på modern arabiska.',
+  engMyMemory: 'MyMemory (gratis, online)', engMyMemorySub: 'Gratis tjänst på nätet utan nyckel, med en daglig gräns.',
+  ocrDevice: 'På telefonen (gratis)', ocrDeviceSub: 'Tesseract läser tryckt arabisk text utan nät (modell ca 1,4 MB hämtas första gången). Klarar inte kalligrafi så bra.',
+  ocrClaude: 'Claude (bäst)', ocrClaudeSub: 'Läser även kalligrafi och vokaltecken. Kräver API-nyckel.',
+  liveTranslate: 'Översätt medan jag skriver', liveSub: 'Med de gratis motorerna översätts texten direkt när du slutar skriva.',
+  downloadModels: 'Ladda ner språkmodeller nu', modelsReady: 'Språkmodellerna finns på telefonen', modelsMissing: 'Hämtas första gången du översätter', downloadingModels: 'Laddar ner…',
+  usingEngine: 'Översätts med', freeNote: 'Gratis översättning: utan vokaltecken och ord för ord. Välj Claude för klassisk arabiska.',
+  claudeKey: 'Claude – API-nyckel',
+  errQuota: 'Dagens gratisgräns hos MyMemory är nådd. Välj "På telefonen" eller försök i morgon.',
+  errModel: 'Språkmodellen kunde inte laddas ner. Anslut till internet en gång, sedan fungerar det utan nät.',
+  errOcrModel: 'Textigenkänningens modell kunde inte laddas ner. Anslut till internet en gång.',
+  errNoDevice: 'Översättning på telefonen finns bara i den installerade appen. Välj MyMemory eller Claude.',
   back: 'Tillbaka', on: 'På', off: 'Av',
 };
 export type Strings = typeof sv;
@@ -125,7 +142,7 @@ const en: Strings = {
   verifiedVerse: 'Text from the muṣḥaf', aiTranslation: "Claude's translation",
   save: 'Save', saved: 'Saved in history',
 
-  errNoKey: 'Add your API key under Settings, AI translation, to read pictures and translate.',
+  errNoKey: 'Claude needs an API key. Add it under Settings, Translation – or choose a free engine there.',
   errBadKey: 'The API key was not accepted. Check it under Settings.',
   errBusy: 'The service is busy right now. Try again in a moment.',
   errNetwork: 'No connection. Check the internet and try again.',
@@ -193,6 +210,23 @@ const en: Strings = {
   awradOpen: 'Open Daily Awrad', awradLater: 'Later',
   awradSource: "Order and counts as in naqshbandi.org and Shaykh Nāẓim's booklet. Qurʾān translations come from the chosen translation.",
   loadingQuran: 'Loading the Qurʾān text…',
+  // engines
+  engines: 'Translation', enginesSub: 'Choose how the app translates and reads pictures',
+  engineText: 'Translating text', engineOcr: 'Reading text in pictures',
+  engAuto: 'Automatic', engAutoSub: 'Claude if you have a key, otherwise free on the phone.',
+  engClaude: 'Claude (best)', engClaudeSub: 'Classical Arabic, vowel marks, word by word and calligraphy. Needs an API key.',
+  engDevice: 'On the phone (free)', engDeviceSub: 'Google ML Kit. Offline once the language model is downloaded (about 30 MB per language). Best at modern Arabic.',
+  engMyMemory: 'MyMemory (free, online)', engMyMemorySub: 'Free online service without a key, with a daily limit.',
+  ocrDevice: 'On the phone (free)', ocrDeviceSub: 'Tesseract reads printed Arabic offline (a model of about 1.4 MB is fetched the first time). Not so good with calligraphy.',
+  ocrClaude: 'Claude (best)', ocrClaudeSub: 'Also reads calligraphy and vowel marks. Needs an API key.',
+  liveTranslate: 'Translate while I type', liveSub: 'With the free engines the text is translated as soon as you stop typing.',
+  downloadModels: 'Download language models now', modelsReady: 'The language models are on the phone', modelsMissing: 'Fetched the first time you translate', downloadingModels: 'Downloading…',
+  usingEngine: 'Translated with', freeNote: 'Free translation: no vowel marks or word by word. Choose Claude for Classical Arabic.',
+  claudeKey: 'Claude – API key',
+  errQuota: "MyMemory's free daily limit is reached. Choose \"On the phone\" or try tomorrow.",
+  errModel: 'The language model could not be downloaded. Connect to the internet once, then it works offline.',
+  errOcrModel: 'The text recognition model could not be downloaded. Connect to the internet once.',
+  errNoDevice: 'Translation on the phone is only in the installed app. Choose MyMemory or Claude.',
   back: 'Back', on: 'On', off: 'Off',
 };
 

@@ -23,6 +23,7 @@ type Ctx = {
   surah: (n: number) => SurahText | null;
   ayahs: (surah: number, from: number, to: number) => Ayah[] | null;
   surahName: (n: number) => string | undefined; // Arabic name, when the text is on the phone
+  arabic: QuranData | null; // the whole Arabic text, when it is on the phone
 };
 const C = createContext<Ctx>(null as unknown as Ctx);
 export const useQuran = () => useContext(C);
@@ -90,6 +91,7 @@ export function QuranProvider({ children }: { children: React.ReactNode }) {
     surah: n => (arabic ? localSurah(n, arabic, translation) : null),
     ayahs: (s, a, b) => (arabic ? localAyahs(arabic, translation, s, a, b) : null),
     surahName: n => arabic?.surahs[n - 1]?.name,
+    arabic,
   }), [arabic, translation, status, bundled, edition, ensure]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }

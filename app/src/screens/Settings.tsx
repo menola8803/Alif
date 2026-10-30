@@ -9,14 +9,19 @@ import { MODELS, askClaude, textBlock } from '../core/engine';
 import { Edition, listEditions, pickEdition } from '../core/quran';
 import { transliterate } from '../core/translit';
 import { isNewer, latestRelease, Release } from '../update';
-import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview } from '../ui';
+import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview, Toggle } from '../ui';
 import { themes, ThemeName } from '../theme';
 import { Pressable } from 'react-native';
 import { formatTime } from '../core/awrad';
+import { deviceAvailable, ocrEngineFor, textEngine } from '../translate';
+import { AlifNativeModule } from '../../modules/alif-native';
+import type { Strings } from '../i18n';
+
+export const engineLabel = (t: Strings, e: 'claude' | 'device' | 'mymemory') => (e === 'claude' ? t.engClaude : e === 'device' ? t.engDevice : t.engMyMemory);
 import { uses12h } from '../reminder';
 
 export default function Settings({ go }: { go: (r: Route) => void }) {
-  const { t, theme, lang, scheme, mode, model, apiKey, editions, reminderOn, reminderHour, reminderMinute } = useApp();
+  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine } = useApp();
   const version = Constants.expoConfig?.version ?? '0.0.0';
   return (
     <ScrollView contentContainerStyle={{ gap: 14, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
@@ -26,7 +31,7 @@ export default function Settings({ go }: { go: (r: Route) => void }) {
         <Row title={t.translitSet} sub={t.translitSetSub} right={`${mode === 'tajwid' ? t.modeTajwid : t.modeWords} · ${scheme === 'academic' ? t.schemeAcademic : t.schemeSimple}`} onPress={() => go({ name: 'translit' })} />
         <Row title={`${t.awrad} · ${t.reminder}`} sub={t.reminderSub} right={reminderOn ? formatTime(reminderHour, reminderMinute, uses12h()) : t.off} onPress={() => go({ name: 'reminder' })} />
         <Row title={t.quranEdition} sub={t.quranEditionSub} right={pickEdition(lang, editions[lang])} onPress={() => go({ name: 'edition' })} />
-        <Row title={t.ai} sub={t.aiSub} right={apiKey ? MODELS.find(m => m.id === model)?.label ?? model : t.keyMissing} onPress={() => go({ name: 'ai' })} />
+        <Row title={t.engines} sub={t.enginesSub} right={engineLabel(t, textEngine({ engine, apiKey }))} onPress={() => go({ name: 'ai' })} />
         <Row title={t.theme} sub={t.themeSub} right={theme.name === 'dark' ? t.themeDark : t.themeBeige} onPress={() => go({ name: 'theme' })} />
         <Row title={t.update} sub={t.updateSub} right={`v${version}`} onPress={() => go({ name: 'update' })} />
         <Row title={t.about} sub={t.aboutSub} onPress={() => go({ name: 'about' })} />
@@ -128,10 +133,37 @@ export function AiScreen({ onBack }: { onBack: () => void }) {
     catch (e: any) { setMsg(e?.kind === 'badkey' ? t.errBadKey : e?.kind === 'network' ? t.errNetwork : `${t.errOther}: ${e?.message ?? ''}`); }
     setBusy(false);
   };
+  const { engine, ocrEngine, live, lang } = useApp();
+  const [models, setModels] = useState<string[] | null>(null);
+  const [dl, setDl] = useState('');
+  useEffect(() => { AlifNativeModule?.downloadedModels().then(setModels).catch(() => setModels([])); }, []);
+  const haveModels = !!models && models.includes('ar') && models.includes(lang);
+  const download = async () => {
+    if (!AlifNativeModule) return;
+    setDl(t.downloadingModels);
+    try { await AlifNativeModule.translate('سلام', 'ar', lang, true); await AlifNativeModule.translate(lang === 'sv' ? 'fred' : 'peace', lang, 'ar', true); setModels(await AlifNativeModule.downloadedModels()); setDl(''); }
+    catch { setDl(t.errModel); }
+  };
   return (
     <Screen>
-      <Header title={t.ai} sub={t.aiSub} onBack={onBack} />
+      <Header title={t.engines} sub={t.enginesSub} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 8 }} keyboardShouldPersistTaps="handled">
+        <Label>{t.engineText}</Label>
+        <Choice title={t.engAuto} sub={`${t.engAutoSub} → ${engineLabel(t, textEngine({ engine: 'auto', apiKey }))}`} on={engine === 'auto'} onPress={() => setPrefs({ engine: 'auto' })} />
+        <Choice title={t.engClaude} sub={t.engClaudeSub} on={engine === 'claude'} onPress={() => setPrefs({ engine: 'claude' })} />
+        <Choice title={t.engDevice} sub={t.engDeviceSub} on={engine === 'device'} onPress={() => setPrefs({ engine: 'device' })}>
+          {deviceAvailable() ? <Text style={{ fontSize: 12, color: haveModels ? theme.good : theme.muted, marginTop: 2 }}>{haveModels ? t.modelsReady : t.modelsMissing}</Text> : <Text style={{ fontSize: 12, color: theme.danger }}>{t.errNoDevice}</Text>}
+        </Choice>
+        {deviceAvailable() && !haveModels ? <Btn title={dl || t.downloadModels} kind="secondary" disabled={!!dl && dl === t.downloadingModels} onPress={download} /> : null}
+        <Choice title={t.engMyMemory} sub={t.engMyMemorySub} on={engine === 'mymemory'} onPress={() => setPrefs({ engine: 'mymemory' })} />
+        <Card><Toggle title={t.liveTranslate} on={live} onChange={v => setPrefs({ live: v })} /><Text style={{ fontSize: 13, color: theme.muted }}>{t.liveSub}</Text></Card>
+
+        <Label>{t.engineOcr}</Label>
+        <Choice title={t.engAuto} sub={`${t.engAutoSub} → ${ocrEngineFor({ ocrEngine: 'auto', apiKey }) === 'claude' ? t.ocrClaude : t.ocrDevice}`} on={ocrEngine === 'auto'} onPress={() => setPrefs({ ocrEngine: 'auto' })} />
+        <Choice title={t.ocrClaude} sub={t.ocrClaudeSub} on={ocrEngine === 'claude'} onPress={() => setPrefs({ ocrEngine: 'claude' })} />
+        <Choice title={t.ocrDevice} sub={t.ocrDeviceSub} on={ocrEngine === 'device'} onPress={() => setPrefs({ ocrEngine: 'device' })} />
+
+        <Label>{t.claudeKey}</Label>
         <Card>
           <Label>{t.apiKey}</Label>
           <Text style={{ color: apiKey ? theme.good : theme.muted, fontWeight: '600' }}>{apiKey ? `${t.keySaved} (…${apiKey.slice(-4)})` : t.keyMissing}</Text>
