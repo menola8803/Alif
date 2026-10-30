@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Alif",
+    "slug": "alif",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "se.sncab.alif",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Alif uses the camera to read Arabic text.",
+        "NSPhotoLibraryUsageDescription": "Alif reads Arabic text in pictures you choose."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1416",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "se.sncab.alif",
+      "allowBackup": false,
+      "permissions": ["CAMERA", "INTERNET", "REQUEST_INSTALL_PACKAGES"],
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "versionCode": 100
+    },
+    "web": { "favicon": "./assets/favicon.png" },
+    "plugins": [
+      ["expo-splash-screen", { "backgroundColor": "#0B1416", "image": "./assets/splash-blank.png", "imageWidth": 200, "resizeMode": "contain" }],
+      ["expo-camera", { "cameraPermission": "Alif uses the camera to read Arabic text.", "recordAudioAndroid": false }],
+      ["expo-image-picker", { "photosPermission": "Alif reads Arabic text in pictures you choose.", "microphonePermission": false }],
+      "expo-secure-store",
+      "./plugins/withReleaseSigning"
+    ],
+    "scheme": "alif"
+  }
+}

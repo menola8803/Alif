@@ -1,0 +1,41 @@
+{
+  "name": "alif",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "dependencies": {
+    "@expo-google-fonts/amiri": "^0.4.1",
+    "@expo-google-fonts/cinzel": "^0.4.2",
+    "@expo-google-fonts/plus-jakarta-sans": "^0.4.2",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "expo": "~58.0.20",
+    "expo-camera": "~58.0.14",
+    "expo-clipboard": "~58.0.4",
+    "expo-constants": "^58.0.13",
+    "expo-file-system": "^58.0.12",
+    "expo-font": "^58.0.10",
+    "expo-image-manipulator": "~58.0.16",
+    "expo-image-picker": "~58.0.10",
+    "expo-intent-launcher": "^58.0.3",
+    "expo-localization": "~58.0.5",
+    "expo-secure-store": "~58.0.2",
+    "expo-splash-screen": "~58.0.11",
+    "expo-status-bar": "~58.0.4",
+    "react": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "~5.10.1",
+    "react-native-svg": "^15.16.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/semver.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "private": true
+}
