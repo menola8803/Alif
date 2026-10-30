@@ -5,60 +5,78 @@ import * as ImagePicker from 'expo-image-picker';
 import Svg, { Path } from 'react-native-svg';
 import { useApp } from '../store';
 import { Result } from '../core/engine';
-import { errorText, translateImage } from '../translate';
+import * as Sharing from 'expo-sharing';
+import { Photo, errorText, translateImage, translateText } from '../translate';
 import { ResultView } from '../result';
-import { Body, Btn, Card, H1, SmallBtn, Sub, Text } from '../ui';
+import { Arabic, Body, Btn, Card, H1, Label, SmallBtn, Sub, Text, TextInput } from '../ui';
 import { Route } from '../nav';
 import { useQuran } from '../library';
 
-export default function CameraScreen({ go, openSurah }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void }) {
+export default function CameraScreen({ go, openSurah, openWrite }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void; openWrite: () => void }) {
   const app = useApp();
   const { t, theme } = app;
   const quran = useQuran();
   const [perm, requestPerm] = useCameraPermissions();
   const cam = useRef<CameraView>(null);
   const [torch, setTorch] = useState(false);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<Photo | null>(null);
+  const [unread, setUnread] = useState<{ raw: string; image?: string } | null>(null);
+  const [edited, setEdited] = useState('');
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [noKey, setNoKey] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
 
-  const run = async (uri: string) => {
-    setPhoto(uri); setResult(null); setErr(''); setNoKey(false); setBusy(true);
+  const run = async (p: Photo, opts: { claude?: boolean } = {}) => {
+    setPhoto(p); setResult(null); setErr(''); setNoKey(false); setUnread(null); setBusy(true);
     try {
-      const r = await translateImage(uri, app, quran);
-      setResult(r);
+      const r = await translateImage(p, opts.claude ? { ...app, ocrEngine: 'claude', engine: 'claude' } : app, quran);
+      setResult(r); setEdited(r.source);
       if (r.arabic) app.addHistory('camera', r);
-    } catch (e) {
-      setErr(errorText(e, t));
-      setNoKey((e as any)?.kind === 'nokey' || (e as any)?.kind === 'badkey');
+    } catch (e: any) {
+      if (e?.kind === 'unreadable') setUnread({ raw: e.raw ?? '', image: e.image });
+      else {
+        setErr(errorText(e, t));
+        setNoKey(['nokey', 'badkey', 'nodevice', 'quota'].includes(e?.kind));
+      }
     }
     setBusy(false);
+  };
+  // The person corrected the text that was read: translate that instead.
+  const again = async () => {
+    if (!edited.trim()) return;
+    setBusy(true); setErr('');
+    try { const r = await translateText(edited.trim(), app, 'ar2x', quran); setResult({ ...r, photo: result?.photo }); app.addHistory('camera', r); }
+    catch (e) { setErr(errorText(e, t)); }
+    setBusy(false);
+  };
+  const lens = async () => {
+    const uri = unread?.image ?? photo?.uri;
+    if (uri && (await Sharing.isAvailableAsync())) Sharing.shareAsync(uri, { mimeType: 'image/jpeg', dialogTitle: 'Google Lens' }).catch(() => {});
   };
 
   const shoot = async () => {
     try {
       const p = await cam.current?.takePictureAsync({ quality: 0.9, shutterSound: false });
-      if (p?.uri) run(p.uri);
+      if (p?.uri) run({ uri: p.uri, width: p.width, height: p.height, frame: true });
     } catch (e) { setErr(errorText(e, t)); }
   };
   const pick = async () => {
     const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1, allowsEditing: true });
-    if (!r.canceled && r.assets[0]?.uri) run(r.assets[0].uri);
+    if (!r.canceled && r.assets[0]?.uri) run({ uri: r.assets[0].uri });
   };
-  const reset = () => { setPhoto(null); setResult(null); setErr(''); setNoKey(false); };
+  const reset = () => { setPhoto(null); setResult(null); setErr(''); setNoKey(false); setUnread(null); };
 
   if (photo) {
     return (
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }} showsVerticalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <Image source={{ uri: photo }} style={{ width: 72, height: 96, borderRadius: 12, borderWidth: 1, borderColor: theme.line }} />
+          <Image source={{ uri: result?.photo ?? unread?.image ?? photo.uri }} style={{ width: 72, height: 96, borderRadius: 12, borderWidth: 1, borderColor: theme.line }} />
           <View style={{ flex: 1, gap: 8 }}>
             <H1 size={22}>{t.cameraTitle}</H1>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <SmallBtn title={t.retake} tone="accent" onPress={reset} />
-              {!busy && (err || result) ? <SmallBtn title={t.retry} onPress={() => run(photo)} /> : null}
+              {!busy && (err || result || unread) ? <SmallBtn title={t.retry} onPress={() => run(photo)} /> : null}
             </View>
           </View>
         </View>
@@ -72,6 +90,30 @@ export default function CameraScreen({ go, openSurah }: { go: (r: Route) => void
           <Card>
             <Body>{err}</Body>
             {noKey ? <Btn title={t.goSettings} onPress={() => go({ name: 'ai' })} /> : null}
+          </Card>
+        ) : null}
+        {unread && !busy ? (
+          <Card style={{ borderColor: theme.danger }}>
+            <Label color={theme.danger}>{t.unreadTitle}</Label>
+            <Body>{t.errUnreadable}</Body>
+            <Text style={{ fontSize: 14, fontWeight: '700', color: theme.ink }}>{t.unreadTry}</Text>
+            {app.apiKey ? <><Btn title={t.unreadClaude} onPress={() => run(photo, { claude: true })} /><Text style={{ fontSize: 12, color: theme.muted, marginTop: -6 }}>{t.unreadClaudeSub}</Text></> : null}
+            <Btn title={t.unreadLens} kind={app.apiKey ? 'secondary' : 'primary'} onPress={lens} />
+            <Text style={{ fontSize: 12, color: theme.muted, marginTop: -6 }}>{t.unreadLensSub}</Text>
+            <Btn title={t.unreadType} kind="secondary" onPress={openWrite} />
+            <Text style={{ fontSize: 12, color: theme.muted, marginTop: -6 }}>{t.unreadTypeSub}</Text>
+            <Btn title={t.unreadRetake} kind="secondary" onPress={reset} />
+            <Text style={{ fontSize: 12, color: theme.muted, marginTop: -6 }}>{t.unreadRetakeSub}</Text>
+            {!app.apiKey ? <Text style={{ fontSize: 12, color: theme.accent }} onPress={() => go({ name: 'ai' })}>{t.unreadClaude}: {t.unreadClaudeSub} ›</Text> : null}
+            {unread.raw ? <><Label>{t.unreadRaw}</Label><Arabic size={18} color={theme.muted}>{unread.raw.slice(0, 300)}</Arabic></> : null}
+          </Card>
+        ) : null}
+        {result && result.photo && !busy ? (
+          <Card>
+            <Label>{t.readText}</Label>
+            <TextInput value={edited} onChangeText={setEdited} multiline textAlignVertical="top"
+              style={{ minHeight: 70, borderRadius: 14, borderWidth: 1, borderColor: theme.line, backgroundColor: theme.bg, padding: 12, color: theme.ink, fontFamily: theme.fonts.arabic, fontSize: 22, lineHeight: 40, textAlign: 'right', writingDirection: 'rtl' }} />
+            {edited.trim() !== result.source.trim() ? <Btn title={t.translateAgain} onPress={again} /> : null}
           </Card>
         ) : null}
         {result ? <ResultView r={result} onOpenSurah={openSurah} /> : null}

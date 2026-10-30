@@ -18,6 +18,7 @@ export type Result = {
   quran?: QuranRef;
   verses?: { n: number; arabic: string; translation: string }[]; // the verses from the muṣḥaf when the reference was confirmed
   edition?: string;    // translation edition of `verses`
+  photo?: string;      // the photo as it was read (camera, phone engine)
 };
 
 export const MODELS = [

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+- Kameran på telefonen: bilden beskärs till rutan och görs svartvit innan den läses, så vägg, golv, ram och papperets struktur inte blir "bokstäver".
+- Det som lästes kontrolleras mot Koranens ordförråd. Är det brus (kalligrafi, dekor, sned bild) översätts inget; i stället visas vad du kan göra: läsa med Claude, dela till Google Lens, skriva in texten själv eller ta en ny bild.
+- Läst text visas och kan rättas innan den översätts igen.
+- Upprepningar i maskinöversättningen ("0 0 0 0 …") kortas.
+
 ## 0.3.1
 - Inställningar → Översättning förklarar vad varje val innebär: kvalitet, kostnad, om texten lämnar telefonen och vart den skickas, och vad som gäller för Koranen och translitterationen.
 

@@ -9,7 +9,7 @@ import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { Directory, File, Paths } from 'expo-file-system';
 import { ApiError, Direction, Result, askClaude, imageBlock, parseAnswer, systemPrompt, textBlock, userPromptAr, userPromptImage, userPromptToArabic, verseMatch } from './core/engine';
 import { Ayah, QuranData, fetchAyahs, pickEdition } from './core/quran';
-import { findVerses, myMemory } from './core/free';
+import { checkOcr, collapseRepeats, findVerses, myMemory, vocabulary } from './core/free';
 import { hasArabic, Mode, Scheme, transliterate, isVocalized } from './core/translit';
 import { Lang, Strings } from './i18n';
 import { AlifNativeModule } from '../modules/alif-native';
@@ -80,10 +80,10 @@ function findQuran(r: Result, s: Settings, lib?: QuranLib): Result {
 async function freeTranslate(text: string, from: string, to: string, engine: 'device' | 'mymemory'): Promise<string> {
   if (engine === 'device') {
     if (!AlifNativeModule) throw Object.assign(new Error('device'), { kind: 'nodevice' });
-    try { return await AlifNativeModule.translate(text, from, to, true); }
+    try { return collapseRepeats(await AlifNativeModule.translate(text, from, to, true)); }
     catch (e: any) { throw Object.assign(new Error(e?.message ?? 'device'), { kind: String(e?.code ?? '').includes('MODEL') ? 'model' : 'other' }); }
   }
-  return myMemory(text, from, to);
+  return collapseRepeats(await myMemory(text, from, to));
 }
 
 export async function translateText(text: string, s: Settings, direction = directionOf(text), lib?: QuranLib): Promise<Result> {
@@ -108,9 +108,20 @@ export async function translateText(text: string, s: Settings, direction = direc
   return findQuran({ ...base, arabic: ar }, s, lib);
 }
 
-/** Shrinks the photo (1600 px wide, JPEG); Claude reads it, or Tesseract on the phone when there is no key. */
-export async function translateImage(uri: string, s: Settings, lib?: QuranLib): Promise<Result> {
-  const ctx = ImageManipulator.manipulate(uri);
+export type Photo = { uri: string; width?: number; height?: number; frame?: boolean };
+
+/**
+ * Shrinks the photo (1600 px wide, JPEG); Claude reads it, or Tesseract on the phone when there is no key.
+ * A camera shot is cut to the frame shown on the screen first, so walls, floor and picture frames are not read as text.
+ */
+export async function translateImage(photo: Photo | string, s: Settings, lib?: QuranLib): Promise<Result> {
+  const p: Photo = typeof photo === 'string' ? { uri: photo } : photo;
+  const ctx = ImageManipulator.manipulate(p.uri);
+  if (p.frame && p.width && p.height) {
+    // The frame on the camera screen: 24 px in from the sides of the preview and 18 % from the top and bottom.
+    const x = Math.round(p.width * 0.06), y = Math.round(p.height * 0.18);
+    ctx.crop({ originX: x, originY: y, width: p.width - 2 * x, height: p.height - 2 * y });
+  }
   ctx.resize({ width: 1600 });
   const img = await ctx.renderAsync();
   const engine = ocrEngineFor(s);
@@ -121,10 +132,18 @@ export async function translateImage(uri: string, s: Settings, lib?: QuranLib): 
     return confirmQuran(parseAnswer(answer, 'ar2x'), s, lib);
   }
   const out = await img.saveAsync({ compress: 0.95, format: SaveFormat.JPEG });
-  const text = (await readArabic(out.uri)).replace(/[ \t]+/g, ' ').trim();
-  if (!hasArabic(text)) return { direction: 'ar2x', source: text, arabic: '', translit: '', translation: '', words: [], notes: '' };
-  // The text read on the phone goes on to the chosen text engine.
-  return translateText(text, s, 'ar2x', lib);
+  const raw = await readArabic(out.uri);
+  const check = checkOcr(raw, vocabFor(lib));
+  // Noise (calligraphy, decoration, a bad photo) is never passed on to be "translated".
+  if (!check.ok) throw Object.assign(new Error('unreadable'), { kind: 'unreadable', raw: check.text || raw.trim(), image: out.uri });
+  return { ...(await translateText(check.text, s, 'ar2x', lib)), photo: out.uri } as Result;
+}
+
+let vocabCache: { q: QuranData; v: Set<string> } | null = null;
+function vocabFor(lib?: QuranLib): Set<string> | undefined {
+  if (!lib?.arabic) return undefined;
+  if (vocabCache?.q !== lib.arabic) vocabCache = { q: lib.arabic, v: vocabulary(lib.arabic) };
+  return vocabCache.v;
 }
 
 // ---- Tesseract on the phone ----
@@ -163,6 +182,7 @@ export function errorText(e: unknown, t: Strings): string {
   if (kind === 'model') return t.errModel;
   if (kind === 'ocrmodel') return t.errOcrModel;
   if (kind === 'nodevice') return t.errNoDevice;
+  if (kind === 'unreadable') return t.errUnreadable;
   if (kind === 'answer' || e instanceof SyntaxError || (e as Error)?.message === 'no JSON in answer') return t.errAnswer;
   return `${t.errOther}: ${(e as Error)?.message ?? ''}`;
 }

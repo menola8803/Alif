@@ -57,7 +57,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       return (
         <Screen>
           <View style={{ flex: 1 }}>
-            {tab === 'camera' && <CameraScreen go={push} openSurah={openSurah} />}
+            {tab === 'camera' && <CameraScreen go={push} openSurah={openSurah} openWrite={() => setTab('text')} />}
             {tab === 'text' && <TextScreen go={push} openSurah={openSurah} />}
             {tab === 'quran' && <Quran open={n => push({ name: 'surah', n })} onAwrad={() => push({ name: 'awrad' })} />}
             {tab === 'history' && <History open={id => push({ name: 'entry', id })} />}

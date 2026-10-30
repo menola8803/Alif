@@ -75,3 +75,58 @@ export function findVerses(text: string, q: QuranData): VerseHit | null {
   const hit = best as VerseHit | null;
   return hit && hit.score >= 0.7 ? hit : null;
 }
+
+// ---- checking what the phone's text recognition read ----
+
+const AR_LETTER = /[ء-غف-يٱ]/g;
+const normWord = (w: string) => stripHarakat(w).replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^ء-ي]/g, '');
+
+/** All distinct (normalized) words of the Qur'an: a dictionary to tell real Arabic from noise. */
+export function vocabulary(q: QuranData): Set<string> {
+  const v = new Set<string>();
+  for (const s of q.surahs) for (const a of s.ayahs) for (const w of a.split(/\s+/)) {
+    const n = normWord(w);
+    if (n.length > 1) { v.add(n); if (n.startsWith('ال') && n.length > 3) v.add(n.slice(2)); }
+  }
+  return v;
+}
+
+const known = (w: string, vocab?: Set<string>) => {
+  if (!vocab) return true;
+  if (vocab.has(w)) return true;
+  // common prefixes (wa-, fa-, bi-, li-, ka-, al-) and suffixes (-hu, -hā, -hum, -kum, -nā)
+  for (const p of ['و', 'ف', 'ب', 'ل', 'ك', 'ال', 'وال', 'بال', 'فال', 'لل']) if (w.startsWith(p) && vocab.has(w.slice(p.length))) return true;
+  for (const x of ['ه', 'ها', 'هم', 'كم', 'نا', 'ي', 'ك']) if (w.endsWith(x) && vocab.has(w.slice(0, -x.length))) return true;
+  return false;
+};
+
+export type OcrCheck = { text: string; ok: boolean; quality: number };
+
+/**
+ * Cleans what Tesseract read and says whether it is real text. Lines that are mostly digits, symbols or loose letters
+ * are dropped. The rest is accepted when enough of it is Arabic words and (with a dictionary) enough of those words exist.
+ */
+export function checkOcr(raw: string, vocab?: Set<string>): OcrCheck {
+  const lines: string[] = [];
+  let words = 0, good = 0;
+  for (const line of raw.split(/\n+/)) {
+    const toks = line.split(/\s+/).filter(Boolean);
+    if (!toks.length) continue;
+    const arabic = toks.map(t => t.replace(/[^؀-ۿ]/g, '')).filter(t => (t.match(AR_LETTER) ?? []).length >= 2 && !/(.)\1\1/.test(t));
+    if (arabic.length / toks.length < 0.6) continue;
+    lines.push(arabic.join(' '));
+    for (const t of arabic) { words++; if (known(normWord(t), vocab)) good++; }
+  }
+  const text = lines.join('\n').trim();
+  const nonSpace = raw.replace(/\s+/g, '').length || 1;
+  const letters = (text.match(AR_LETTER) ?? []).length;
+  const share = letters / nonSpace;               // how much of what was read survived
+  const real = words ? good / words : 0;          // how many words are real words
+  const quality = Math.min(1, share * 1.4) * 0.4 + real * 0.6;
+  return { text, ok: words >= 2 && share >= 0.45 && (!vocab || real >= 0.5), quality };
+}
+
+/** Repeated words or digits in a machine translation of noise ("0 0 0 0 …", "ف ف ف …") are cut down. */
+export function collapseRepeats(s: string): string {
+  return s.replace(/(\S+)(?:\s+\1){3,}/g, '$1 …');
+}

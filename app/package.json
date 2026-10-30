@@ -1,6 +1,6 @@
 {
   "name": "alif",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "index.ts",
   "dependencies": {
     "@expo-google-fonts/amiri": "^0.4.1",
@@ -20,6 +20,7 @@
     "expo-localization": "~58.0.5",
     "expo-notifications": "~58.1.7",
     "expo-secure-store": "~58.0.2",
+    "expo-sharing": "~58.0.21",
     "expo-splash-screen": "~58.0.11",
     "expo-status-bar": "~58.0.4",
     "react": "19.3.0",
@@ -36,7 +37,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/semver.test.ts",
+    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/ocr.test.ts && tsx test/semver.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "private": true

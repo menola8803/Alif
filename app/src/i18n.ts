@@ -98,6 +98,13 @@ const sv = {
   awradOpen: 'Öppna Daily Awrad', awradLater: 'Senare',
   awradSource: 'Ordning och antal enligt naqshbandi.org och Shaykh Nāẓims häfte. Översättningarna av Koranen hämtas från den valda översättningen.',
   loadingQuran: 'Koranens text laddas…',
+  errUnreadable: 'Texten kunde inte läsas säkert på telefonen. Kalligrafi, dekorerad skrift och snett fotograferad text klarar läsningen på telefonen inte – därför översattes inget.',
+  unreadTitle: 'Kunde inte läsa texten', unreadTry: 'Det här kan du göra:',
+  unreadClaude: 'Läs med Claude', unreadClaudeSub: 'Läser kalligrafi och vokaltecken (API-nyckel).',
+  unreadLens: 'Dela till Google Lens', unreadLensSub: 'Gratis, läser och översätter kalligrafi bra. Välj Google Lens i listan.',
+  unreadType: 'Skriv in texten själv', unreadTypeSub: 'Skriv eller klistra in den arabiska texten under Skriv.',
+  unreadRetake: 'Ta en ny bild', unreadRetakeSub: 'Rakt framifrån, nära, skarpt och utan reflexer – bara texten i rutan.',
+  unreadRaw: 'Det som lästes (osäkert)', readText: 'Läst text – rätta vid behov', translateAgain: 'Översätt igen',
   // engines
   engInfoTitle: 'Bra att veta om valen',
   engInfo: [
@@ -219,6 +226,13 @@ const en: Strings = {
   awradOpen: 'Open Daily Awrad', awradLater: 'Later',
   awradSource: "Order and counts as in naqshbandi.org and Shaykh Nāẓim's booklet. Qurʾān translations come from the chosen translation.",
   loadingQuran: 'Loading the Qurʾān text…',
+  errUnreadable: 'The text could not be read reliably on the phone. Calligraphy, decorated script and text photographed at an angle are beyond the phone\'s text recognition – so nothing was translated.',
+  unreadTitle: 'Could not read the text', unreadTry: 'What you can do:',
+  unreadClaude: 'Read with Claude', unreadClaudeSub: 'Reads calligraphy and vowel marks (API key).',
+  unreadLens: 'Share to Google Lens', unreadLensSub: 'Free, reads and translates calligraphy well. Choose Google Lens in the list.',
+  unreadType: 'Type the text yourself', unreadTypeSub: 'Write or paste the Arabic text under Write.',
+  unreadRetake: 'Take a new photo', unreadRetakeSub: 'Straight on, close, sharp and without glare – only the text in the frame.',
+  unreadRaw: 'What was read (uncertain)', readText: 'Read text – correct it if needed', translateAgain: 'Translate again',
   // engines
   engInfoTitle: 'Good to know about the choices',
   engInfo: [
