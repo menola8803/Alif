@@ -7,7 +7,7 @@ import { dict, Lang, Strings } from './i18n';
 import { Mode, Scheme } from './core/translit';
 import { DEFAULT_MODEL, Result } from './core/engine';
 import { SurahText } from './core/quran';
-import { Level } from './core/awrad';
+import { IhdaShaykh, Level } from './core/awrad';
 import type { Engine, OcrEngine } from './translate';
 
 export type EntryKind = 'camera' | 'text' | 'quran';
@@ -30,6 +30,7 @@ type Saved = {
   popupDay: string;                    // the day the reminder popup was last closed
   engine: Engine; ocrEngine: OcrEngine; // translation engine and photo reading (auto: Claude with a key, else free on the phone)
   live: boolean;                       // translate while typing (free engines)
+  ihdaShaykh: IhdaShaykh;              // the living shaykh named at the end of the dedication
 };
 
 const KEY = 'alif.state.v1';
@@ -42,7 +43,7 @@ const empty = (): Saved => ({
   themeName: 'dark', lang: phoneLang(), scheme: 'academic', mode: 'tajwid', model: DEFAULT_MODEL, editions: {},
   arabicSize: 30, showTranslit: true, showTranslation: true, history: [],
   awradLevel: 'mubtadi', reminderOn: true, reminderHour: 21, reminderMinute: 0, awradDay: '', awradCounts: {}, popupDay: '',
-  engine: 'auto', ocrEngine: 'auto', live: true,
+  engine: 'auto', ocrEngine: 'auto', live: true, ihdaShaykh: 'none',
 });
 
 type Prefs = Omit<Saved, 'history'>;

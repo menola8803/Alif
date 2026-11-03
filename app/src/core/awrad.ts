@@ -76,7 +76,7 @@ export const AWRAD: AwradStep[] = [
   {
     id: 'ihda', count: 1,
     title: { sv: 'Ihdāʾ (tillägnan)', en: 'Ihdāʾ (dedication)' },
-    note: { sv: 'Tillägna belöningen av det du läst till Profeten ﷺ, hans familj och följeslagare, alla profeter och sändebud, de fyra imamerna och mästarna i den naqshbandiska kedjan, ända till din shaykh. Läs tillägnan ur din shaykhs bok.', en: 'Dedicate the reward of what you recited to the Prophet ﷺ, his family and companions, all prophets and messengers, the four imams and the masters of the Naqshbandi chain, up to your own shaykh. Read the dedication from your shaykh\'s book.' },
+    note: { sv: 'Belöningen av det som lästs tillägnas Profeten ﷺ och mästarna i den naqshbandiska kedjan. Avslutas med al-Fātiḥa.', en: 'The reward of what was recited is dedicated to the Prophet ﷺ and the masters of the Naqshbandi chain. It closes with al-Fātiḥa.' },
   },
   {
     id: 'fatiha2', count: 1, quran: { surah: 1, from: 1, to: 7 },
@@ -146,3 +146,58 @@ export function formatTime(hour: number, minute: number, h12: boolean): string {
 
 /** Is it past the reminder time today (local time)? */
 export const pastTime = (hour: number, minute: number, d = new Date()) => d.getHours() * 60 + d.getMinutes() >= hour * 60 + minute;
+
+// ---- Ihdāʾ (dedication) ----
+// The wording used in the Naqshbandi-Haqqani awrād (naqshbandi.org, Shaykh Nāẓim's booklet). The last line names the
+// living shaykh of the murīd's own line; the person chooses it (or none) on the Awrad screen.
+
+export type IhdaShaykh = 'none' | 'hisham' | 'adil';
+export const IHDA_SHAYKHS: IhdaShaykh[] = ['none', 'hisham', 'adil'];
+
+const IHDA_PARTS = {
+  open: 'اللَّهُمَّ بَلِّغْ ثَوَابَ مَا قَرَأْنَاهُ وَنُورَ مَا تَلَوْنَاهُ هَدِيَّةً وَاصِلَةً مِنَّا إِلَىٰ رُوحِ نَبِيِّنَا سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ ﷺ،',
+  prophets: 'وَإِلَىٰ أَرْوَاحِ إِخْوَانِهِ مِنَ ٱلْأَنْبِيَاءِ وَٱلْمُرْسَلِينَ وَخُدَمَاءِ شَرَائِعِهِمْ،',
+  imams: 'وَإِلَىٰ أَرْوَاحِ ٱلْأَئِمَّةِ ٱلْأَرْبَعَةِ،',
+  masters: 'وَإِلَىٰ أَرْوَاحِ مَشَايِخِنَا فِي ٱلطَّرِيقَةِ ٱلنَّقْشْبَنْدِيَّةِ ٱلْعَلِيَّةِ،',
+  bahauddin: 'خَاصَّةً إِلَىٰ رُوحِ إِمَامِ ٱلطَّرِيقَةِ وَغَوْثِ ٱلْخَلِيقَةِ خْوَاجَهْ بَهَاءِ ٱلدِّينِ ٱلنَّقْشْبَنْدِ مُحَمَّدٍ ٱلْأُوَيْسِيِّ ٱلْبُخَارِيِّ،',
+  abdullah: 'وَإِلَىٰ حَضْرَةِ مَوْلَانَا سُلْطَانِ ٱلْأَوْلِيَاءِ ٱلشَّيْخِ عَبْدِ ٱللَّهِ ٱلْفَائِزِ ٱلدَّاغِسْتَانِيِّ،',
+  nazim: 'وَإِلَىٰ حَضْرَةِ مَوْلَانَا سُلْطَانِ ٱلْأَوْلِيَاءِ ٱلشَّيْخِ مُحَمَّدٍ نَاظِمٍ ٱلْحَقَّانِيِّ،',
+  hisham: 'وَإِلَىٰ حَضْرَةِ مَوْلَانَا ٱلشَّيْخِ مُحَمَّدٍ هِشَامٍ قَبَّانِي،',
+  adil: 'وَإِلَىٰ حَضْرَةِ مَوْلَانَا ٱلشَّيْخِ مُحَمَّدٍ عَادِلٍ ٱلرَّبَّانِيِّ،',
+  close: 'وَسَائِرِ سَادَاتِنَا وَٱلصِّدِّيقِينَ. ٱلْفَاتِحَة.',
+};
+
+const IHDA_MEANING = {
+  sv: {
+    open: 'O Gud, låt belöningen av det vi har läst och ljuset av det vi har reciterat nå fram som en gåva från oss till vår profets själ, vår mästare och herre Muhammad ﷺ,',
+    prophets: 'och till själarna hos hans bröder bland profeterna och sändebuden och dem som tjänade deras lagar,',
+    imams: 'och till de fyra imamernas själar,',
+    masters: 'och till våra mästares själar i den upphöjda naqshbandiska ṭarīqan,',
+    bahauddin: 'särskilt till själen hos vägens imam och skapelsens hjälpare, Khwāja Bahāʾuddīn an-Naqshband Muhammad al-Uwaysī al-Bukhārī,',
+    abdullah: 'och till vår mästare, helgonens sultan, Shaykh ʿAbdullāh al-Fāʾiz ad-Dāghistānī,',
+    nazim: 'och till vår mästare, helgonens sultan, Shaykh Muhammad Nāẓim al-Ḥaqqānī,',
+    hisham: 'och till vår mästare Shaykh Muhammad Hishām Kabbānī,',
+    adil: 'och till vår mästare Shaykh Muhammad ʿĀdil ar-Rabbānī,',
+    close: 'och alla våra mästare och de sannfärdiga. Al-Fātiḥa.',
+  },
+  en: {
+    open: 'O God, let the reward of what we have read and the light of what we have recited reach, as a gift from us, the soul of our Prophet, our master and liege Muhammad ﷺ,',
+    prophets: 'and the souls of his brothers among the prophets and messengers, and of those who served their laws,',
+    imams: 'and the souls of the four imams,',
+    masters: 'and the souls of our masters in the exalted Naqshbandi ṭarīqa,',
+    bahauddin: 'especially the soul of the imam of the path and helper of creation, Khwāja Bahāʾuddīn an-Naqshband Muhammad al-Uwaysī al-Bukhārī,',
+    abdullah: 'and our master, the sultan of the saints, Shaykh ʿAbdullāh al-Fāʾiz ad-Dāghistānī,',
+    nazim: 'and our master, the sultan of the saints, Shaykh Muhammad Nāẓim al-Ḥaqqānī,',
+    hisham: 'and our master Shaykh Muhammad Hishām Kabbānī,',
+    adil: 'and our master Shaykh Muhammad ʿĀdil ar-Rabbānī,',
+    close: 'and all our masters and the truthful ones. Al-Fātiḥa.',
+  },
+};
+
+const ihdaKeys = (shaykh: IhdaShaykh) =>
+  (['open', 'prophets', 'imams', 'masters', 'bahauddin', 'abdullah', 'nazim', ...(shaykh === 'none' ? [] : [shaykh]), 'close'] as (keyof typeof IHDA_PARTS)[]);
+
+/** The dedication in Arabic, one clause per line. */
+export const ihdaArabic = (shaykh: IhdaShaykh) => ihdaKeys(shaykh).map(k => IHDA_PARTS[k]).join('\n');
+/** Its meaning in Swedish or English. */
+export const ihdaMeaning = (shaykh: IhdaShaykh, lang: 'sv' | 'en') => ihdaKeys(shaykh).map(k => IHDA_MEANING[lang][k]).join(' ');

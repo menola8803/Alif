@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3
+- **Ihdāʾ (tillägnan)** i Daily Awrad med hela texten: arabiska med vokaltecken, translitteration enligt tajwīd och betydelse på svenska eller engelska. Kedjan från Profeten ﷺ via Khwāja Bahāʾuddīn an-Naqshband, Shaykh ʿAbdullāh ad-Dāghistānī och Shaykh Nāẓim al-Ḥaqqānī; den levande shaykhen i sista raden väljs (ingen, Shaykh Hishām Kabbānī eller Shaykh ʿĀdil ar-Rabbānī).
+- Translitterationen behåller ﷺ och skriver tāʾ marbūṭa utan vokal som -h.
+
 ## 0.3.2
 - Kameran på telefonen: bilden beskärs till rutan och görs svartvit innan den läses, så vägg, golv, ram och papperets struktur inte blir "bokstäver".
 - Det som lästes kontrolleras mot Koranens ordförråd. Är det brus (kalligrafi, dekor, sned bild) översätts inget; i stället visas vad du kan göra: läsa med Claude, dela till Google Lens, skriva in texten själv eller ta en ny bild.

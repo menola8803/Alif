@@ -2,20 +2,21 @@ import React, { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 import { useApp } from '../store';
 import { useQuran } from '../library';
-import { AWRAD, AwradStep, Level, SALAWAT_SAYYIDINA, countFor, dayKey, formatTime, isMTF } from '../core/awrad';
+import { AWRAD, AwradStep, IhdaShaykh, Level, SALAWAT_SAYYIDINA, countFor, dayKey, formatTime, ihdaArabic, ihdaMeaning, isMTF } from '../core/awrad';
 import { transliterate } from '../core/translit';
 import { arabicDigits } from '../translate';
 import { askPermission, timeZone, uses12h } from '../reminder';
 import { Arabic, Body, Card, Header, Label, Screen, Segmented, SmallBtn, Text, Toggle } from '../ui';
 
 function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: number; onTap: () => void; onUndo: () => void }) {
-  const { t, theme, lang, scheme, mode, showTranslation } = useApp();
+  const { t, theme, lang, scheme, mode, showTranslation, ihdaShaykh, setPrefs } = useApp();
+  const ihda = s.id === 'ihda';
   const lib = useQuran();
   const done = n >= need;
   const ayahs = s.quran ? lib.ayahs(s.quran.surah, s.quran.from, s.quran.to) : null;
-  const arabic = s.arabic ?? (ayahs ? ayahs.map(a => `${a.arabic} ۝${arabicDigits(a.n)}`).join(' ') : '');
+  const arabic = ihda ? ihdaArabic(ihdaShaykh) : s.arabic ?? (ayahs ? ayahs.map(a => `${a.arabic} ۝${arabicDigits(a.n)}`).join(' ') : '');
   const translit = useMemo(() => (arabic ? transliterate(arabic, { scheme, mode }) : ''), [arabic, scheme, mode]);
-  const meaning = s.meaning?.[lang] ?? (ayahs && ayahs.some(a => a.translation) ? ayahs.map(a => a.translation).join(' ') : '');
+  const meaning = ihda ? ihdaMeaning(ihdaShaykh, lang) : s.meaning?.[lang] ?? (ayahs && ayahs.some(a => a.translation) ? ayahs.map(a => a.translation).join(' ') : '');
 
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={`${s.title[lang]} ${n}/${need}`} onPress={onTap} onLongPress={onUndo}
@@ -29,10 +30,16 @@ function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: nu
           <Text style={{ fontSize: 14, fontWeight: '700', color: done ? theme.onPrimary : theme.ink }}>{done ? `✓ ${need}` : `${n} / ${need}`}</Text>
         </View>
       </View>
-      {arabic ? <Arabic size={s.quran ? undefined : 28}>{arabic}</Arabic> : s.quran ? <Text style={{ color: theme.muted }}>{t.loadingQuran}</Text> : null}
+      {arabic ? <Arabic size={s.quran || ihda ? undefined : 28}>{arabic}</Arabic> : s.quran ? <Text style={{ color: theme.muted }}>{t.loadingQuran}</Text> : null}
       {translit ? <Text selectable style={{ fontSize: 15, lineHeight: 22, color: theme.accent, fontWeight: '500' }}>{translit}</Text> : null}
       {meaning && showTranslation ? <Body muted>{meaning}</Body> : null}
       {s.note ? <Text style={{ fontSize: 13, lineHeight: 19, color: theme.muted, fontStyle: 'italic' }}>{s.note[lang]}</Text> : null}
+      {ihda ? (
+        <View style={{ gap: 6 }}>
+          <Text style={{ fontSize: 12, color: theme.muted }}>{t.ihdaShaykh}</Text>
+          <Segmented<IhdaShaykh> options={[['none', t.ihdaNone], ['hisham', 'Hishām Kabbānī'], ['adil', 'ʿĀdil ar-Rabbānī']]} value={ihdaShaykh} onChange={v => setPrefs({ ihdaShaykh: v })} />
+        </View>
+      ) : null}
       {need > 1 && !done ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.tapToCount}</Text> : null}
     </Pressable>
   );

@@ -58,7 +58,7 @@ const CONS: Record<string, Sym> = {
 const HAMZA_SEATS = new Set(['ء', 'أ', 'إ', 'ؤ', 'ئ']);
 const SUN = new Set(['ت', 'ث', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ل', 'ن']);
 const IDGHAM = new Set(['ي', 'ر', 'م', 'ل', 'و', 'ن']);
-const PUNCT: Record<string, string> = { '،': ',', '؛': ';', '؟': '?', '٪': '%', '«': '"', '»': '"', '۔': '.', '﴾': '', '﴿': '' };
+const PUNCT: Record<string, string> = { 'ﷺ': 'ﷺ', 'ﷻ': 'ﷻ', '،': ',', '؛': ';', '؟': '?', '٪': '%', '«': '"', '»': '"', '۔': '.', '﴾': '', '﴿': '' };
 const PAUSE_PUNCT = new Set(['.', '!', '?', ';', ':', ',', '،', '؛', '؟', '۔']);
 const LETTER_NAMES: Record<string, Sym> = {
   'ا': sym('alif'), 'ل': sym('lām', 'laam'), 'م': sym('mīm', 'miim'), 'ص': sym('ṣād', 'saad'), 'ر': sym('rā', 'raa'),
@@ -283,6 +283,7 @@ function renderSegs(segs: Seg[], sc: Scheme, opts: { dropFirstG?: boolean; initi
   segs.forEach((s, i) => {
     let c = cons(s.c, sc);
     if (i === 0 && s.c === 'ء' && opts.initialHamzaSilent) c = ''; // ALA-LC: no ʾ at the start of a word
+    if (s.tm && !s.v && !s.tan) c = 'h';
     if (s.g && !(i === 0 && opts.dropFirstG)) c = c + c;
     out += c + vowel(s.v, sc) + (s.tan && s.v ? 'n' : '') + (s.help ?? '');
   });

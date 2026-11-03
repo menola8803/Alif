@@ -21,6 +21,15 @@ const tr = (id: string) => transliterate(AWRAD.find(s => s.id === id)!.arabic!);
 ok(tr('istighfar') === 'astaghfiru llāh', 'istighfar translit: ' + tr('istighfar'));
 ok(tr('tahlil') === 'lā ilāha illa llāh', 'tahlil translit: ' + tr('tahlil'));
 ok(tr('haqq') === 'allāhu llāhu llāhu ḥaqq', 'haqq translit: ' + tr('haqq'));
+import('../src/core/awrad').then(({ ihdaArabic, ihdaMeaning }) => {
+  const ar = ihdaArabic('none');
+  ok(isVocalized(ar) && ar.startsWith('اللَّهُمَّ بَلِّغْ') && !ar.includes('هِشَامٍ') && ihdaArabic('hisham').includes('هِشَامٍ') && ihdaArabic('adil').includes('عَادِلٍ'), 'ihda arabic');
+  const tl = transliterate(ar);
+  ok(tl.startsWith('allāhumma balligh thawāba mā qaraʾnāhu') && tl.includes('ﷺ') && tl.endsWith('al-fātiḥah.'), 'ihda translit: ' + tl.slice(0, 80) + ' … ' + tl.slice(-30));
+  ok(transliterate(ar, { mode: 'words' }).endsWith('al-fātiḥah.'), 'ihda words mode');
+  ok(ihdaMeaning('none', 'sv').startsWith('O Gud') && ihdaMeaning('hisham', 'en').includes('Hishām'), 'ihda meaning');
+  if (fail) { console.log(`${fail} awrad test(s) failed`); process.exit(1); }
+});
 console.log('salawat:', tr('salawat10'));
 console.log('shahada:', tr('shahada'));
 console.log('opening:', tr('opening'));
