@@ -38,3 +38,13 @@ Docs: https://docs.expo.dev/eas/index.md
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
 - Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
 - Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+
+## Every release (do not forget)
+
+- Update the in-app manual in BOTH languages (`app/src/manual.ts`, Swedish and English) for every change a user can see,
+  and set its version to the new app version. The tests fail when the manual's version differs from `package.json`.
+- Add the release notes to `CHANGELOG.md` (Swedish) and `CHANGELOG.en.md` (English); the app shows them in the
+  language chosen in Settings.
+- All new text in the app goes into `src/i18n.ts` in Swedish and English; no hard-coded text in screens.
+- The word "GitHub" is not shown anywhere in the app. Developer credit: Claes Sundman · Scandinavian Nexum Consulting.
+- Privacy: the microphone is off by default and only used after the person turns it on in Settings.
