@@ -417,7 +417,7 @@ export default function Splash({ onDone }: { onDone: () => void }) {
   const sv = lang === 'sv';
   const words: FW[] = [
     { ar: 'عِلْم', tr: 'ʿilm', gloss: sv ? 'kunskap' : 'knowledge', x: 112, y: 26, delay: 0 },
-    { ar: 'نُور', tr: 'nūr', gloss: sv ? 'light' : 'ljus', x: 196, y: 34, delay: 900 },
+    { ar: 'نُور', tr: 'nūr', gloss: sv ? 'ljus' : 'light', x: 196, y: 34, delay: 900 },
     { ar: 'حِكْمَة', tr: 'ḥikmah', gloss: sv ? 'visdom' : 'wisdom', x: 280, y: 26, delay: 1600 },
   ];
 

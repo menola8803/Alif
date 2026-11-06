@@ -39,7 +39,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/ocr.test.ts && tsx test/semver.test.ts",
+    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/ocr.test.ts && tsx test/update.test.ts && tsx test/semver.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "private": true

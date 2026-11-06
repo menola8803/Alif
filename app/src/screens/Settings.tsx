@@ -8,7 +8,7 @@ import { Route } from '../nav';
 import { MODELS, askClaude, textBlock } from '../core/engine';
 import { Edition, listEditions, pickEdition } from '../core/quran';
 import { transliterate } from '../core/translit';
-import { isNewer, latestRelease, Release } from '../update';
+import { isNewer, latestRelease, notesFor, Release } from '../update';
 import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview, Toggle } from '../ui';
 import { themes, ThemeName } from '../theme';
 import { Pressable } from 'react-native';
@@ -193,7 +193,7 @@ export function AiScreen({ onBack }: { onBack: () => void }) {
 }
 
 export function UpdateScreen({ onBack }: { onBack: () => void }) {
-  const { theme, t } = useApp();
+  const { theme, t, lang } = useApp();
   const cur = Constants.expoConfig?.version ?? '0.0.0';
   const [msg, setMsg] = useState(''); const [rel, setRel] = useState<Release | null>(null); const [busy, setBusy] = useState(false);
   const install = async () => {
@@ -221,7 +221,7 @@ export function UpdateScreen({ onBack }: { onBack: () => void }) {
   return (
     <Screen>
       <Header title={t.update} sub={t.updateSub} onBack={onBack} />
-      <Card><Text style={{ color: theme.ink }}>{t.version} {cur}</Text>{msg ? <Text style={{ color: theme.muted }}>{msg}</Text> : null}{rel?.notes ? <Text style={{ color: theme.muted, fontSize: 13 }}>{rel.notes}</Text> : null}</Card>
+      <Card><Text style={{ color: theme.ink }}>{t.version} {cur}</Text>{msg ? <Text style={{ color: theme.muted }}>{msg}</Text> : null}{rel && notesFor(rel.notes, lang) ? <Text style={{ color: theme.muted, fontSize: 13, lineHeight: 19 }}>{notesFor(rel.notes, lang)}</Text> : null}</Card>
       <Btn title={busy ? t.checking : t.checkUpdate} onPress={check} disabled={busy} />
       {rel ? <Btn title={t.installUpdate} onPress={install} disabled={busy} /> : null}
       {rel ? <Btn title={t.download} kind="secondary" onPress={() => Linking.openURL(rel.page).catch(() => {})} /> : null}

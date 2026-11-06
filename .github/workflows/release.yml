@@ -119,8 +119,13 @@ jobs:
           # Fixed name: https://github.com/<owner>/<repo>/releases/latest/download/Alif.apk always points at the newest release.
           cp "Alif-${TAG}.apk" Alif.apk
           git archive --format=zip --prefix="alif-${TAG}/" -o "alif-${TAG}.zip" HEAD
+          # Release notes in both languages; the app shows the one that matches its language setting.
+          V="${TAG#v}"
+          section() { awk -v v="## $V" 'index($0, v) == 1 {on=1; next} /^## / {on=0} on' "$1"; }
+          { echo "<!-- lang:sv -->"; section CHANGELOG.md; echo; echo "<!-- lang:en -->"; section CHANGELOG.en.md; } > notes.md
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "Alif-${TAG}.apk" Alif.apk "alif-${TAG}.zip" --clobber
+            gh release edit "$TAG" --notes-file notes.md
           else
-            gh release create "$TAG" "Alif-${TAG}.apk" Alif.apk "alif-${TAG}.zip" --target "${GITHUB_SHA}" --title "Alif ${TAG}" --generate-notes
+            gh release create "$TAG" "Alif-${TAG}.apk" Alif.apk "alif-${TAG}.zip" --target "${GITHUB_SHA}" --title "Alif ${TAG}" --notes-file notes.md
           fi
