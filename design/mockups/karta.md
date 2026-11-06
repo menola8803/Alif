@@ -12,3 +12,4 @@ Ska se ut som kartan i Trace (se karta-som-trace.webp):
 ## Källa att jämföra
 - https://islam.se/moskeer/ – Claes tips. Jämför med OpenStreetMap när kartan byggs; använd den om den är mer komplett (fråga om lov om appen blir offentlig).
 - islam.se listar 234 moskéer i 21 län: namn, adress, kommun, län (inga koordinater i texten; kartan laddas med JavaScript – leta datafilen bakom den). Plan: skript läser listan, slår upp koordinater (Nominatim, 1/s) om de saknas, sparar en fil i appen, slår ihop med OpenStreetMap och tar bort dubbletter. Källan anger att adresser/positioner är ungefärliga.
+- Mawaqit som tredje källa: moskéer i Sverige som finns på mawaqit.net (namn, adress, position). Slås ihop med OSM + islam.se, dubbletter bort. Moskéer från Mawaqit kan visa sina egna bönetider på kartan. Kolla villkoren först.
