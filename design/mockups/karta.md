@@ -8,3 +8,6 @@ Ska se ut som kartan i Trace (se karta-som-trace.webp):
 - Moskéer som små ikoner; tryck för namn, adress och vägbeskrivning.
 - Mörk panel nertill: antal moskéer, närmaste moské, två knappar (Lista · Mer).
 - © OpenStreetMap-bidragsgivare syns på kartan.
+
+## Källa att jämföra
+- https://islam.se/moskeer/ – Claes tips. Jämför med OpenStreetMap när kartan byggs; använd den om den är mer komplett (fråga om lov om appen blir offentlig).
