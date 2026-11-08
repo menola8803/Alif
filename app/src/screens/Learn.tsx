@@ -138,7 +138,8 @@ export function LetterScreen({ id, onBack, go }: { id: string; onBack: () => voi
   // Two boxes per row, sized in pixels (screen padding 16 + card padding 16 on each side).
   const { width } = useWindowDimensions();
   const GAP = 12;
-  const cell = Math.floor((width - 64 - GAP) / 2);
+  const [gridW, setGridW] = useState(0);
+  const cell = Math.floor(((gridW || width - 72) - GAP) / 2);
   return (
     <Screen>
       <Header title={`${i + 1}. ${l.name}`} sub={`${t.sound}: ${l.sound}`} onBack={onBack} />
@@ -158,13 +159,23 @@ export function LetterScreen({ id, onBack, go }: { id: string; onBack: () => voi
         {l.forms && FORMS[l.id] ? (
           <Card>
             <Label>{t.letterForms}</Label>
-            <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: GAP }}>
-              {(['iso', 'ini', 'med', 'fin'] as const).map(k => (
-                <View key={k} style={{ width: cell, gap: 6 }}>
-                  <Text style={{ fontSize: 12.5, fontWeight: '700', color: theme.muted, textAlign: 'center' }}>{t[`form_${k}`]}</Text>
-                  <View style={{ width: cell, height: Math.round(cell / 1.5), backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: theme.line, alignItems: 'center', justifyContent: 'center' }}>
-                    <Image source={FORMS[l.id][k]} style={{ width: cell - 12, height: Math.round(cell / 1.5) - 12 }} resizeMode="contain" />
-                  </View>
+            {/* Two rows of two, read from the right: 1 alone, 2 at the start, 3 in the middle, 4 at the end. */}
+            <View onLayout={e => setGridW(e.nativeEvent.layout.width)} style={{ gap: GAP }}>
+              {([['iso', 'ini'], ['med', 'fin']] as const).map((row, r) => (
+                <View key={r} style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
+                  {row.map((k, c) => (
+                    <View key={k} style={{ width: cell, gap: 6 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                        <View style={{ width: 22, height: 22, borderRadius: 11, borderWidth: 1.5, borderColor: theme.primary, alignItems: 'center', justifyContent: 'center' }}>
+                          <Text style={{ fontSize: 12, fontWeight: '700', color: theme.primary }}>{r * 2 + c + 1}</Text>
+                        </View>
+                        <Text numberOfLines={1} style={{ fontSize: 12.5, fontWeight: '700', color: theme.muted }}>{t[`form_${k}`]}</Text>
+                      </View>
+                      <View style={{ width: cell, height: Math.round(cell / 1.5), backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: theme.line, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={FORMS[l.id][k]} style={{ width: cell - 12, height: Math.round(cell / 1.5) - 12 }} resizeMode="contain" />
+                      </View>
+                    </View>
+                  ))}
                 </View>
               ))}
             </View>

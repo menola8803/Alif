@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.4.2';
+export const MANUAL_VERSION = '0.4.3';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -47,7 +47,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Översättningsmotor väljs under Inställningar › Översättning.',
     ] },
     { title: 'Lär dig läsa', items: [
-      'Bokstäverna i samma ordning som boken Iqraʾa! (Samir Muric), med bokens bilder av var bokstaven uttalas och hur den skrivs: ensam, i början, i mitten och i slutet, i fyra rutor med rubriker på ditt språk.',
+      'Bokstäverna i samma ordning som boken Iqraʾa! (Samir Muric), med bokens bilder av var bokstaven uttalas och hur den skrivs: ensam, i början, i mitten och i slutet, i fyra rutor två och två, numrerade 1–4 från höger.',
       'Tryck ▶ Lyssna för att höra bokstaven (telefonens talsyntes). "Vokaltecken" visar fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler.',
       'Frågor slås på och av i menyn ⋮ uppe till höger (av från början).',
       '"Öppna boken" visar hela boken i telefonens PDF-läsare.',
@@ -107,7 +107,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The translation engine is chosen in Settings › Translation.',
     ] },
     { title: 'Learn to read', items: [
-      'The letters in the same order as the book Iqraʾa! (Samir Muric), with the book’s pictures of where each letter is pronounced and how it is written: alone, at the start, in the middle and at the end, in four boxes with headings in your language.',
+      'The letters in the same order as the book Iqraʾa! (Samir Muric), with the book’s pictures of where each letter is pronounced and how it is written: alone, at the start, in the middle and at the end, in four boxes two by two, numbered 1–4 from the right.',
       'Tap ▶ Listen to hear the letter (the phone’s speech). "Vowel signs" shows fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and the long vowels.',
       'Questions are switched on and off in the ⋮ menu in the top right corner (off by default).',
       '"Open the book" shows the whole book in the phone’s PDF viewer.',

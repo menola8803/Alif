@@ -317,7 +317,7 @@ const sv2 = {
   learnProgress: '{n} av {m} bokstäver lärda', vowelSigns: 'Vokaltecken', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler',
   questions: 'Frågor', quizScore: '{n} av {m} rätt', tryAgain: 'Försök igen', sound: 'Ljud', listen: 'Lyssna',
   joinsYes: 'Kopplas ihop med bokstaven efter.', joinsNo: 'Kopplas inte ihop med bokstaven efter.',
-  makhraj: 'Uttalsplats (makhraj)', letterForms: 'Bokstavens former', formsHelp: 'Pilarna och siffrorna i bokens bilder visar i vilken ordning bokstaven skrivs.', form_iso: 'Ensam', form_ini: 'I början', form_med: 'I mitten', form_fin: 'I slutet',
+  makhraj: 'Uttalsplats (makhraj)', letterForms: 'Bokstavens former', formsHelp: 'Läs från höger: 1 ensam, 2 i början, 3 i mitten, 4 i slutet av ett ord. Pilarna och de små siffrorna i bilderna visar i vilken ordning bokstaven skrivs.', form_iso: 'Ensam', form_ini: 'I början', form_med: 'I mitten', form_fin: 'I slutet',
   learned: 'Lärd', markLearned: 'Markera som lärd', tapToListen: 'Tryck på ett exempel för att lyssna.',
   // Dhikr
   dhikrSub: 'Räknare, Daily Awrad och ṣalawāt', resetCount: 'Nollställ', awradWithIhda: 'Dagens awrād med Ihdāʾ', salawatTitle: 'Ṣalawāt',
@@ -377,7 +377,7 @@ const en2: typeof sv2 = {
   learnProgress: '{n} of {m} letters learned', vowelSigns: 'Vowel signs', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and long vowels',
   questions: 'Questions', quizScore: '{n} of {m} right', tryAgain: 'Try again', sound: 'Sound', listen: 'Listen',
   joinsYes: 'Joins the letter after it.', joinsNo: 'Does not join the letter after it.',
-  makhraj: 'Where it is pronounced (makhraj)', letterForms: 'The letter’s forms', formsHelp: 'The arrows and numbers in the book’s pictures show the order in which the letter is written.', form_iso: 'Alone', form_ini: 'At the start', form_med: 'In the middle', form_fin: 'At the end',
+  makhraj: 'Where it is pronounced (makhraj)', letterForms: 'The letter’s forms', formsHelp: 'Read from the right: 1 alone, 2 at the start, 3 in the middle, 4 at the end of a word. The arrows and small numbers in the pictures show the order in which the letter is written.', form_iso: 'Alone', form_ini: 'At the start', form_med: 'In the middle', form_fin: 'At the end',
   learned: 'Learned', markLearned: 'Mark as learned', tapToListen: 'Tap an example to listen.',
   dhikrSub: 'Counter, Daily Awrad and ṣalawāt', resetCount: 'Reset', awradWithIhda: 'Today’s awrād with the Ihdāʾ', salawatTitle: 'Ṣalawāt',
   manual: 'Manual', manualSub: 'How to use Alif', privacy: 'Privacy', privacySub: 'What stays on the phone',

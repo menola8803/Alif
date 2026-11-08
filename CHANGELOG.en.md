@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.4.3
+- Learn to read: the letter’s four forms are shown two by two, with a number in a ring (1 alone, 2 at the start, 3 in the middle, 4 at the end) so the order is clear.
+
 ## 0.4.2
 - Learn to read: the letter’s four forms are shown in four separate white boxes with round corners and space between them, and the letter fills the box better.
 - Pictures in Learn and in Translate › Picture get the right size on the phone and no longer spill out of their box.

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.3
+- Lär dig läsa: bokstavens fyra former visas två och två, med en siffra i en ring (1 ensam, 2 i början, 3 i mitten, 4 i slutet) så ordningen syns.
+
 ## 0.4.2
 - Lär dig läsa: bokstavens fyra former visas i fyra egna vita rutor med runda hörn och mellanrum, och bokstaven fyller rutan bättre.
 - Bilder i Lär dig och under Översätt › Bild får rätt storlek på telefonen och går inte utanför sin ruta.
