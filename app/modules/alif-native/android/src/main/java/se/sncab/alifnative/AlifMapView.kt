@@ -19,6 +19,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
@@ -28,6 +30,7 @@ class MosquePin : Record {
   @Field val lat: Double = 0.0
   @Field val lng: Double = 0.0
   @Field val title: String = ""
+  @Field val own: Boolean = false
 }
 
 /**
@@ -37,6 +40,7 @@ class MosquePin : Record {
  */
 class AlifMapView(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
   private val onMarkerPress by EventDispatcher<Map<String, Any>>()
+  private val onMapLongPress by EventDispatcher<Map<String, Any>>()
   private val map: MapView
   private var me: MyLocationNewOverlay? = null
   private var lastCenter: List<Double>? = null
@@ -59,6 +63,15 @@ class AlifMapView(context: Context, appContext: AppContext) : ExpoView(context, 
       controller.setZoom(5.0)
       controller.setCenter(GeoPoint(62.0, 16.0))
     }
+    // Holding a finger on the map: the app offers to add a mosque there.
+    map.overlays.add(0, MapEventsOverlay(object : MapEventsReceiver {
+      override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean = false
+      override fun longPressHelper(p: GeoPoint?): Boolean {
+        if (p == null) return false
+        onMapLongPress(mapOf("lat" to p.latitude, "lng" to p.longitude))
+        return true
+      }
+    }))
     addView(map, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
   }
 
@@ -113,12 +126,14 @@ class AlifMapView(context: Context, appContext: AppContext) : ExpoView(context, 
 
   private fun draw() {
     map.overlays.removeAll { it is Marker }
-    val normal = icon(false)
-    val big = icon(true)
+    val normal = icon(false, false)
+    val big = icon(true, false)
+    val ownN = icon(false, true)
+    val ownB = icon(true, true)
     pins.forEachIndexed { i, p ->
       val m = Marker(map)
       m.position = GeoPoint(p.lat, p.lng)
-      m.icon = BitmapDrawable(resources, if (i == selected) big else normal)
+      m.icon = BitmapDrawable(resources, if (p.own) (if (i == selected) ownB else ownN) else (if (i == selected) big else normal))
       m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
       m.title = p.title
       m.setInfoWindow(null)
@@ -133,15 +148,16 @@ class AlifMapView(context: Context, appContext: AppContext) : ExpoView(context, 
   }
 
   // A round dark badge with a gold ring and a small dome with a crescent.
-  private fun icon(big: Boolean): Bitmap {
+  private fun icon(big: Boolean, own: Boolean): Bitmap {
     val d = resources.displayMetrics.density
     val size = ((if (big) 40f else 28f) * d).toInt()
     val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
     val c = Canvas(bmp)
     val r = size / 2f
-    val gold = Color.rgb(232, 176, 74)
+    // Mosques you added yourself get a green ring.
+    val gold = if (own) Color.rgb(95, 196, 180) else Color.rgb(232, 176, 74)
     val p = Paint(Paint.ANTI_ALIAS_FLAG)
-    p.color = Color.argb(80, 232, 176, 74)
+    p.color = if (own) Color.argb(80, 95, 196, 180) else Color.argb(80, 232, 176, 74)
     c.drawCircle(r, r, r, p)
     p.color = Color.argb(245, 23, 38, 41)
     c.drawCircle(r, r, r * 0.74f, p)

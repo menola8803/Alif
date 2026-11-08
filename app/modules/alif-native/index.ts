@@ -21,10 +21,11 @@ type AlifNative = {
 /** The phone's own translation (ML Kit), text recognition (Tesseract), map, speech, widget and volume keys. Null where the native code is not built in (Expo Go, web, tests). */
 export const AlifNativeModule = requireOptionalNativeModule<AlifNative>('AlifNative');
 
-export type MapPin = { lat: number; lng: number; title: string };
+export type MapPin = { lat: number; lng: number; title: string; own?: boolean };
 export type AlifMapProps = ViewProps & {
   pins: MapPin[]; selected: number; center: number[]; showMe: boolean;
   onMarkerPress?: (e: { nativeEvent: { index: number } }) => void;
+  onMapLongPress?: (e: { nativeEvent: { lat: number; lng: number } }) => void;
 };
 let MapNative: React.ComponentType<AlifMapProps> | null = null;
 /** The OpenStreetMap view, or null where it is not built in. */

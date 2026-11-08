@@ -2,6 +2,13 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.2
+- All option rows have the same see-through look as the menu at the bottom.
+- Today: one gold card for the Hijri calendar (date, next special day, sacred month); Mosques next to Qibla.
+- The Qur’an translation is chosen only in Settings (the line in the sura panel is gone).
+- Mosque map: the dot button zooms in where you are; add mosques by holding a finger on the map, remove mosques; the Aisha mosque and more Stockholm mosques added; mosques whose street is not found are included at an approximate place.
+- Daily Awrad: hold a counter to reset it.
+
 ## 0.5.1
 - **Mosque map** (Today › Mosques): an OpenStreetMap map as in Trace with all the mosques in Sweden (OpenStreetMap, Wikidata and islam.se), name, address, distance, directions and a list by distance.
 - **Listen** under Translate: spoken Arabic becomes text in a beige box, transliteration and translation. The microphone is off by default, only open while you listen and closed when you leave the page; "On the phone only" is the default so no audio is sent to Google.

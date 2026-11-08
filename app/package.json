@@ -1,6 +1,6 @@
 {
   "name": "alif",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "index.ts",
   "dependencies": {
     "@expo-google-fonts/amiri": "^0.4.1",

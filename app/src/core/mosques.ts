@@ -1,5 +1,8 @@
 // Mosques for the map (see scripts/fetch-mosques.js for how the built-in list is made).
-export type Mosque = { name: string; addr: string; city: string; lat: number; lng: number; web?: string; src: string };
+export type Mosque = { name: string; addr: string; city: string; lat: number; lng: number; web?: string; src: string; approx?: boolean; own?: boolean };
+
+/** Key for a mosque the person has hidden (the place, rounded to about 10 m). */
+export const mosqueKey = (m: { lat: number; lng: number }) => `${m.lat.toFixed(4)},${m.lng.toFixed(4)}`;
 
 export const overpassQuery = '[out:json][timeout:120];area["ISO3166-1"="SE"][admin_level=2]->.se;nwr["amenity"="place_of_worship"]["religion"="muslim"](area.se);out center tags;';
 

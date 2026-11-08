@@ -435,6 +435,10 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  holdToReset: 'tryck länge för att nollställa',
+  addMosque: 'Lägg till moské', addMosqueHint: 'Håll fingret på kartan där en moské saknas för att lägga till den.', mosqueName: 'Namn', mosqueAddr: 'Adress och ort (valfritt)',
+  removeMosque: 'Ta bort', removeMosqueQ: 'Ta bort {m} från kartan?', ownMosque: 'Tillagd av dig', approxPlace: 'ungefärlig plats',
+  hiddenMosques: '{n} borttagna', showHidden: 'Visa borttagna igen',
   mosques: 'Moskéer', mosquesSub: 'Karta över moskéer i Sverige', mosquesNear: 'Moskéer nära dig', mosque: 'Moské', you: 'Du',
   myPlaceBtn: 'Min plats', list: 'Lista', directions: 'Vägbeskrivning', nearestBtn: 'Närmaste', nearest: 'närmast',
   mosquesCount: '{n} moskéer', noAddress: 'Adress saknas', source: 'Källa', from: 'från', searchMosque: 'Sök moské eller ort',
@@ -463,6 +467,10 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  holdToReset: 'hold to reset',
+  addMosque: 'Add mosque', addMosqueHint: 'Hold your finger on the map where a mosque is missing to add it.', mosqueName: 'Name', mosqueAddr: 'Address and town (optional)',
+  removeMosque: 'Remove', removeMosqueQ: 'Remove {m} from the map?', ownMosque: 'Added by you', approxPlace: 'approximate place',
+  hiddenMosques: '{n} removed', showHidden: 'Show removed again',
   mosques: 'Mosques', mosquesSub: 'Map of mosques in Sweden', mosquesNear: 'Mosques near you', mosque: 'Mosque', you: 'You',
   myPlaceBtn: 'My place', list: 'List', directions: 'Directions', nearestBtn: 'Nearest', nearest: 'nearest',
   mosquesCount: '{n} mosques', noAddress: 'No address', source: 'Source', from: 'from', searchMosque: 'Search mosque or town',

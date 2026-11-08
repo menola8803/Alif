@@ -1,0 +1,12 @@
+{
+  "_note": "Mosques that the open sources miss. The address is looked up when the app is built; lat/lng is used if the lookup fails.",
+  "mosques": [
+    { "name": "Aisha moské (Masjid Aysha)", "addr": "Sankt Eriksgatan 91", "city": "Stockholm", "lat": 59.3405, "lng": 18.0365 },
+    { "name": "Hötorgsmoskén (Masjid Sheikh Said)", "addr": "Apelbergsgatan 34", "city": "Stockholm", "lat": 59.3372, "lng": 18.0605 },
+    { "name": "Islamiska Kulturföreningen i Stockholm", "addr": "Kocksgatan 23", "city": "Stockholm", "lat": 59.3149, "lng": 18.0806 },
+    { "name": "Fatihmoskén", "addr": "Sveavägen 94", "city": "Stockholm", "lat": 59.3437, "lng": 18.0542 },
+    { "name": "Skärholmens moské", "addr": "Bredholmstorget 12", "city": "Skärholmen", "lat": 59.2768, "lng": 17.9077 },
+    { "name": "Imam Ali Islamiska Center", "addr": "Datavägen 2B", "city": "Järfälla", "lat": 59.4246, "lng": 17.8339 },
+    { "name": "Alby moské", "addr": "Rotemannavägen 24", "city": "Norsborg", "lat": 59.2392, "lng": 17.8452 }
+  ]
+}

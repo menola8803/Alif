@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Vibration, View } from 'react-native';
 import { useApp } from '../store';
 import { useQuran } from '../library';
 import { AWRAD, AwradStep, IhdaShaykh, Level, SALAWAT_SAYYIDINA, countFor, dayKey, formatTime, ihdaArabic, ihdaMeaning, isMTF } from '../core/awrad';
@@ -40,7 +40,7 @@ function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: nu
           <Segmented<IhdaShaykh> options={[['none', t.ihdaNone], ['hisham', 'Hishām Kabbānī'], ['adil', 'ʿĀdil ar-Rabbānī']]} value={ihdaShaykh} onChange={v => setPrefs({ ihdaShaykh: v })} />
         </View>
       ) : null}
-      {need > 1 && !done ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.tapToCount}</Text> : null}
+      {need > 1 && !done ? <Text style={{ fontSize: 12, color: theme.muted }}>{n > 0 ? `${t.tapToCount} · ${t.holdToReset}` : t.tapToCount}</Text> : done ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.holdToReset}</Text> : null}
     </Pressable>
   );
 }
@@ -86,7 +86,7 @@ export default function Awrad({ onBack, onReminder }: { onBack: () => void; onRe
         </Card>
         {steps.map(s => {
           const n = counts[s.id] ?? 0;
-          return <Step key={s.id} s={s} n={n} need={need(s)} onTap={() => set(s.id, n >= need(s) ? n : n + 1)} onUndo={() => set(s.id, n - 1)} />;
+          return <Step key={s.id} s={s} n={n} need={need(s)} onTap={() => set(s.id, n >= need(s) ? n : n + 1)} onUndo={() => { if (n > 0) { Vibration.vibrate(40); set(s.id, 0); } }} />;
         })}
         <Text style={{ fontSize: 12, color: theme.muted, lineHeight: 17 }}>{t.awradSource}</Text>
       </ScrollView>

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.2
+- Alla flikrader har samma genomskinliga stil som menyn nertill.
+- Idag: ett guldkort för hijri-kalendern (datum, nästa särskilda dag, helig månad); Moskéer bredvid Qibla.
+- Koranöversättningen väljs bara under Inställningar (raden i surans panel är borttagen).
+- Moskékartan: punktknappen zoomar in där du är; lägg till moskéer genom att hålla fingret på kartan, ta bort moskéer; Aisha-moskén och fler Stockholmsmoskéer tillagda; moskéer vars gata inte hittas kommer med på ungefärlig plats.
+- Daily Awrad: tryck länge på en räknare för att nollställa den.
+
 ## 0.5.1
 - **Moskékarta** (Idag › Moskéer): OpenStreetMap-karta som i Trace med alla moskéer i Sverige (OpenStreetMap, Wikidata och islam.se), namn, adress, avstånd, vägbeskrivning och lista efter avstånd.
 - **Lyssna** under Översätt: arabiskt tal blir text i en beige ruta, translitteration och översättning. Mikrofonen är av från början, öppen bara medan du lyssnar och stängs när du lämnar sidan; "Bara på telefonen" är förval så inget ljud skickas till Google.

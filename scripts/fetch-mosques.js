@@ -75,13 +75,35 @@ async function fromIslamSe(known) {
   for (const it of items) {
     // Already on the map by name nearby? Then no lookup is needed.
     if (known.some(k => norm(k.name) && norm(k.name) === norm(it.name))) continue;
+    const p = await lookup(it.addr, it.city);
+    if (p) out.push({ name: it.name, addr: it.addr, city: it.city, ...p, web: '', src: 'islam.se' });
+    else console.log(`not found: ${it.name} · ${it.addr} · ${it.city}`);
+  }
+  return out;
+}
+
+// Looks up an address: the full address, then with the town, then the town alone (marked approximate).
+async function lookup(addr, city) {
+  const tries = [[`${addr}, ${city}, Sweden`, false], [`${addr}, Sweden`, false], [`${(addr || '').replace(/\s*\d.*$/, '')}, ${city}, Sweden`, true], [`${city}, Sweden`, true]];
+  for (const [q, approx] of tries) {
+    if (!q.replace(/[ ,]|Sweden/g, '')) continue;
     await sleep(1100); // Nominatim: at most one request per second
     try {
-      const q = `${it.addr}, Sweden`;
       const r = await get(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=se&q=${encodeURIComponent(q)}`, {}, 2);
       const j = await r.json();
-      if (j[0]) out.push({ name: it.name, addr: it.addr, city: it.city, lat: Number(j[0].lat), lng: Number(j[0].lon), web: '', src: 'islam.se' });
+      if (j[0]) return { lat: Number(j[0].lat), lng: Number(j[0].lon), ...(approx ? { approx: true } : {}) };
     } catch {}
+  }
+  return null;
+}
+
+// The hand-made list in scripts/mosques-extra.json (mosques the open sources miss).
+async function fromExtra() {
+  const list = JSON.parse(fs.readFileSync(path.join(__dirname, 'mosques-extra.json'), 'utf8')).mosques;
+  const out = [];
+  for (const m of list) {
+    const p = await lookup(m.addr, m.city);
+    out.push({ name: m.name, addr: m.addr, city: m.city, ...(p && !p.approx ? p : { lat: m.lat, lng: m.lng }), web: m.web || '', src: 'alif' });
   }
   return out;
 }
@@ -105,6 +127,7 @@ function merge(list, add) {
   for (const [name, f] of [['OpenStreetMap', fromOsm], ['Wikidata', fromWikidata]]) {
     try { const got = await f(); merge(all, got); console.log(`${name}: ${got.length}`); } catch (e) { console.error(`${name} failed: ${e.message}`); }
   }
+  try { const got = await fromExtra(); merge(all, got); console.log(`extra: ${got.length}`); } catch (e) { console.error(`extra failed: ${e.message}`); }
   try { const got = await fromIslamSe(all); merge(all, got); console.log(`islam.se (looked up): ${got.length}`); } catch (e) { console.error(`islam.se failed: ${e.message}`); }
   all = all.filter(inSweden).map(p => ({ ...p, lat: Math.round(p.lat * 1e5) / 1e5, lng: Math.round(p.lng * 1e5) / 1e5, name: p.name || 'Moské' }));
   if (all.length < 20) throw new Error(`too few mosques (${all.length})`);

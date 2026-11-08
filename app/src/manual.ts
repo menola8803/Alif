@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.1';
+export const MANUAL_VERSION = '0.5.2';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -15,7 +15,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Datum och hijri-datum överst.',
       'Bönetidsklockan: en 24-timmarsklocka med midnatt nertill och middag överst. Varje bön är en prick på ringen, solen går runt i realtid och nästa bön lyser i guld med nedräkning i mitten. Tryck på klockan för alla tider och inställningar.',
       'Raden med tider: tryck på en bön för att slå av eller på dess avisering (● på, ○ av).',
-      'Korten för Daily Awrad, Qibla, månaden och nästa särskilda dag öppnar respektive sida.',
+      'Korten för Daily Awrad, Qibla och Moskéer öppnar respektive sida. Guldkortet visar hijri-datum, nästa särskilda dag och nästa heliga månad och öppnar hijri-kalendern.',
       'Längst ner en av bilderna från Mecka, Medina och Hagia Sofia med Allāhumma ṣalli ʿalā sayyidinā Muḥammad i guld. En ny bild väljs varje gång du trycker på Idag.',
     ] },
     { title: 'Bönetider', items: [
@@ -35,7 +35,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Moskéer', items: [
       'Kortet Moskéer på Idag (eller knappen på Qibla-sidan) öppnar kartan över moskéer i Sverige, med en ikon för varje moské. Kartan är OpenStreetMap, som i Trace.',
-      'Tryck på en ikon för namn, adress, avstånd och vägbeskrivning. Knappen uppe till höger flyttar kartan till din plats; Lista visar alla moskéer efter avstånd, med sökning.',
+      'Tryck på en ikon för namn, adress, avstånd och vägbeskrivning. Punktknappen uppe till höger zoomar in där du är (telefonen frågar om plats första gången); Lista visar alla moskéer efter avstånd, med sökning.',
+      'Saknas en moské? Håll fingret på kartan där den ligger, skriv namnet och tryck Spara. Dina moskéer får grön ring. Tryck på en moské och Ta bort för att ta bort den; i Lista kan du visa borttagna igen. Dina ändringar följer med i säkerhetskopian.',
       'Moskéerna kommer från OpenStreetMap, Wikidata och islam.se och följer med appen. Din position visas bara om du har slagit på plats.',
     ] },
     { title: 'Widget', items: [
@@ -44,7 +45,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
       '"Fortsätt läsa" tar dig dit du slutade. Tryck "Bokmärke" vid en vers för att spara den; bokmärkena visas överst på Koranen.',
-      'Daily Awrad med Ihdāʾ öppnas från Idag, Koranen eller Dhikr.',
+      'Daily Awrad med Ihdāʾ öppnas från Idag, Koranen eller Dhikr. Tryck på ett kort för att räkna; tryck länge för att nollställa just den räknaren.',
       'Recitation: spelaren längst ner i en sura spelar vers för vers (▶). Tryck på versens nummer eller "▶" vid en vers för att börja där. Versen som läses markeras och följs.',
       'Ladda ner: pilen ⤓ till höger i suralistan eller i spelaren. En ring visar hur långt det kommit, en grön bock när suran finns på telefonen och spelas utan nät. Tryck på ringen för att avbryta.',
       'Recitatör (förval al-Ḥuṣarī), "bara wifi" och borttagning av ljud finns under Inställningar › Recitation. Ljudet spelas bara medan Alif är öppen.',
@@ -92,7 +93,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The date and the Hijri date at the top.',
       'The prayer clock: a 24-hour clock with midnight at the bottom and noon at the top. Each prayer is a dot on the ring, the sun moves round in real time and the next prayer glows in gold with a countdown in the middle. Tap the clock for all times and settings.',
       'The row of times: tap a prayer to turn its notification on or off (● on, ○ off).',
-      'The cards for Daily Awrad, Qibla, the month and the next special day open their pages.',
+      'The cards for Daily Awrad, Qibla and Mosques open their pages. The gold card shows the Hijri date, the next special day and the next sacred month and opens the Hijri calendar.',
       'At the bottom one of the pictures of Mecca, Medina and Hagia Sophia with Allāhumma ṣalli ʿalā sayyidinā Muḥammad in gold. A new picture is chosen every time you tap Today.',
     ] },
     { title: 'Prayer times', items: [
@@ -112,7 +113,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Mosques', items: [
       'The Mosques card on Today (or the button on the Qibla page) opens the map of mosques in Sweden, with an icon for each mosque. The map is OpenStreetMap, as in Trace.',
-      'Tap an icon for the name, address, distance and directions. The button in the top right moves the map to your place; List shows all mosques by distance, with search.',
+      'Tap an icon for the name, address, distance and directions. The dot button in the top right zooms in where you are (the phone asks for location the first time); List shows all mosques by distance, with search.',
+      'A mosque missing? Hold your finger on the map where it is, type the name and tap Save. Your mosques get a green ring. Tap a mosque and Remove to remove it; in List you can show removed ones again. Your changes are included in the backup.',
       'The mosques come from OpenStreetMap, Wikidata and islam.se and are built into the app. Your position is only shown if you have turned location on.',
     ] },
     { title: 'Widget', items: [
@@ -121,7 +123,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',
       '"Continue reading" takes you to where you stopped. Tap "Bookmark" at a verse to save it; bookmarks are shown at the top of the Qur’an page.',
-      'Daily Awrad with the Ihdāʾ opens from Today, the Qur’an or Dhikr.',
+      'Daily Awrad with the Ihdāʾ opens from Today, the Qur’an or Dhikr. Tap a card to count; hold it to reset that counter.',
       'Recitation: the player at the bottom of a sūra plays verse by verse (▶). Tap a verse number or "▶" at a verse to start there. The verse being recited is highlighted and followed.',
       'Download: the ⤓ arrow on the right in the sūra list or in the player. A ring shows the progress, a green tick when the sūra is on the phone and plays offline. Tap the ring to cancel.',
       'Reciter (default al-Ḥuṣarī), "wifi only" and removing audio are in Settings › Recitation. Audio only plays while Alif is open.',

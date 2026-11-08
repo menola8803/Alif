@@ -49,7 +49,7 @@ class AlifNativeModule : Module() {
 
     // ---- Map (osmdroid) ----
     View(AlifMapView::class) {
-      Events("onMarkerPress")
+      Events("onMarkerPress", "onMapLongPress")
       Prop("pins") { view: AlifMapView, pins: List<MosquePin> -> view.setPins(pins) }
       Prop("selected") { view: AlifMapView, i: Int -> view.setSelected(i) }
       Prop("center") { view: AlifMapView, c: List<Double> -> view.setCenter(c) }
