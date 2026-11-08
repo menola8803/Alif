@@ -7,11 +7,11 @@
     android:padding="14dp"
     android:background="@drawable/alif_widget_bg">
     <TextView android:id="@+id/alif_widget_label" android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="ALIF" android:textColor="#5FC4B4" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.1" />
+        android:text="ALIF" android:textColor="#B3E8B04A" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.1" />
     <TextView android:id="@+id/alif_widget_next" android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="Alif" android:textColor="#E8B04A" android:textSize="24sp" android:textStyle="bold" android:maxLines="1" />
     <TextView android:id="@+id/alif_widget_sub" android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="" android:textColor="#EAF1EF" android:textSize="12sp" android:maxLines="1" />
+        android:text="" android:textColor="#D9E8B04A" android:textSize="12sp" android:maxLines="1" />
     <TextView android:id="@+id/alif_widget_times" android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_marginTop="6dp" android:text="" android:textColor="#B7C6C3" android:textSize="11sp" android:maxLines="2" />
+        android:layout_marginTop="6dp" android:text="" android:textColor="#B3E8B04A" android:textSize="11sp" android:maxLines="2" />
 </LinearLayout>

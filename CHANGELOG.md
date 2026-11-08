@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.5.2
+- Widget: gulddesign med tunn guldkant, följer ljust/mörkt tema; välj Allt eller Bara bönetider under Inställningar › Widget och skärmsläckare. Kan läggas på låsskärmen där telefonen stöder det.
+- Skärmsläckare med klocka och bönetider (nedtonad i ljust tema).
 - Alla flikrader har samma genomskinliga stil som menyn nertill.
 - Idag: ett guldkort för hijri-kalendern (datum, nästa särskilda dag, helig månad); Moskéer bredvid Qibla.
 - Koranöversättningen väljs bara under Inställningar (raden i surans panel är borttagen).

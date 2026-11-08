@@ -11,7 +11,7 @@ import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
 import { PrayerProvider } from './src/prayer';
 import { RecitationProvider } from './src/recitation';
-import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen } from './src/screens/More';
+import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen, WidgetSettingsScreen } from './src/screens/More';
 import MosquesScreen, { MosqueListScreen } from './src/screens/Mosques';
 import { Route } from './src/nav';
 import { Screen, TabBar, TabName } from './src/ui';
@@ -110,6 +110,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'mosques': return <MosquesScreen onBack={pop} go={push} />;
       case 'mosqueList': return <MosqueListScreen onBack={pop} />;
       case 'micSettings': return <MicSettingsScreen onBack={pop} />;
+      case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} />;
       default:
         return (
           <Screen bottom={false}>

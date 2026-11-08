@@ -26,4 +26,5 @@ export type Route =
   | { name: 'cards' }
   | { name: 'mosques' }
   | { name: 'mosqueList' }
-  | { name: 'micSettings' };
+  | { name: 'micSettings' }
+  | { name: 'widgetSettings' };

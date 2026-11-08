@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Linking, Pressable, ScrollView, View } from 'react-native';
+import { Linking, Platform, Pressable, ScrollView, View } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
@@ -7,7 +7,9 @@ import { useApp } from '../store';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
 import { LETTERS } from '../core/learn';
-import { Arabic, Body, Btn, Card, Choice, Header, Label, Screen, Text, Toggle } from '../ui';
+import { Arabic, Body, Btn, Card, Choice, Header, Label, Screen, Segmented, Text, Toggle } from '../ui';
+import { usePrayer } from '../prayer';
+import { PRAYER_TR, SALAH, hhmm } from '../core/prayer';
 
 /** Settings › Recitation: reciter, downloads only on wifi, what is downloaded, remove downloads. */
 export function RecitationScreen({ onBack }: { onBack: () => void }) {
@@ -162,6 +164,47 @@ export function MicSettingsScreen({ onBack }: { onBack: () => void }) {
         <Card style={{ borderColor: theme.primary }}>
           <Label color={theme.primary}>{t.micRulesTitle}</Label>
           {t.micRules.map((r, i) => <Body key={i}>• {r}</Body>)}
+        </Card>
+      </ScrollView>
+    </Screen>
+  );
+}
+
+/** Settings › Widget and screen saver: the look of the widget, with a preview in the same colours. */
+export function WidgetSettingsScreen({ onBack }: { onBack: () => void }) {
+  const { t, theme, widgetStyle, setPrefs } = useApp();
+  const { today, next } = usePrayer();
+  const gold = theme.dark ? '#E8B04A' : '#9C6B22';
+  const box = { backgroundColor: theme.dark ? '#172629' : '#FAF8F4', borderColor: theme.dark ? 'rgba(232,176,74,0.7)' : 'rgba(156,107,34,0.7)', borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12 } as const;
+  return (
+    <Screen>
+      <Header title={t.widgetTitle} sub={t.widgetSub} onBack={onBack} />
+      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }}>
+        <Segmented<'full' | 'times'> options={[['full', t.widgetFull], ['times', t.widgetTimes]]} value={widgetStyle} onChange={v => setPrefs({ widgetStyle: v })} />
+        <Text style={{ fontSize: 12.5, color: theme.muted }}>{widgetStyle === 'times' ? t.widgetTimesSub : t.widgetFullSub}</Text>
+        {/* preview */}
+        <View style={{ alignItems: 'center' }}>
+          <View style={[box, { width: 280, gap: widgetStyle === 'times' ? 4 : 2 }]}>
+            {widgetStyle === 'times' ? SALAH.map(k => {
+              const on = next?.name === k;
+              return (
+                <View key={k} style={{ flexDirection: 'row' }}>
+                  <Text style={{ flex: 1, fontSize: 15, color: gold, opacity: on ? 1 : 0.8, fontWeight: on ? '700' : '400' }}>{PRAYER_TR[k]}</Text>
+                  <Text style={{ fontSize: 15, color: gold, opacity: on ? 1 : 0.8, fontWeight: on ? '700' : '400' }}>{today ? hhmm(today.times[k]) : '–'}</Text>
+                </View>
+              );
+            }) : <>
+              <Text style={{ fontSize: 11, fontWeight: '700', letterSpacing: 1.1, color: gold, opacity: 0.7 }}>{t.nextPrayer.toUpperCase()}</Text>
+              <Text style={{ fontSize: 24, fontWeight: '700', color: gold }}>{next ? `${PRAYER_TR[next.name]}  ${String(next.at.getHours()).padStart(2, '0')}:${String(next.at.getMinutes()).padStart(2, '0')}` : '–'}</Text>
+              <Text style={{ fontSize: 11, color: gold, opacity: 0.75, marginTop: 4 }}>{today ? SALAH.map(k => `${PRAYER_TR[k]} ${hhmm(today.times[k])}`).join('   ') : ''}</Text>
+            </>}
+          </View>
+        </View>
+        <Card><Body>{t.widgetTheme}</Body><Body muted>{t.widgetHow}</Body></Card>
+        <Card>
+          <Label>{t.dreamTitle}</Label>
+          <Body muted>{t.dreamHow}</Body>
+          {Platform.OS === 'android' ? <Btn title={t.dreamOpen} kind="secondary" onPress={() => Linking.sendIntent('android.settings.DREAM_SETTINGS').catch(() => Linking.openSettings().catch(() => {}))} /> : null}
         </Card>
       </ScrollView>
     </Screen>

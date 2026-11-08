@@ -435,6 +435,12 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  widgetTitle: 'Widget och skärmsläckare', widgetSub: 'Bönetiderna på hemskärmen', widgetFull: 'Allt', widgetTimes: 'Bara bönetider',
+  widgetFullSub: 'Nästa bön, hijri-datum, ort och dagens tider', widgetTimesSub: 'De fem bönerna med namn och tid; nästa i fetstil',
+  widgetTheme: 'Widgeten följer Alifs tema: mörkt (mörkgrönt med guld) eller ljust. Byt under Inställningar › Tema.',
+  widgetHow: 'Lägg till: håll fingret på hemskärmen › Widgetar › Alif. På telefoner som har widgetar på låsskärmen finns den där också.',
+  dreamTitle: 'Skärmsläckare', dreamHow: 'Klocka och dagens bönetider i samma stil, på svart, när telefonen laddar. Med ljust tema tonas den ner och skärmen dämpas så den inte bländar. Välj Alif under telefonens Inställningar › Skärm › Skärmsläckare.',
+  dreamOpen: 'Öppna skärmsläckare i telefonen',
   holdToReset: 'tryck länge för att nollställa',
   addMosque: 'Lägg till moské', addMosqueHint: 'Håll fingret på kartan där en moské saknas för att lägga till den.', mosqueName: 'Namn', mosqueAddr: 'Adress och ort (valfritt)',
   removeMosque: 'Ta bort', removeMosqueQ: 'Ta bort {m} från kartan?', ownMosque: 'Tillagd av dig', approxPlace: 'ungefärlig plats',
@@ -467,6 +473,12 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  widgetTitle: 'Widget and screen saver', widgetSub: 'The prayer times on the home screen', widgetFull: 'Everything', widgetTimes: 'Prayer times only',
+  widgetFullSub: 'Next prayer, Hijri date, place and today’s times', widgetTimesSub: 'The five prayers with name and time; the next in bold',
+  widgetTheme: 'The widget follows Alif’s theme: dark (dark green with gold) or light. Change it under Settings › Theme.',
+  widgetHow: 'Add it: hold your finger on the home screen › Widgets › Alif. On phones with lock screen widgets it is there too.',
+  dreamTitle: 'Screen saver', dreamHow: 'A clock and today’s prayer times in the same style, on black, while the phone charges. With the light theme it is toned down and the screen dimmed so it does not dazzle. Choose Alif in the phone’s Settings › Display › Screen saver.',
+  dreamOpen: 'Open screen saver settings',
   holdToReset: 'hold to reset',
   addMosque: 'Add mosque', addMosqueHint: 'Hold your finger on the map where a mosque is missing to add it.', mosqueName: 'Name', mosqueAddr: 'Address and town (optional)',
   removeMosque: 'Remove', removeMosqueQ: 'Remove {m} from the map?', ownMosque: 'Added by you', approxPlace: 'approximate place',

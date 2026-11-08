@@ -7,5 +7,13 @@
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/alif_widget_info" />
     </receiver>
+    <!-- Screen saver: clock and prayer times -->
+    <service android:name="se.sncab.alifnative.AlifDream" android:exported="true" android:label="Alif"
+        android:permission="android.permission.BIND_DREAM_SERVICE">
+      <intent-filter>
+        <action android:name="android.service.dreams.DreamService" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </service>
   </application>
 </manifest>

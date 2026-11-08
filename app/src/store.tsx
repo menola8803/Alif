@@ -64,6 +64,7 @@ type Saved = {
   micOnlyPhone: boolean;               // recognise speech only on the phone (nothing sent to Google)
   listenTranslit: boolean;             // show the transliteration box under Listen
   dhikrVolume: boolean;                // count dhikr with the volume buttons on the Dhikr page
+  widgetStyle: 'full' | 'times';      // home screen widget: everything, or only the five prayers with their times
   myMosques: Mosque[];                 // mosques the person has added on the map
   hiddenMosques: string[];             // built-in mosques the person has removed (mosqueKey)
 };
@@ -87,7 +88,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [],
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full',
 });
 
 type Prefs = Omit<Saved, 'history'>;

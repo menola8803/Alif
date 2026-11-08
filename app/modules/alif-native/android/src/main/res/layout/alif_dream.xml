@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Screen saver: a clock and the prayer times on black, in the widget's look. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#000000">
+    <LinearLayout android:id="@+id/alif_dream_card" android:layout_width="320dp" android:layout_height="wrap_content"
+        android:layout_gravity="center" android:orientation="vertical" android:padding="22dp" android:background="@drawable/alif_dream_bg">
+        <TextClock android:id="@+id/alif_dream_clock" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center" android:format24Hour="HH:mm" android:format12Hour="h:mm" android:textSize="64sp" />
+        <TextView android:id="@+id/alif_dream_sub" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center" android:textSize="14sp" android:layout_marginBottom="12dp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="4dp">
+            <TextView android:id="@+id/alif_d_name0" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textSize="22sp" />
+            <TextView android:id="@+id/alif_d_time0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="22sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="4dp">
+            <TextView android:id="@+id/alif_d_name1" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textSize="22sp" />
+            <TextView android:id="@+id/alif_d_time1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="22sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="4dp">
+            <TextView android:id="@+id/alif_d_name2" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textSize="22sp" />
+            <TextView android:id="@+id/alif_d_time2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="22sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="4dp">
+            <TextView android:id="@+id/alif_d_name3" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textSize="22sp" />
+            <TextView android:id="@+id/alif_d_time3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="22sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="4dp">
+            <TextView android:id="@+id/alif_d_name4" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textSize="22sp" />
+            <TextView android:id="@+id/alif_d_time4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="22sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
