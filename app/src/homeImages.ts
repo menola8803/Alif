@@ -15,3 +15,5 @@ export const HOME_IMAGES: number[] = [
   require('../assets/home/12.jpg'),
   require('../assets/home/13.jpg'),
 ];
+/** Where the main subject is in each picture, from the top (0) to the bottom (1); the visible strip is kept around it. */
+export const HOME_FOCUS: number[] = [0.5, 0.55, 0.52, 0.45, 0.4, 0.38, 0.42, 0.6, 0.62, 0.5, 0.3, 0.32, 0.5];

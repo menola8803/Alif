@@ -2,6 +2,11 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.4.1
+- Learn to read: the letter’s forms are shown whole in four boxes (alone, at the start, in the middle, at the end) with headings in the chosen language, instead of a table that was cut off. The pictures of where a letter is pronounced are cropped to their frame and sharper.
+- The note that a letter does not join is shown only once.
+- Today: the picture shows the Kaʿba, the dome or the door instead of just the middle of the photo.
+
 ## 0.4.0
 - **New menu with five tabs:** Today, Qur’an, Translate, Learn and Dhikr, with new icons (Translate is an old dip pen with an Arabic stroke). The menu floats slightly see-through over the page. Settings open with the gear in the top right corner, which glows when a new version is out. History is under Settings.
 - **Today:** a prayer clock (24 hours, the sun moves round and the next prayer glows with a countdown), today’s times with a notification per prayer, Daily Awrad, Qibla, the Hijri month and the next special day. At the bottom a picture of Mecca, Medina or Hagia Sophia with Allāhumma ṣalli ʿalā sayyidinā Muḥammad in gold – a new picture every time you tap Today.

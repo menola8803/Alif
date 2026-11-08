@@ -153,7 +153,16 @@ export function LetterScreen({ id, onBack, go }: { id: string; onBack: () => voi
         {l.forms && FORMS[l.id] ? (
           <Card>
             <Label>{t.letterForms}</Label>
-            <Image source={FORMS[l.id]} style={{ width: '100%', aspectRatio: 5, backgroundColor: '#fff', borderRadius: 12 }} resizeMode="contain" />
+            <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 10 }}>
+              {(['iso', 'ini', 'med', 'fin'] as const).map(k => (
+                <View key={k} style={{ width: '48.5%', gap: 4 }}>
+                  <Text style={{ fontSize: 12.5, fontWeight: '700', color: theme.muted, textAlign: 'center' }}>{t[`form_${k}`]}</Text>
+                  <View style={{ backgroundColor: '#fff', borderRadius: 12, padding: 4 }}>
+                    <Image source={FORMS[l.id][k]} style={{ width: '100%', aspectRatio: 1.65 }} resizeMode="contain" />
+                  </View>
+                </View>
+              ))}
+            </View>
             <Text style={{ fontSize: 12, color: theme.muted }}>{t.formsHelp}</Text>
           </Card>
         ) : null}

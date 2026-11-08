@@ -1,10 +1,10 @@
 // Parts of the Today page: the prayer-time clock and the picture with the ṣalawāt.
 import React from 'react';
-import { Image, Pressable, Text as RNText, View } from 'react-native';
+import { Image, Pressable, Text as RNText, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Defs, Line, LinearGradient, Path, RadialGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 import { useApp } from './store';
 import { PRAYERS, PRAYER_TR, PrayerDay, PrayerName, SALAH } from './core/prayer';
-import { HOME_IMAGES } from './homeImages';
+import { HOME_FOCUS, HOME_IMAGES } from './homeImages';
 
 const pt = (minutes: number, r: number, c: number) => {
   const a = ((minutes / 60 - 12) / 24) * 2 * Math.PI;
@@ -112,12 +112,20 @@ const SALAWAT_AR = 'اللّٰهُمَّ صَلِّ عَلَىٰ سَيِّدِ�
  */
 export function HomeArt({ index, height }: { index: number; height: number }) {
   const { theme } = useApp();
-  const src = HOME_IMAGES[((index % HOME_IMAGES.length) + HOME_IMAGES.length) % HOME_IMAGES.length];
+  const i = ((index % HOME_IMAGES.length) + HOME_IMAGES.length) % HOME_IMAGES.length;
+  const src = HOME_IMAGES[i];
+  const { width } = useWindowDimensions();
+  // Fill the width and keep the strip around the picture's subject (the Kaʿba, the green dome …) instead of the middle.
+  const dim = Image.resolveAssetSource(src);
+  const ratio = dim?.width && dim?.height ? dim.height / dim.width : 1;
+  let w = width, h = width * ratio;
+  if (h < height) { h = height; w = height / ratio; }
+  const top = -(h - height) * (HOME_FOCUS[i] ?? 0.5), left = -(w - width) / 2;
   const bg = theme.bg;
   const shadow = { textShadowColor: 'rgba(0,0,0,0.85)', textShadowRadius: 6, textShadowOffset: { width: 0, height: 1 } };
   return (
-    <View style={{ height, marginHorizontal: -16, overflow: 'hidden' }}>
-      <Image source={src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />
+    <View style={{ height, width, marginHorizontal: -16, overflow: 'hidden' }}>
+      <Image source={src} resizeMode="cover" style={{ position: 'absolute', left, top, width: w, height: h }} />
       <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
         <Defs>
           <RadialGradient id="edge" cx="50%" cy="52%" rx="62%" ry="56%">

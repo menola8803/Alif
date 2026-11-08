@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1
+- Lär dig läsa: bokstavens former visas hela i fyra rutor (ensam, i början, i mitten, i slutet) med rubriker på valt språk, i stället för en tabell som klipptes av. Bilderna av uttalsplatsen är beskurna till sin ram och skarpare.
+- Texten om att en bokstav inte kopplas ihop visas bara en gång.
+- Idag: bilden visar Kaʿba, kupolen eller dörren i stället för bara mitten av fotot.
+
 ## 0.4.0
 - **Ny meny med fem flikar:** Idag, Koranen, Översätt, Lär dig och Dhikr, med nya ikoner (Översätt är en gammal bläckpenna med ett arabiskt drag). Menyn svävar lite genomskinlig över sidan. Inställningar öppnas med kugghjulet uppe till höger, som lyser när en ny version finns. Historiken finns under Inställningar.
 - **Idag:** bönetidsklocka (24 timmar, solen går runt och nästa bön lyser med nedräkning), dagens tider med avisering per bön, Daily Awrad, Qibla, hijri-månaden och nästa särskilda dag. Längst ner en bild från Mecka, Medina eller Hagia Sofia med Allāhumma ṣalli ʿalā sayyidinā Muḥammad i guld – en ny bild varje gång du trycker på Idag.

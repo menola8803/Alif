@@ -317,7 +317,7 @@ const sv2 = {
   learnProgress: '{n} av {m} bokstäver lärda', vowelSigns: 'Vokaltecken', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler',
   questions: 'Frågor', quizScore: '{n} av {m} rätt', tryAgain: 'Försök igen', sound: 'Ljud', listen: 'Lyssna',
   joinsYes: 'Kopplas ihop med bokstaven efter.', joinsNo: 'Kopplas inte ihop med bokstaven efter.',
-  makhraj: 'Uttalsplats (makhraj)', letterForms: 'Bokstavens former', formsHelp: 'Från höger: ensam, i början, i mitten och i slutet av ett ord.',
+  makhraj: 'Uttalsplats (makhraj)', letterForms: 'Bokstavens former', formsHelp: 'Pilarna och siffrorna i bokens bilder visar i vilken ordning bokstaven skrivs.', form_iso: 'Ensam', form_ini: 'I början', form_med: 'I mitten', form_fin: 'I slutet',
   learned: 'Lärd', markLearned: 'Markera som lärd', tapToListen: 'Tryck på ett exempel för att lyssna.',
   // Dhikr
   dhikrSub: 'Räknare, Daily Awrad och ṣalawāt', resetCount: 'Nollställ', awradWithIhda: 'Dagens awrād med Ihdāʾ', salawatTitle: 'Ṣalawāt',
@@ -377,7 +377,7 @@ const en2: typeof sv2 = {
   learnProgress: '{n} of {m} letters learned', vowelSigns: 'Vowel signs', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and long vowels',
   questions: 'Questions', quizScore: '{n} of {m} right', tryAgain: 'Try again', sound: 'Sound', listen: 'Listen',
   joinsYes: 'Joins the letter after it.', joinsNo: 'Does not join the letter after it.',
-  makhraj: 'Where it is pronounced (makhraj)', letterForms: 'The letter’s forms', formsHelp: 'From the right: alone, at the start, in the middle and at the end of a word.',
+  makhraj: 'Where it is pronounced (makhraj)', letterForms: 'The letter’s forms', formsHelp: 'The arrows and numbers in the book’s pictures show the order in which the letter is written.', form_iso: 'Alone', form_ini: 'At the start', form_med: 'In the middle', form_fin: 'At the end',
   learned: 'Learned', markLearned: 'Mark as learned', tapToListen: 'Tap an example to listen.',
   dhikrSub: 'Counter, Daily Awrad and ṣalawāt', resetCount: 'Reset', awradWithIhda: 'Today’s awrād with the Ihdāʾ', salawatTitle: 'Ṣalawāt',
   manual: 'Manual', manualSub: 'How to use Alif', privacy: 'Privacy', privacySub: 'What stays on the phone',
