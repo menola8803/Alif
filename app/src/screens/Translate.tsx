@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Image, LayoutChangeEvent, PanResponder, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Image, LayoutChangeEvent, PanResponder, ScrollView, useWindowDimensions, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Clipboard from 'expo-clipboard';
@@ -85,6 +85,9 @@ function ImageScreen({ go, openSurah, toWrite }: { go: (r: Route) => void; openS
 
   const onLayout = (e: LayoutChangeEvent) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
   const ratio = img ? img.width / Math.max(1, img.height) : 1;
+  const { width } = useWindowDimensions();
+  let bw = width - 32, bh = bw / ratio;
+  if (bh > 460) { bh = 460; bw = bh * ratio; }
 
   return (
     <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false} scrollEnabled={!sel || !busy}>
@@ -92,7 +95,7 @@ function ImageScreen({ go, openSurah, toWrite }: { go: (r: Route) => void; openS
       <Btn title={img ? t.otherImage : t.openImage} kind={img ? 'secondary' : 'primary'} onPress={pick} />
       {img ? <>
         <View style={{ alignItems: 'center' }}>
-          <View onLayout={onLayout} {...pan.panHandlers} style={{ width: '100%', maxHeight: 460, aspectRatio: ratio, borderRadius: 18, overflow: 'hidden', borderWidth: 1, borderColor: theme.line, backgroundColor: '#000' }}>
+          <View onLayout={onLayout} {...pan.panHandlers} style={{ width: bw, height: bh, borderRadius: 18, overflow: 'hidden', borderWidth: 1, borderColor: theme.line, backgroundColor: '#000' }}>
             <Image source={{ uri: img.uri }} style={{ width: '100%', height: '100%' }} resizeMode="stretch" />
             {sel && sel.w > 4 ? <View pointerEvents="none" style={{ position: 'absolute', left: sel.x, top: sel.y, width: sel.w, height: sel.h, borderWidth: 2.5, borderColor: '#E8B04A', borderRadius: 14, backgroundColor: 'rgba(232,176,74,0.12)' }} /> : null}
           </View>

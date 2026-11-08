@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Modal, Platform, Pressable, ScrollView, View } from 'react-native';
+import { Image, Modal, Platform, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Asset } from 'expo-asset';
 import { File, Paths } from 'expo-file-system';
@@ -55,12 +55,13 @@ function CornerMenu() {
 
 export default function Learn({ go, onGear, glow }: { go: (r: Route) => void; onGear: () => void; glow: boolean }) {
   const { t, theme, learnDone } = useApp();
+  const { width } = useWindowDimensions();
   const [bookErr, setBookErr] = useState(false);
   return (
     <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false}>
       <PageTitle title={t.tabLearn} sub={t.learnSub} onGear={onGear} glow={glow} right={<CornerMenu />} />
       <Card style={{ alignItems: 'center' }}>
-        <Image source={OVERVIEW} style={{ width: '100%', aspectRatio: 467 / 415, borderRadius: 12 }} resizeMode="contain" />
+        <Image source={OVERVIEW} style={{ width: width - 66, height: Math.round((width - 66) * 415 / 467), borderRadius: 12 }} resizeMode="contain" />
         <Text style={{ fontSize: 12, color: theme.muted }}>{t.bookCredit}</Text>
         <Btn title={t.openBook} kind="secondary" onPress={async () => setBookErr(!(await openBook()))} />
         {bookErr ? <Text style={{ fontSize: 12.5, color: theme.danger }}>{t.bookErr}</Text> : null}
@@ -134,6 +135,10 @@ export function LetterScreen({ id, onBack, go }: { id: string; onBack: () => voi
   const l = LETTERS[i];
   const done = learnDone.includes(l.id);
   const prev = LETTERS[i - 1], next = LETTERS[i + 1];
+  // Two boxes per row, sized in pixels (screen padding 16 + card padding 16 on each side).
+  const { width } = useWindowDimensions();
+  const GAP = 12;
+  const cell = Math.floor((width - 64 - GAP) / 2);
   return (
     <Screen>
       <Header title={`${i + 1}. ${l.name}`} sub={`${t.sound}: ${l.sound}`} onBack={onBack} />
@@ -153,12 +158,12 @@ export function LetterScreen({ id, onBack, go }: { id: string; onBack: () => voi
         {l.forms && FORMS[l.id] ? (
           <Card>
             <Label>{t.letterForms}</Label>
-            <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 10 }}>
+            <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: GAP }}>
               {(['iso', 'ini', 'med', 'fin'] as const).map(k => (
-                <View key={k} style={{ width: '48.5%', gap: 4 }}>
+                <View key={k} style={{ width: cell, gap: 6 }}>
                   <Text style={{ fontSize: 12.5, fontWeight: '700', color: theme.muted, textAlign: 'center' }}>{t[`form_${k}`]}</Text>
-                  <View style={{ backgroundColor: '#fff', borderRadius: 12, padding: 4 }}>
-                    <Image source={FORMS[l.id][k]} style={{ width: '100%', aspectRatio: 1.65 }} resizeMode="contain" />
+                  <View style={{ width: cell, height: Math.round(cell / 1.5), backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: theme.line, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image source={FORMS[l.id][k]} style={{ width: cell - 12, height: Math.round(cell / 1.5) - 12 }} resizeMode="contain" />
                   </View>
                 </View>
               ))}

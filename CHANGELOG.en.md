@@ -2,6 +2,10 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.4.2
+- Learn to read: the letter’s four forms are shown in four separate white boxes with round corners and space between them, and the letter fills the box better.
+- Pictures in Learn and in Translate › Picture get the right size on the phone and no longer spill out of their box.
+
 ## 0.4.1
 - Learn to read: the letter’s forms are shown whole in four boxes (alone, at the start, in the middle, at the end) with headings in the chosen language, instead of a table that was cut off. The pictures of where a letter is pronounced are cropped to their frame and sharper.
 - The note that a letter does not join is shown only once.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+- Lär dig läsa: bokstavens fyra former visas i fyra egna vita rutor med runda hörn och mellanrum, och bokstaven fyller rutan bättre.
+- Bilder i Lär dig och under Översätt › Bild får rätt storlek på telefonen och går inte utanför sin ruta.
+
 ## 0.4.1
 - Lär dig läsa: bokstavens former visas hela i fyra rutor (ensam, i början, i mitten, i slutet) med rubriker på valt språk, i stället för en tabell som klipptes av. Bilderna av uttalsplatsen är beskurna till sin ram och skarpare.
 - Texten om att en bokstav inte kopplas ihop visas bara en gång.
