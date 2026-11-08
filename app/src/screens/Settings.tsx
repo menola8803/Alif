@@ -20,23 +20,49 @@ import type { Strings } from '../i18n';
 export const engineLabel = (t: Strings, e: 'claude' | 'device' | 'mymemory') => (e === 'claude' ? t.engClaude : e === 'device' ? t.engDevice : t.engMyMemory);
 import { uses12h } from '../reminder';
 
-export default function Settings({ go }: { go: (r: Route) => void }) {
-  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine } = useApp();
+export default function Settings({ go, onBack }: { go: (r: Route) => void; onBack: () => void }) {
+  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine, place, school, hijriAdjust, setPrefs, updateTag, history } = useApp();
   const version = Constants.expoConfig?.version ?? '0.0.0';
+  const newer = !!updateTag && isNewer(updateTag, version);
   return (
-    <ScrollView contentContainerStyle={{ gap: 14, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
-      <View><H1>{t.settings}</H1><Sub>{t.settingsSub}</Sub></View>
-      <Card>
-        <Row title={t.language} sub={t.languageSub} right={lang === 'sv' ? t.swedish : t.english} onPress={() => go({ name: 'language' })} />
-        <Row title={t.translitSet} sub={t.translitSetSub} right={`${mode === 'tajwid' ? t.modeTajwid : t.modeWords} · ${scheme === 'academic' ? t.schemeAcademic : t.schemeSimple}`} onPress={() => go({ name: 'translit' })} />
-        <Row title={`${t.awrad} · ${t.reminder}`} sub={t.reminderSub} right={reminderOn ? formatTime(reminderHour, reminderMinute, uses12h()) : t.off} onPress={() => go({ name: 'reminder' })} />
-        <Row title={t.quranEdition} sub={t.quranEditionSub} right={pickEdition(lang, editions[lang])} onPress={() => go({ name: 'edition' })} />
-        <Row title={t.engines} sub={t.enginesSub} right={engineLabel(t, textEngine({ engine, apiKey }))} onPress={() => go({ name: 'ai' })} />
-        <Row title={t.theme} sub={t.themeSub} right={theme.name === 'dark' ? t.themeDark : t.themeBeige} onPress={() => go({ name: 'theme' })} />
-        <Row title={t.update} sub={t.updateSub} right={`v${version}`} onPress={() => go({ name: 'update' })} />
-        <Row title={t.about} sub={t.aboutSub} onPress={() => go({ name: 'about' })} />
-      </Card>
-    </ScrollView>
+    <Screen>
+      <Header title={t.settings} sub={t.settingsSub} onBack={onBack} />
+      <ScrollView contentContainerStyle={{ gap: 14, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
+        {newer ? (
+          <Pressable accessibilityRole="button" onPress={() => go({ name: 'update' })}>
+            <Card style={{ borderColor: theme.primary, borderWidth: 2 }}>
+              <Text style={{ fontSize: 16, fontWeight: '700', color: theme.primary }}>{t.newVersion}: {updateTag}</Text>
+              <Text style={{ fontSize: 13, color: theme.muted }}>{t.updateReady}</Text>
+            </Card>
+          </Pressable>
+        ) : null}
+        <Card>
+          <Row title={t.language} sub={t.languageSub} right={lang === 'sv' ? t.swedish : t.english} onPress={() => go({ name: 'language' })} />
+          <Row title={t.theme} sub={t.themeSub} right={theme.name === 'dark' ? t.themeDark : t.themeBeige} onPress={() => go({ name: 'theme' })} />
+          <Row title={t.translitSet} sub={t.translitSetSub} right={`${mode === 'tajwid' ? t.modeTajwid : t.modeWords} · ${scheme === 'academic' ? t.schemeAcademic : t.schemeSimple}`} onPress={() => go({ name: 'translit' })} />
+          <Row title={t.engines} sub={t.enginesSub} right={engineLabel(t, textEngine({ engine, apiKey }))} onPress={() => go({ name: 'ai' })} />
+          <Row title={t.quranEdition} sub={t.quranEditionSub} right={pickEdition(lang, editions[lang])} onPress={() => go({ name: 'edition' })} />
+        </Card>
+        <Card>
+          <Row title={t.prayerTimes} sub={t.prayerTimesSub} right={`${place.name} · ${school === 'hanafi' ? 'Ḥanafī' : t.asrStandard}`} onPress={() => go({ name: 'prayer' })} />
+          <Row title={`${t.awrad} · ${t.reminder}`} sub={t.reminderSub} right={reminderOn ? formatTime(reminderHour, reminderMinute, uses12h()) : t.off} onPress={() => go({ name: 'reminder' })} />
+          <View style={{ gap: 6 }}>
+            <Text style={{ fontSize: 16, fontWeight: '600', color: theme.ink }}>{t.hijriAdjust}</Text>
+            <Text style={{ fontSize: 13, color: theme.muted }}>{t.hijriAdjustSub}</Text>
+            <Segmented options={[['-1', `−1 ${t.day}`], ['0', '0'], ['1', `+1 ${t.day}`]]} value={String(hijriAdjust) as '-1' | '0' | '1'} onChange={v => setPrefs({ hijriAdjust: Number(v) })} />
+          </View>
+        </Card>
+        <Card>
+          <Row title={t.historyTitle} sub={t.historySub} right={String(history.length)} onPress={() => go({ name: 'history' })} />
+          <Row title={t.manual} sub={t.manualSub} onPress={() => go({ name: 'manual' })} />
+          <Row title={t.privacy} sub={t.privacySub} onPress={() => go({ name: 'privacy' })} />
+        </Card>
+        <Card style={newer ? { borderColor: theme.primary } : undefined}>
+          <Row title={t.update} sub={t.updateSub} right={newer ? `● ${updateTag}` : `v${version}`} onPress={() => go({ name: 'update' })} />
+          <Row title={t.about} sub={t.developer} onPress={() => go({ name: 'about' })} />
+        </Card>
+      </ScrollView>
+    </Screen>
   );
 }
 
@@ -244,7 +270,7 @@ export function AboutScreen({ onBack }: { onBack: () => void }) {
           <Body>{t.aboutBody}</Body>
           <Body muted>{t.aboutQuran}</Body>
           <Body muted>{t.aboutAi}</Body>
-          <Text style={{ color: theme.muted, fontSize: 13 }}>{t.aboutSub}</Text>
+          <Text style={{ color: theme.muted, fontSize: 13 }}>{t.developer}</Text>
         </Card>
       </ScrollView>
     </Screen>

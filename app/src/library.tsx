@@ -1,8 +1,8 @@
 // The Qur'an kept on the phone.
 // - Arabic (Uthmani): built into the app when the APK workflow could bundle it (assets/quran/quran-uthmani.json),
 //   otherwise downloaded once and saved.
-// - Translation: the edition chosen for the app language (Swedish or English) is downloaded once and saved, and a new one
-//   is fetched when the language or the edition changes.
+// - Translation: Swedish (Bernström) and English (Saheeh International) are built in as well; another edition chosen in
+//   Settings is downloaded once and saved.
 // Everything is read from the phone afterwards, so the Qur'an works without internet.
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Directory, File, Paths } from 'expo-file-system';
@@ -11,6 +11,10 @@ import { useApp } from './store';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const BUNDLED: QuranData = require('../assets/quran/quran-uthmani.json');
+// The Swedish and English translations are built in too (filled by the APK workflow), so nothing has to be downloaded.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const BUNDLED_TR: QuranData[] = [require('../assets/quran/sv.bernstrom.json'), require('../assets/quran/en.sahih.json')];
+const bundledTr = (): Record<string, QuranData> => Object.fromEntries(BUNDLED_TR.filter(q => completeQuran(q)).map(q => [q.edition, q]));
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 type Ctx = {
@@ -52,7 +56,7 @@ export function QuranProvider({ children }: { children: React.ReactNode }) {
   const edition = pickEdition(lang, editions[lang]);
   const bundled = completeQuran(BUNDLED);
   const [arabic, setArabic] = useState<QuranData | null>(bundled ? BUNDLED : null);
-  const [tr, setTr] = useState<Record<string, QuranData>>({});
+  const [tr, setTr] = useState<Record<string, QuranData>>(bundledTr);
   const [status, setStatus] = useState<Status>('idle');
   const busy = useRef(false);
 

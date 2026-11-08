@@ -2,7 +2,12 @@ package se.sncab.alifnative
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
+import android.os.ParcelFileDescriptor
+import java.io.File
+import java.io.FileOutputStream
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -64,6 +69,39 @@ class AlifNativeModule : Module() {
         tess.recycle()
         bmp.recycle()
       }
+    }
+
+    // Draws the first pages of a PDF as pictures (white background, 1600 px wide) into outDir, for text recognition.
+    AsyncFunction("pdfPages") { pdfUri: String, outDir: String, maxPages: Int ->
+      val path = if (pdfUri.startsWith("file:")) Uri.parse(pdfUri).path ?: pdfUri else pdfUri
+      val dir = File(if (outDir.startsWith("file:")) Uri.parse(outDir).path ?: outDir else outDir)
+      dir.mkdirs()
+      val fd = ParcelFileDescriptor.open(File(path), ParcelFileDescriptor.MODE_READ_ONLY)
+      val out = ArrayList<String>()
+      try {
+        val renderer = PdfRenderer(fd)
+        try {
+          val count = minOf(renderer.pageCount, maxPages)
+          for (i in 0 until count) {
+            val page = renderer.openPage(i)
+            val w = 1600
+            val h = maxOf(1, (page.height.toLong() * w / maxOf(1, page.width)).toInt())
+            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            bmp.eraseColor(Color.WHITE)
+            page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            page.close()
+            val f = File(dir, "page-" + i + ".png")
+            FileOutputStream(f).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            bmp.recycle()
+            out.add("file://" + f.absolutePath)
+          }
+        } finally {
+          renderer.close()
+        }
+      } finally {
+        fd.close()
+      }
+      out
     }
   }
 

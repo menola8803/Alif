@@ -27,9 +27,13 @@ export async function askPermission(): Promise<boolean> {
   } catch { return false; }
 }
 
-async function schedule(on: boolean, hour: number, minute: number, title: string, body: string) {
+const AWRAD_ID = 'awrad-daily';
+
+async function schedule(on: boolean, hour: number, minute: number, title: string, body: string, firstRun: boolean, done: () => void) {
   try {
-    await Notifications.cancelAllScheduledNotificationsAsync();
+    // Versions before 0.4.0 gave the reminder no name, so everything is cleared once; after that only the reminder itself.
+    if (firstRun) { await Notifications.cancelAllScheduledNotificationsAsync(); done(); }
+    else await Notifications.cancelScheduledNotificationAsync(AWRAD_ID).catch(() => {});
     if (!on) return;
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync(CHANNEL, {
@@ -39,6 +43,7 @@ async function schedule(on: boolean, hour: number, minute: number, title: string
     }
     if (!(await askPermission())) return;
     await Notifications.scheduleNotificationAsync({
+      identifier: AWRAD_ID,
       content: { title, body, data: { open: 'awrad' } },
       trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute, channelId: CHANNEL },
     });
@@ -47,13 +52,14 @@ async function schedule(on: boolean, hour: number, minute: number, title: string
 
 /** Keeps the scheduled notification in step with the settings, opens the Awrad from a tapped notification and shows the in-app popup. */
 export function ReminderManager({ openAwrad, active }: { openAwrad: () => void; active: boolean }) {
-  const { ready, t, theme, reminderOn, reminderHour, reminderMinute, awradDay, awradCounts, awradLevel, popupDay, setPrefs, lang } = useApp();
+  const { ready, t, theme, reminderOn, reminderHour, reminderMinute, awradDay, awradCounts, awradLevel, popupDay, setPrefs, lang, notifV2 } = useApp();
   const open = useRef(openAwrad); open.current = openAwrad;
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
     if (!ready) return;
-    schedule(reminderOn, reminderHour, reminderMinute, t.awradNotifTitle, t.awradNotifBody);
+    schedule(reminderOn, reminderHour, reminderMinute, t.awradNotifTitle, t.awradNotifBody, !notifV2, () => setPrefs({ notifV2: true }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, reminderOn, reminderHour, reminderMinute, lang, t.awradNotifTitle, t.awradNotifBody]);
 
   useEffect(() => {

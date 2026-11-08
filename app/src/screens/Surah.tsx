@@ -16,7 +16,9 @@ const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّ
 
 function Verse({ a, surah }: { a: Ayah; surah: number }) {
   const app = useApp();
-  const { t, theme, scheme, mode, showTranslit, showTranslation } = app;
+  const { t, theme, scheme, mode, showTranslit, showTranslation, bookmarks, setPrefs } = app;
+  const marked = bookmarks.some(b => b.n === surah && b.ayah === a.n);
+  const toggleMark = () => setPrefs({ bookmarks: marked ? bookmarks.filter(b => !(b.n === surah && b.ayah === a.n)) : [{ n: surah, ayah: a.n, at: Date.now() }, ...bookmarks].slice(0, 50) });
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [res, setRes] = useState<Result | null>(null);
@@ -47,6 +49,7 @@ function Verse({ a, surah }: { a: Ayah; surah: number }) {
       {showTranslation && a.translation ? <Body>{a.translation}</Body> : null}
       <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
         <SmallBtn title={open ? '–' : '…'} onPress={() => setOpen(o => !o)} />
+        <SmallBtn title={marked ? `🔖 ${t.bookmarked}` : t.bookmark} tone={marked ? 'accent' : undefined} onPress={toggleMark} />
         {open ? <>
           {textEngine(app) === 'claude' ? <SmallBtn title={t.explainVerse} tone="accent" onPress={explain} disabled={busy} /> : null}
           <SmallBtn title={t.copy} onPress={() => Clipboard.setStringAsync(`${a.arabic}\n${translit}\n${a.translation}\n(${SURAHS[surah - 1].name} ${surah}:${a.n})`).catch(() => {})} />
@@ -69,6 +72,12 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
   const [err, setErr] = useState('');
   const [cached, setCached] = useState(false);
   const list = useRef<FlatList<Ayah>>(null);
+  // Remembers where you are, for "Continue reading".
+  const setPrefsRef = useRef(setPrefs); setPrefsRef.current = setPrefs;
+  const onViewable = useRef(({ viewableItems }: { viewableItems: { item: Ayah }[] }) => {
+    const first = viewableItems[0]?.item;
+    if (first) setPrefsRef.current({ lastRead: { n, ayah: first.n } });
+  });
 
   const local = lib.arabicReady ? lib.surah(n) : null;
   const localFull = !!local && lib.translationReady;
@@ -104,6 +113,8 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
           data={data.ayahs}
           keyExtractor={a => String(a.n)}
           showsVerticalScrollIndicator={false}
+          onViewableItemsChanged={onViewable.current}
+          viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
           onScrollToIndexFailed={i => setTimeout(() => list.current?.scrollToIndex({ index: i.index, animated: true }), 400)}
           ListHeaderComponent={
             <View style={{ gap: 10, paddingBottom: 6 }}>

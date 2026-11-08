@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useApp } from '../store';
 import { SURAHS } from '../core/quran';
 import { arabicDigits } from '../translate';
 import { useQuran } from '../library';
-import { Card, H1, SmallBtn, Sub, Text, TextInput } from '../ui';
+import { Card, PageTitle, SmallBtn, TAB_SPACE, Text, TextInput } from '../ui';
 
 /** Eight-pointed star with a number in it (verse and sūra numbers). */
 export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number; hideNumber?: boolean }) {
@@ -20,8 +20,8 @@ export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number
   );
 }
 
-export default function Quran({ open, onAwrad }: { open: (n: number) => void; onAwrad: () => void }) {
-  const { t, theme } = useApp();
+export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: number, ayah?: number) => void; onAwrad: () => void; onGear: () => void; glow: boolean }) {
+  const { t, theme, lastRead, bookmarks } = useApp();
   const lib = useQuran();
   const [q, setQ] = useState('');
   const list = useMemo(() => {
@@ -32,7 +32,25 @@ export default function Quran({ open, onAwrad }: { open: (n: number) => void; on
 
   return (
     <View style={{ flex: 1, gap: 12 }}>
-      <View><H1>{t.quranTitle}</H1><Sub>{t.quranSub}</Sub></View>
+      <PageTitle title={t.quranTitle} sub={t.quranSub} onGear={onGear} glow={glow} />
+      {lastRead ? (
+        <Pressable accessibilityRole="button" onPress={() => open(lastRead.n, lastRead.ayah)}
+          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 20, borderWidth: 1, borderColor: theme.line, backgroundColor: theme.card, opacity: pressed ? 0.85 : 1 })}>
+          <StarNum n={lastRead.n} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 15, fontWeight: '700', color: theme.ink }}>{t.continueReading}</Text>
+            <Text style={{ fontSize: 13, color: theme.muted }}>{`${SURAHS[lastRead.n - 1].name} · ${t.verse} ${lastRead.ayah}`}</Text>
+          </View>
+          <Text style={{ color: theme.muted, fontSize: 18 }}>›</Text>
+        </Pressable>
+      ) : null}
+      {bookmarks.length ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
+          {bookmarks.map(b => (
+            <SmallBtn key={`${b.n}:${b.ayah}`} title={`🔖 ${SURAHS[b.n - 1].name} ${b.n}:${b.ayah}`} onPress={() => open(b.n, b.ayah)} />
+          ))}
+        </ScrollView>
+      ) : null}
       <Pressable accessibilityRole="button" onPress={onAwrad}
         style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, borderRadius: 20, borderWidth: 1, borderColor: theme.primary, backgroundColor: theme.chip, opacity: pressed ? 0.85 : 1 })}>
         <StarNum n={0} hideNumber />
@@ -59,6 +77,7 @@ export default function Quran({ open, onAwrad }: { open: (n: number) => void; on
         keyExtractor={s => String(s.number)}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: TAB_SPACE }}
         ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: theme.line, marginLeft: 56 }} />}
         renderItem={({ item: s }) => (
           <Pressable accessibilityRole="button" onPress={() => open(s.number)} style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 10, opacity: pressed ? 0.7 : 1 })}>

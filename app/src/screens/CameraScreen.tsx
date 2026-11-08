@@ -8,11 +8,11 @@ import { Result } from '../core/engine';
 import * as Sharing from 'expo-sharing';
 import { Photo, errorText, translateImage, translateText } from '../translate';
 import { ResultView } from '../result';
-import { Arabic, Body, Btn, Card, H1, Label, SmallBtn, Sub, Text, TextInput } from '../ui';
+import { Arabic, Body, Btn, Card, H1, Label, SmallBtn, Sub, TAB_SPACE, Text, TextInput } from '../ui';
 import { Route } from '../nav';
 import { useQuran } from '../library';
 
-export default function CameraScreen({ go, openSurah, openWrite }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void; openWrite: () => void }) {
+export default function CameraScreen({ go, openSurah, openWrite, hideTitle }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void; openWrite: () => void; hideTitle?: boolean }) {
   const app = useApp();
   const { t, theme } = app;
   const quran = useQuran();
@@ -69,7 +69,7 @@ export default function CameraScreen({ go, openSurah, openWrite }: { go: (r: Rou
 
   if (photo) {
     return (
-      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <Image source={{ uri: result?.photo ?? unread?.image ?? photo.uri }} style={{ width: 72, height: 96, borderRadius: 12, borderWidth: 1, borderColor: theme.line }} />
           <View style={{ flex: 1, gap: 8 }}>
@@ -122,8 +122,8 @@ export default function CameraScreen({ go, openSurah, openWrite }: { go: (r: Rou
   }
 
   return (
-    <View style={{ flex: 1, gap: 12 }}>
-      <View><H1>{t.cameraTitle}</H1><Sub>{t.cameraSub}</Sub></View>
+    <View style={{ flex: 1, gap: 12, paddingBottom: TAB_SPACE - 8 }}>
+      {hideTitle ? <Sub>{t.cameraSub}</Sub> : <View><H1>{t.cameraTitle}</H1><Sub>{t.cameraSub}</Sub></View>}
       {!perm ? <View style={{ flex: 1 }} /> : !perm.granted ? (
         <Card style={{ flex: 1, justifyContent: 'center' }}>
           <Body muted>{perm.canAskAgain ? t.cameraSub : t.camDenied}</Body>

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0
+- **Ny meny med fem flikar:** Idag, Koranen, Översätt, Lär dig och Dhikr, med nya ikoner (Översätt är en gammal bläckpenna med ett arabiskt drag). Menyn svävar lite genomskinlig över sidan. Inställningar öppnas med kugghjulet uppe till höger, som lyser när en ny version finns. Historiken finns under Inställningar.
+- **Idag:** bönetidsklocka (24 timmar, solen går runt och nästa bön lyser med nedräkning), dagens tider med avisering per bön, Daily Awrad, Qibla, hijri-månaden och nästa särskilda dag. Längst ner en bild från Mecka, Medina eller Hagia Sofia med Allāhumma ṣalli ʿalā sayyidinā Muḥammad i guld – en ny bild varje gång du trycker på Idag.
+- **Bönetider** från Aladhan med Muslim World League, förval Stockholm, ʿaṣr Ḥanafī (Standard valbart) och regel för korta sommarnätter. Välj svensk ort, sök en ort i världen eller använd din plats (av från början). Sparas för hela månaden och räknas ut på telefonen utan nät. Aviseringar vid de fem bönerna.
+- **Hijri-kalender** med de islamiska månadernas namn på arabiska, translitteration och svenska/engelska, de heliga månaderna, särskilda dagar och justering ±1 dag.
+- **Qibla-kompass** med riktning, avstånd och vibration när du står rätt.
+- **Koranen:** svensk och engelsk översättning finns i appen från början, så hela Koranen fungerar utan nät. Fortsätt läsa och bokmärken.
+- **Översätt:** Skriv, Bild (öppna png/jpeg/bmp och ringa in texten), Kamera och Fil (.docx, .odt, .pdf, bilder och text – markera i den vita rutan och översätt).
+- **Lär dig läsa** enligt boken Iqraʾa!: alla bokstäver med bokens bilder av uttalsplats och former, Lyssna, vokaltecken och frågor som slås på i menyn ⋮ (av från början). Hela boken kan öppnas som PDF.
+- **Dhikr:** räknare med vibration och mål, Daily Awrad med Ihdāʾ och ṣalawāt.
+- **Manual** på svenska och engelska under Inställningar, och en sida om integritet.
+- Ändringsloggen visas på det språk som är valt i Inställningar.
+
 ## 0.3.3
 - **Ihdāʾ (tillägnan)** i Daily Awrad med hela texten: arabiska med vokaltecken, translitteration enligt tajwīd och betydelse på svenska eller engelska. Kedjan från Profeten ﷺ via Khwāja Bahāʾuddīn an-Naqshband, Shaykh ʿAbdullāh ad-Dāghistānī och Shaykh Nāẓim al-Ḥaqqānī; den levande shaykhen i sista raden väljs (ingen, Shaykh Hishām Kabbānī eller Shaykh ʿĀdil ar-Rabbānī).
 - Translitterationen behåller ﷺ och skriver tāʾ marbūṭa utan vokal som -h.

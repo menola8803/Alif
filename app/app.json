@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.3.3",
+    "version": "0.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -11,7 +11,8 @@
       "bundleIdentifier": "se.sncab.alif",
       "infoPlist": {
         "NSCameraUsageDescription": "Alif uses the camera to read Arabic text.",
-        "NSPhotoLibraryUsageDescription": "Alif reads Arabic text in pictures you choose."
+        "NSPhotoLibraryUsageDescription": "Alif reads Arabic text in pictures you choose.",
+        "NSLocationWhenInUseUsageDescription": "Alif uses your location for prayer times and the Qibla, only if you turn it on."
       }
     },
     "android": {
@@ -30,12 +31,17 @@
         "REQUEST_INSTALL_PACKAGES",
         "POST_NOTIFICATIONS",
         "RECEIVE_BOOT_COMPLETED",
-        "VIBRATE"
+        "VIBRATE",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "SCHEDULE_EXACT_ALARM"
       ],
       "blockedPermissions": [
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.FOREGROUND_SERVICE_LOCATION"
       ],
-      "versionCode": 303
+      "versionCode": 400
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -72,6 +78,14 @@
           "icon": "./assets/notification-icon.png",
           "color": "#E8B04A",
           "defaultChannel": "awrad"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Alif uses your location for prayer times and the Qibla, only if you turn it on.",
+          "isAndroidBackgroundLocationEnabled": false,
+          "isAndroidForegroundServiceEnabled": false
         }
       ],
       [

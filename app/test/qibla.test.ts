@@ -1,0 +1,13 @@
+import { angleDiff, compassPoint, declination, distanceKm, headingFromMag, qibla } from '../src/core/qibla';
+let fail = 0;
+const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m); } };
+const q = qibla(59.3293, 18.0686);
+ok(Math.abs(q - 148.2) < 0.5, `stockholm ${q}`);
+ok(Math.abs(distanceKm(59.3293, 18.0686) - 4554) < 15, 'distance');
+ok(Math.abs(qibla(51.5074, -0.1278) - 119) < 1.5, 'london ~119');
+ok(compassPoint(148, 'sv') === 'SO' && compassPoint(148, 'en') === 'SE', 'points');
+ok(declination(59.33, 18.07) > 5 && declination(59.33, 18.07) < 9 && declination(40, -3) === 0, 'declination');
+ok(Math.round(headingFromMag(0, 30)) === 0 && Math.round(headingFromMag(-30, 0)) === 90, 'heading');
+ok(angleDiff(10, 350) === 20 && angleDiff(350, 10) === -20, 'diff');
+if (fail) process.exit(1);
+console.log('qibla: all ok');

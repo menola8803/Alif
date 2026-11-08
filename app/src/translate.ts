@@ -13,6 +13,7 @@ import { checkOcr, collapseRepeats, findVerses, myMemory, vocabulary } from './c
 import { hasArabic, Mode, Scheme, transliterate, isVocalized } from './core/translit';
 import { Lang, Strings } from './i18n';
 import { AlifNativeModule } from '../modules/alif-native';
+import { kindOf, officeText } from './core/docs';
 
 export type Engine = 'auto' | 'claude' | 'device' | 'mymemory';
 export type OcrEngine = 'auto' | 'claude' | 'device';
@@ -108,7 +109,8 @@ export async function translateText(text: string, s: Settings, direction = direc
   return findQuran({ ...base, arabic: ar }, s, lib);
 }
 
-export type Photo = { uri: string; width?: number; height?: number; frame?: boolean };
+/** crop: the part the person circled, as fractions (0–1) of the picture. */
+export type Photo = { uri: string; width?: number; height?: number; frame?: boolean; crop?: { x: number; y: number; w: number; h: number } };
 
 /**
  * Shrinks the photo (1600 px wide, JPEG); Claude reads it, or Tesseract on the phone when there is no key.
@@ -121,6 +123,10 @@ export async function translateImage(photo: Photo | string, s: Settings, lib?: Q
     // The frame on the camera screen: 24 px in from the sides of the preview and 18 % from the top and bottom.
     const x = Math.round(p.width * 0.06), y = Math.round(p.height * 0.18);
     ctx.crop({ originX: x, originY: y, width: p.width - 2 * x, height: p.height - 2 * y });
+  } else if (p.crop && p.width && p.height) {
+    const x = Math.max(0, Math.round(p.crop.x * p.width)), y = Math.max(0, Math.round(p.crop.y * p.height));
+    const w = Math.min(p.width - x, Math.round(p.crop.w * p.width)), h = Math.min(p.height - y, Math.round(p.crop.h * p.height));
+    if (w > 8 && h > 8) ctx.crop({ originX: x, originY: y, width: w, height: h });
   }
   ctx.resize({ width: 1600 });
   const img = await ctx.renderAsync();
@@ -172,6 +178,34 @@ async function readArabic(uri: string): Promise<string> {
   return AlifNativeModule.ocr(uri, dataPath, 'ara');
 }
 
+/** The Arabic text in a picture, read with Tesseract on the phone (nothing is sent anywhere). */
+export async function ocrImage(uri: string): Promise<string> {
+  const ctx = ImageManipulator.manipulate(uri);
+  ctx.resize({ width: 1600 });
+  const img = await ctx.renderAsync();
+  const out = await img.saveAsync({ compress: 0.95, format: SaveFormat.JPEG });
+  return collapseRepeats(await readArabic(out.uri)).trim();
+}
+
+/** The text of a file the person opened: Word and OpenDocument are unpacked, PDF pages and pictures are read on the phone. */
+export async function readFileText(uri: string, name: string, mime = ''): Promise<string> {
+  const kind = kindOf(name, mime);
+  const f = new File(uri);
+  if (kind === 'docx' || kind === 'odt') return officeText(await f.bytes(), kind);
+  if (kind === 'text') return (await f.text()).trim();
+  if (kind === 'image') return ocrImage(uri);
+  if (kind === 'pdf') {
+    if (!AlifNativeModule) throw Object.assign(new Error('device'), { kind: 'nodevice' });
+    const dir = new Directory(Paths.cache, 'pdf');
+    try { if (dir.exists) dir.delete(); } catch {}
+    const pages = await AlifNativeModule.pdfPages(uri, decodeURIComponent(dir.uri.replace(/^file:\/\//, '')), 6);
+    const texts: string[] = [];
+    for (const p of pages) texts.push(await ocrImage(p));
+    return texts.join('\n\n').trim();
+  }
+  throw Object.assign(new Error('format'), { kind: 'format' });
+}
+
 export function errorText(e: unknown, t: Strings): string {
   const kind = (e as any)?.kind as string | undefined;
   if (kind === 'nokey') return t.errNoKey;
@@ -183,6 +217,7 @@ export function errorText(e: unknown, t: Strings): string {
   if (kind === 'ocrmodel') return t.errOcrModel;
   if (kind === 'nodevice') return t.errNoDevice;
   if (kind === 'unreadable') return t.errUnreadable;
+  if (kind === 'format') return t.errFormat;
   if (kind === 'answer' || e instanceof SyntaxError || (e as Error)?.message === 'no JSON in answer') return t.errAnswer;
   return `${t.errOther}: ${(e as Error)?.message ?? ''}`;
 }

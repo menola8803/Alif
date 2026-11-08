@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text as RNText, TextInput as RNTextInput, TextInputProps, TextProps, TextStyle, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Circle, Path, Rect } from 'react-native-svg';
+import Svg, { Circle, G, Path, Rect } from 'react-native-svg';
 import { useApp } from './store';
 import { Theme } from './theme';
 
@@ -170,54 +170,103 @@ export function Toggle({ title, on, onChange }: { title: string; on: boolean; on
   );
 }
 
-export type TabName = 'camera' | 'text' | 'quran' | 'history' | 'settings';
+export type TabName = 'today' | 'quran' | 'translate' | 'learn' | 'dhikr';
 
-// Line icons for the bottom bar (24 x 24, drawn with the text color of the tab).
-function TabIcon({ tab, color }: { tab: TabName; color: string }) {
-  const p = { stroke: color, strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', fill: 'none' } as const;
+/** Room at the bottom of a tab page, so the last line can be scrolled up above the floating menu. */
+export const TAB_SPACE = 96;
+
+// Two-tone icons for the bottom bar (24 x 24): soft fill and a line in the tab's color.
+function TabIcon({ tab, color, fill }: { tab: TabName; color: string; fill: string }) {
+  const line = { stroke: color, strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const beads = Array.from({ length: 10 }, (_, i) => i * 0.5236 - 1.05);
   return (
-    <Svg width={24} height={24} viewBox="0 0 24 24">
-      {tab === 'camera' ? <>
-        <Path {...p} d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.5-2h5.6l1.5 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" />
-        <Circle {...p} cx={12} cy={12.8} r={3.4} />
-      </> : null}
-      {tab === 'text' ? <>
-        <Path {...p} d="M4 20h4L19 9l-4-4L4 16z" />
-        <Path {...p} d="M13.5 6.5l4 4" />
+    <Svg width={26} height={26} viewBox="0 0 24 24">
+      {tab === 'today' ? <>
+        <Path {...line} fill={fill} d="M15.6 4.2a8 8 0 1 0 4.2 11.6 6.4 6.4 0 1 1-4.2-11.6z" />
+        <Path fill={color} d="M17.6 7.2l.7-1.5.7 1.5 1.5.7-1.5.7-.7 1.5-.7-1.5-1.5-.7z" />
       </> : null}
       {tab === 'quran' ? <>
-        <Path {...p} d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z" />
-        <Path {...p} d="M12 6.5v13" />
+        <Path {...line} fill={fill} d="M12 7.5c-2.2-1.6-5.2-2-8.5-1.5v11.5c3.3-.5 6.3 0 8.5 1.5 2.2-1.5 5.2-2 8.5-1.5V6c-3.3-.5-6.3-.1-8.5 1.5z" />
+        <Path {...line} fill="none" d="M12 7.5V19M5 21.5l7-3 7 3" />
+        <Path fill={color} d="M15 10.5l1.2-1.2 1.2 1.2-1.2 1.2z" />
       </> : null}
-      {tab === 'history' ? <>
-        <Circle {...p} cx={12} cy={12} r={8} />
-        <Path {...p} d="M12 7.5V12l3 2" />
+      {tab === 'translate' ? <>
+        {/* the old dip pen: holder, ferrule and steel nib, writing a thin Arabic stroke */}
+        <G transform="translate(5.6 19) rotate(45) scale(0.9) translate(-12 -26)">
+          <Path d="M10.25 17 L9.75 11 L10.75 1.4 Q12 0 13.25 1.4 L14.25 11 L13.75 17 Z" fill={fill} stroke={color} strokeWidth={1.35} strokeLinejoin="round" />
+          <Path d="M10 12.6 H14 M10.1 14.4 H13.9" stroke={color} strokeWidth={0.9} strokeLinecap="round" opacity={0.75} />
+          <Rect x={9.9} y={17} width={4.2} height={2.1} rx={0.5} fill={color} />
+          <Path d="M12 26 L10 21.2 Q9.8 19.7 10.3 19.1 H13.7 Q14.2 19.7 14 21.2 Z" fill={fill} stroke={color} strokeWidth={1.2} strokeLinejoin="round" />
+          <Path d="M12 25.5 V21.7" stroke={color} strokeWidth={0.9} strokeLinecap="round" />
+          <Circle cx={12} cy={21} r={0.6} fill={color} />
+        </G>
+        <Path d="M22.2 16.2 c.3 1.6 -.6 2.9 -2.4 3.2 c-2.6 .5 -7.2 .6 -14 -.5" fill="none" stroke={color} strokeWidth={1.1} strokeLinecap="round" />
+        <Path d="M15 19.7 c.1 -.9 -.1 -1.6 -.5 -2.1" fill="none" stroke={color} strokeWidth={1} strokeLinecap="round" />
+        <Path d="M13.2 21.9 l.6 -.6 .6 .6 -.6 .6 z" fill={color} />
       </> : null}
-      {tab === 'settings' ? <>
-        <Path {...p} d="M4 7h8M18 7h2M4 12h2M12 12h8M4 17h10M20 17h0" />
-        <Circle {...p} cx={15} cy={7} r={2.2} />
-        <Circle {...p} cx={9} cy={12} r={2.2} />
-        <Circle {...p} cx={17} cy={17} r={2.2} />
+      {tab === 'learn' ? <>
+        <Rect x={3.5} y={3.5} width={17} height={17} rx={4.5} fill={fill} stroke={color} strokeWidth={1.6} />
+        <Path d="M15.5 7.5v8" stroke={color} strokeWidth={2} strokeLinecap="round" />
+        <Path d="M7 13.2c0 1.6 1.2 2.3 3 2.3s3-.7 3-2.3" stroke={color} strokeWidth={1.8} strokeLinecap="round" fill="none" />
+        <Path d="M9.6 17.6l.6-.6.6.6-.6.6z" fill={color} />
+      </> : null}
+      {tab === 'dhikr' ? <>
+        {beads.map((a, i) => <Circle key={i} cx={12 + 7.2 * Math.cos(a)} cy={11 + 7.2 * Math.sin(a)} r={1.55} fill={fill} stroke={color} strokeWidth={1.2} />)}
+        <Path d="M12 18.2v2.6M10.6 22h2.8" stroke={color} strokeWidth={1.5} strokeLinecap="round" />
+        <Circle cx={12} cy={11} r={1.8} fill={color} />
       </> : null}
     </Svg>
   );
 }
 
+/** The bottom menu: floats over the page and is slightly see-through, so long pages show faintly behind it. */
 export function TabBar({ tab, setTab }: { tab: TabName; setTab: (t: TabName) => void }) {
   const { theme, t } = useApp();
-  const items: [TabName, string][] = [['text', t.tabText], ['quran', t.tabQuran], ['history', t.tabHistory], ['settings', t.tabSettings], ['camera', t.tabCamera]];
+  const i = useSafeAreaInsets();
+  const items: [TabName, string][] = [['today', t.tabToday], ['quran', t.tabQuran], ['translate', t.tabTranslate], ['learn', t.tabLearn], ['dhikr', t.tabDhikr]];
+  const glass = theme.dark ? 'rgba(19,34,37,0.78)' : 'rgba(250,248,244,0.86)';
   return (
-    <View style={{ flexDirection: 'row', gap: 2, backgroundColor: theme.card, borderColor: theme.line, borderWidth: 1, borderRadius: 22, padding: 5 }}>
+    <View style={{ position: 'absolute', left: 12, right: 12, bottom: i.bottom + 8, flexDirection: 'row', gap: 2, backgroundColor: glass, borderColor: theme.dark ? 'rgba(232,176,74,0.22)' : theme.line, borderWidth: 1, borderRadius: 24, padding: 5, elevation: 8, shadowColor: '#000', shadowOpacity: 0.35, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } }}>
       {items.map(([k, label]) => {
         const on = tab === k, color = on ? theme.tabActive : theme.muted;
+        const fill = on ? (theme.dark ? 'rgba(232,176,74,0.22)' : 'rgba(38,35,31,0.12)') : (theme.dark ? 'rgba(183,198,195,0.08)' : 'rgba(106,99,88,0.08)');
         return (
           <Pressable key={k} accessibilityRole="tab" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={() => setTab(k)}
-            style={{ flex: 1, minHeight: 56, borderRadius: 17, alignItems: 'center', justifyContent: 'center', gap: 3, backgroundColor: on ? theme.chip : 'transparent' }}>
-            <TabIcon tab={k} color={color} />
-            <Text numberOfLines={1} style={{ fontSize: 10.5, fontWeight: '600', color, maxWidth: '100%', paddingHorizontal: 1 }}>{label}</Text>
+            style={{ flex: 1, minHeight: 60, borderRadius: 19, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? (theme.dark ? 'rgba(232,176,74,0.12)' : theme.chip) : 'transparent', borderWidth: on ? 1 : 0, borderColor: theme.dark ? 'rgba(232,176,74,0.5)' : theme.line }}>
+            <TabIcon tab={k} color={color} fill={fill} />
+            <Text numberOfLines={1} style={{ fontSize: 10.5, fontWeight: on ? '700' : '600', color, maxWidth: '100%', paddingHorizontal: 1 }}>{label}</Text>
+            {on ? <View style={{ width: 16, height: 3, borderRadius: 2, backgroundColor: theme.tabActive }} /> : null}
           </Pressable>
         );
       })}
+    </View>
+  );
+}
+
+/** Gear in the top right corner that opens Settings; a ring glows around it when a new version is out. */
+export function GearButton({ onPress, glow }: { onPress: () => void; glow?: boolean }) {
+  const { theme, t } = useApp();
+  const c = theme.dark ? '#E8B04A' : theme.ink;
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={glow ? `${t.settings} · ${t.newVersion}` : t.settings} onPress={onPress} hitSlop={8}
+      style={({ pressed }) => ({ width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.card, borderWidth: glow ? 2 : 1, borderColor: glow ? '#E8B04A' : theme.line, opacity: pressed ? 0.8 : 1,
+        shadowColor: '#E8B04A', shadowOpacity: glow ? 0.9 : 0, shadowRadius: glow ? 10 : 0, elevation: glow ? 10 : 0 })}>
+      <Svg width={24} height={24} viewBox="0 0 24 24">
+        <Path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z" stroke={c} strokeWidth={1.7} fill="none" />
+        <Path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.5-2-3.4-2.3.9a7.5 7.5 0 0 0-2.6-1.5L14.1 2.5h-4l-.4 2.5a7.5 7.5 0 0 0-2.6 1.5l-2.3-.9-2 3.4 2 1.5a7.6 7.6 0 0 0 0 3l-2 1.5 2 3.4 2.3-.9a7.5 7.5 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.5 7.5 0 0 0 2.6-1.5l2.3.9 2-3.4z" stroke={c} strokeWidth={1.5} strokeLinejoin="round" fill="none" />
+      </Svg>
+      {glow ? <View style={{ position: 'absolute', top: 2, right: 2, width: 10, height: 10, borderRadius: 5, backgroundColor: '#E8B04A', borderWidth: 2, borderColor: theme.card }} /> : null}
+    </Pressable>
+  );
+}
+
+/** Title of a tab page with the gear on the right. */
+export function PageTitle({ title, sub, onGear, glow, right }: { title: string; sub?: string; onGear: () => void; glow?: boolean; right?: React.ReactNode }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <View style={{ flex: 1 }}><H1>{title}</H1>{sub ? <Sub>{sub}</Sub> : null}</View>
+      {right}
+      <GearButton onPress={onGear} glow={glow} />
     </View>
   );
 }

@@ -9,6 +9,9 @@ import { DEFAULT_MODEL, Result } from './core/engine';
 import { SurahText } from './core/quran';
 import { IhdaShaykh, Level } from './core/awrad';
 import type { Engine, OcrEngine } from './translate';
+import { DEFAULT_PLACE, HighLat, Place, PrayerName, School } from './core/prayer';
+
+export type Bookmark = { n: number; ayah: number; at: number };
 
 export type EntryKind = 'camera' | 'text' | 'quran';
 export type Entry = { id: string; at: number; kind: EntryKind; result: Result };
@@ -31,6 +34,25 @@ type Saved = {
   engine: Engine; ocrEngine: OcrEngine; // translation engine and photo reading (auto: Claude with a key, else free on the phone)
   live: boolean;                       // translate while typing (free engines)
   ihdaShaykh: IhdaShaykh;              // the living shaykh named at the end of the dedication
+  // Prayer times, Hijri and Qibla
+  place: Place;                        // chosen town (default Stockholm)
+  useLocation: boolean;                // use the phone's position instead (off until the person turns it on)
+  school: School; highLat: HighLat;    // ʿaṣr Ḥanafī by default, angle-based rule for short summer nights
+  prayerNotify: Record<PrayerName, boolean>;
+  hijriAdjust: number;                 // the person's ±1 day (moon sighting)
+  hijriAuto: number;                   // shift that makes the arithmetic calendar agree with Umm al-Qurā (from Aladhan)
+  // Qur'an
+  lastRead: { n: number; ayah: number } | null;
+  bookmarks: Bookmark[];
+  // Learn to read
+  learnQuiz: boolean;                  // questions shown (off by default, switched in the corner menu)
+  learnDone: string[];                 // letters marked as learned
+  // Dhikr counter
+  dhikrSel: string; dhikrCounts: Record<string, number>; dhikrTargets: Record<string, number>;
+  // Other
+  updateTag: string; updateChecked: number; // newest version found (the gear glows)
+  homeImg: number;                     // picture last shown on Today
+  notifV2: boolean;                    // old notifications cleared once after the update to 0.4.0
 };
 
 const KEY = 'alif.state.v1';
@@ -44,6 +66,13 @@ const empty = (): Saved => ({
   arabicSize: 30, showTranslit: true, showTranslation: true, history: [],
   awradLevel: 'mubtadi', reminderOn: true, reminderHour: 21, reminderMinute: 0, awradDay: '', awradCounts: {}, popupDay: '',
   engine: 'auto', ocrEngine: 'auto', live: true, ihdaShaykh: 'none',
+  place: DEFAULT_PLACE, useLocation: false, school: 'hanafi', highLat: 'angle',
+  prayerNotify: { fajr: true, sunrise: false, dhuhr: true, asr: true, maghrib: true, isha: true },
+  hijriAdjust: 0, hijriAuto: 0,
+  lastRead: null, bookmarks: [],
+  learnQuiz: false, learnDone: [],
+  dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
+  updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

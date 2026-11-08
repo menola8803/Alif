@@ -1,0 +1,21 @@
+// Every release: the manual (both languages) must be updated and carry the app's version; no "GitHub" in the app's text.
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { MANUAL, MANUAL_VERSION } from '../src/manual';
+import { dict } from '../src/i18n';
+let fail = 0;
+const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m); } };
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+const app = JSON.parse(readFileSync(join(__dirname, '..', 'app.json'), 'utf8'));
+ok(MANUAL_VERSION === pkg.version, `manual version ${MANUAL_VERSION} ≠ package.json ${pkg.version} – update src/manual.ts (sv + en)`);
+ok(app.expo.version === pkg.version, 'app.json version = package.json version');
+ok(MANUAL.sv.length === MANUAL.en.length && MANUAL.sv.every((s, i) => s.items.length === MANUAL.en[i].items.length), 'manual sv/en have the same sections and items');
+const svKeys = Object.keys(dict.sv).sort(), enKeys = Object.keys(dict.en).sort();
+ok(JSON.stringify(svKeys) === JSON.stringify(enKeys), 'i18n sv/en keys match');
+const all = JSON.stringify([dict, MANUAL]);
+ok(!/github/i.test(all), 'the word GitHub is not shown in the app');
+ok(dict.sv.developer.includes('Claes Sundman · Scandinavian Nexum Consulting') && dict.en.developer.includes('Claes Sundman · Scandinavian Nexum Consulting'), 'developer credit');
+const changelog = readFileSync(join(__dirname, '..', '..', 'CHANGELOG.md'), 'utf8'), changelogEn = readFileSync(join(__dirname, '..', '..', 'CHANGELOG.en.md'), 'utf8');
+ok(changelog.includes(pkg.version) && changelogEn.includes(pkg.version), 'both changelogs have the version');
+if (fail) process.exit(1);
+console.log('manual: all ok');

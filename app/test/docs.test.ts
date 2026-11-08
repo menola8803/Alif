@@ -1,0 +1,15 @@
+import { strToU8, zipSync } from 'fflate';
+import { docxText, kindOf, odtText, officeText } from '../src/core/docs';
+let fail = 0;
+const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m, '\n'); } };
+const docXml = '<w:document><w:body><w:p><w:r><w:t>بِسْمِ</w:t></w:r><w:r><w:t xml:space="preserve"> ٱللَّهِ</w:t></w:r></w:p><w:p><w:r><w:t>Hej &amp; tack</w:t><w:tab/><w:t>x</w:t></w:r></w:p></w:body></w:document>';
+ok(docxText(docXml) === 'بِسْمِ ٱللَّهِ\nHej & tack\tx', `docx: ${JSON.stringify(docxText(docXml))}`);
+const odtXml = '<office:document-content><office:body><office:text><text:h>Rubrik</text:h><text:p>ٱلْحَمْدُ<text:s/>لِلَّهِ</text:p><text:p>a<text:s text:c="2"/>b<text:line-break/>c</text:p></office:text></office:body></office:document-content>';
+ok(odtText(odtXml) === 'Rubrik\nٱلْحَمْدُ لِلَّهِ\na  b\nc', `odt: ${JSON.stringify(odtText(odtXml))}`);
+const zip = zipSync({ 'word/document.xml': strToU8(docXml), '[Content_Types].xml': strToU8('<x/>') });
+ok(officeText(zip, 'docx').startsWith('بِسْمِ'), 'docx zip');
+const z2 = zipSync({ 'content.xml': strToU8(odtXml), mimetype: strToU8('application/vnd.oasis.opendocument.text') });
+ok(officeText(z2, 'odt').startsWith('Rubrik'), 'odt zip');
+ok(kindOf('a.DOCX') === 'docx' && kindOf('b.odt') === 'odt' && kindOf('c.pdf') === 'pdf' && kindOf('d.bmp') === 'image' && kindOf('e.txt') === 'text' && kindOf('f.xyz') === 'unknown', 'kinds');
+if (fail) process.exit(1);
+console.log('docs: all ok');

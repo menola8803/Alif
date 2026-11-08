@@ -4,6 +4,7 @@ type AlifNative = {
   translate(text: string, from: string, to: string, allowDownload: boolean): Promise<string>;
   downloadedModels(): Promise<string[]>;
   ocr(imageUri: string, dataPath: string, lang: string): Promise<string>;
+  pdfPages(pdfUri: string, outDir: string, maxPages: number): Promise<string[]>;
 };
 
 /** The phone's own translation (ML Kit) and text recognition (Tesseract). Null where the native code is not built in (Expo Go, web, tests). */

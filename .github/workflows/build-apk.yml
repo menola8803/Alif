@@ -1,10 +1,10 @@
 name: Build APK
-# Builds a release APK on every push to main that touches the app, and on demand.
+# Builds a release APK on every push to main (and the work branch) that touches the app, and on demand.
 # Download it from the run page: Actions -> the run -> Artifacts.
 on:
   push:
-    branches: [main]
-    paths: ['app/**', '.github/workflows/build-apk.yml']
+    branches: [main, lar-dig-lasa]
+    paths: ['app/**', 'scripts/**', '.github/workflows/build-apk.yml']
   workflow_dispatch:
 permissions:
   contents: read

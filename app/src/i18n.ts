@@ -76,10 +76,10 @@ const sv = {
   ai: 'AI-översättning', aiSub: 'Claude läser bilder och översätter',
   apiKey: 'API-nyckel (Anthropic)', apiKeyPh: 'sk-ant-…', apiKeyHelp: 'Kameraläsning och översättning görs av Claude med din egen API-nyckel från console.anthropic.com. Nyckeln sparas krypterad i telefonens säkra lagring och skickas bara till Anthropic. Text och bilder du översätter skickas till Anthropic för att behandlas. Translitteration och Koranläsning fungerar utan nyckel.',
   model: 'Modell', saveKey: 'Spara nyckel', removeKey: 'Ta bort nyckel', keySaved: 'Nyckeln är sparad', keyMissing: 'Ingen nyckel', testKey: 'Testa nyckeln', keyOk: 'Nyckeln fungerar',
-  update: 'Uppdateringar', updateSub: 'Söker efter ny version på GitHub', checkUpdate: 'Sök efter uppdatering', upToDate: 'Du har senaste versionen', newVersion: 'Ny version',
+  update: 'Uppdateringar', updateSub: 'Söker efter en ny version av Alif', checkUpdate: 'Sök efter uppdatering', upToDate: 'Du har senaste versionen', newVersion: 'Ny version',
   download: 'Öppna releasesidan', installUpdate: 'Ladda ner och installera', downloading: 'Laddar ner…', installAllow: 'Godkänn installationen i Android. Första gången kan du behöva tillåta installation från Alif.',
   installFail: 'Kunde inte installera. Öppna releasesidan och ladda ner APK-filen där.', noRelease: 'Ingen release hittades än.', checking: 'Söker…', updateFail: 'Kunde inte kontrollera uppdatering.', version: 'Version',
-  about: 'Om Alif', aboutSub: 'Utvecklare: Claes Sundman S.N.C AB - 2026',
+  about: 'Om Alif', aboutSub: 'Utvecklare: Claes Sundman · Scandinavian Nexum Consulting',
   aboutBody: 'Alif hjälper dig att läsa klassisk arabiska och Koranen: kameran läser texten, appen vokaliserar, translittererar enligt tajwīd och översätter till svenska eller engelska. Du kan också skriva svenska eller engelska och få det på arabiska.',
   aboutQuran: 'Koranens arabiska text är Tanzils uthmaniska text (tanzil.net). Översättningarna hämtas från AlQuran Cloud (alquran.cloud) och sparas på telefonen. En översättning av Koranen är alltid en tolkning av betydelsen.',
   aboutAi: 'Översättningar från Claude kan innehålla fel. Kontrollera viktiga texter mot en lärd källa.',
@@ -134,9 +134,9 @@ const sv = {
   errNoDevice: 'Översättning på telefonen finns bara i den installerade appen. Välj MyMemory eller Claude.',
   back: 'Tillbaka', on: 'På', off: 'Av',
 };
-export type Strings = typeof sv;
+type Base = typeof sv;
 
-const en: Strings = {
+const en: Base = {
   tagline: 'READ · UNDERSTAND · TRANSLATE',
   salawatMeaning: 'O God, bless our master Muhammad', splashCamera: 'CAMERA', splashTranslit: 'TRANSLITERATE', splashTranslate: 'TRANSLATE',
   tabCamera: 'Camera', tabText: 'Write', tabQuran: 'Qurʾān', tabHistory: 'History', tabSettings: 'Settings',
@@ -205,10 +205,10 @@ const en: Strings = {
   ai: 'AI translation', aiSub: 'Claude reads pictures and translates',
   apiKey: 'API key (Anthropic)', apiKeyPh: 'sk-ant-…', apiKeyHelp: 'Camera reading and translation are done by Claude with your own API key from console.anthropic.com. The key is kept encrypted in the phone\'s secure storage and is only sent to Anthropic. Text and pictures you translate are sent to Anthropic to be processed. Transliteration and reading the Qurʾān work without a key.',
   model: 'Model', saveKey: 'Save key', removeKey: 'Remove key', keySaved: 'The key is saved', keyMissing: 'No key', testKey: 'Test the key', keyOk: 'The key works',
-  update: 'Updates', updateSub: 'Looks for a new version on GitHub', checkUpdate: 'Check for update', upToDate: 'You have the latest version', newVersion: 'New version',
+  update: 'Updates', updateSub: 'Looks for a new version of Alif', checkUpdate: 'Check for update', upToDate: 'You have the latest version', newVersion: 'New version',
   download: 'Open the release page', installUpdate: 'Download and install', downloading: 'Downloading…', installAllow: 'Approve the installation in Android. The first time you may need to allow installing from Alif.',
   installFail: 'Could not install. Open the release page and download the APK there.', noRelease: 'No release found yet.', checking: 'Checking…', updateFail: 'Could not check for an update.', version: 'Version',
-  about: 'About Alif', aboutSub: 'Developer: Claes Sundman S.N.C AB - 2026',
+  about: 'About Alif', aboutSub: 'Developer: Claes Sundman · Scandinavian Nexum Consulting',
   aboutBody: 'Alif helps you read Classical Arabic and the Qurʾān: the camera reads the text, the app vocalizes it, transliterates it by the rules of tajwīd and translates it into Swedish or English. You can also write Swedish or English and get it in Arabic.',
   aboutQuran: 'The Arabic text of the Qurʾān is the Tanzil Uthmani text (tanzil.net). Translations come from AlQuran Cloud (alquran.cloud) and are kept on the phone. A translation of the Qurʾān is always an interpretation of its meaning.',
   aboutAi: 'Translations by Claude can contain mistakes. Check important texts against a learned source.',
@@ -264,4 +264,132 @@ const en: Strings = {
   back: 'Back', on: 'On', off: 'Off',
 };
 
-export const dict: Record<Lang, Strings> = { sv, en };
+
+// ---- 0.4.0: tabs, Today, prayer times, Hijri, Qibla, Translate, Learn, Dhikr, manual ----
+const sv2 = {
+  tabToday: 'Idag', tabTranslate: 'Översätt', tabLearn: 'Lär dig', tabDhikr: 'Dhikr',
+  developer: 'Utvecklare: Claes Sundman · Scandinavian Nexum Consulting',
+  updateReady: 'Tryck här för att ladda ner och installera.',
+  // Today
+  today: 'Idag', nextPrayer: 'Nästa bön', todayIs: 'Idag:', inDays: 'om {n} dagar', sacredMonth: 'Helig månad', hijriMonth: 'Hijri-månad',
+  awradStepsDone: 'steg klara idag', notifOn: 'avisering på', notifOff: 'avisering av',
+  // prayer times
+  prayerTimes: 'Bönetider', prayerTimesSub: 'Plats, metod, ʿaṣr och aviseringar',
+  asrStandard: 'Standard', calcOnPhone: 'beräknat på telefonen', sourceAladhan: 'Från Aladhan, sparat för hela månaden.', sourcePhone: 'Beräknat på telefonen (ingen sparad månad ännu). Hämtas från Aladhan när det finns nät.',
+  refresh: 'Uppdatera', place: 'Plats', change: 'Byt', myPlace: 'Min plats',
+  useLocation: 'Använd min plats', useLocationSub: 'Av från början. Påslagen används telefonens position för bönetider och Qibla och kontrolleras när appen startar. Positionen sparas bara på telefonen.',
+  locationDenied: 'Platsen är inte tillåten. Välj en ort i listan, eller tillåt plats för Alif i telefonens inställningar.',
+  calculation: 'Beräkning', mwlSub: 'Fajr 18° och ʿIshāʾ 17° under horisonten.',
+  asrSub: 'Ḥanafī: när skuggan är dubbelt så lång som föremålet. Standard (Shāfiʿī, Mālikī, Ḥanbalī): lika lång.',
+  highLat: 'Korta sommarnätter', hlAngle: 'Vinkel', hlMiddle: 'Mitt i natten', hlSeventh: '1/7 natt',
+  highLatSub: 'I Sverige når solen inte 18° under horisonten på sommaren. Då räknas Fajr och ʿIshāʾ som en del av natten: vinkel (förval), mitten av natten eller en sjundedel av natten.',
+  prayerNotifs: 'Aviseringar', prayerNotifsSub: 'En notis vid varje bön, även på låsskärmen. Läggs in sex dagar framåt och förnyas när appen öppnas.',
+  onTime: 'Påminnelser i rätt tid', onTimeSub: 'OnePlus och andra telefoner kan fördröja notiser för att spara batteri. Tillåt "Alarm och påminnelser" och undanta Alif från batterisparläget.',
+  allowAlarms: 'Tillåt alarm och påminnelser', batterySettings: 'Batterisparläge',
+  prayerChannel: 'Bönetider', prayerNotifBody: 'Dags för {p} ({c})',
+  searchCity: 'Sök ort', otherPlace: 'Annan plats i världen', otherPlaceSub: 'Skriv orten i sökrutan ovan och landet här (på engelska), till exempel Istanbul och Turkey.',
+  countryPh: 'Land (t.ex. Turkey)', findPlace: 'Hitta "{q}"', cityNotFound: 'Orten hittades inte. Kontrollera stavningen och landet.',
+  // Qibla
+  qibla: 'Qibla', qiblaSub: 'Riktning mot Kaʿba', locationOn: 'Telefonens position', locationOffList: 'Vald i listan · plats av',
+  noCompass: 'Telefonen saknar kompass.', compassStarting: 'Kompassen startar…', facingQibla: 'Du står mot Qibla',
+  turnBy: 'Vrid {n}° åt {dir}', right: 'höger', left: 'vänster', holdFlat: 'Håll telefonen plant',
+  compassHelp: 'Riktningen räknas ut från platsen. Ta av magnetiska skal. Visar kompassen fel – rör telefonen i en åtta några gånger. Med plats på används Androids egen kompass (geografisk nord), annars magnetometern med rättning för missvisningen i Sverige.',
+  // Hijri
+  hijriCalendar: 'Hijri-kalender', prevMonth: 'Föregående månad', nextMonth: 'Nästa månad',
+  hijriLegend: 'Stort tal = hijri-dag, litet = svenskt datum. Prick = måndag/torsdag (sunnafasta). Guldkant = särskild dag.',
+  specialDays: 'Särskilda dagar', theMonths: 'Månaderna', sacred: 'helig',
+  hijriSource: 'Datumet följer Umm al-Qurā-kalendern (från Aladhan när den har hämtats, annars uträknat). Följer din moské månskådning kan du flytta datumet ±1 dag i Inställningar.',
+  hijriAdjust: 'Hijri-datum', hijriAdjustSub: 'Flytta en dag om din moské följer månskådning', day: 'dag',
+  // Qur'an
+  continueReading: 'Fortsätt läsa', verse: 'vers', bookmark: 'Bokmärke', bookmarked: 'Sparad',
+  // Translate
+  modeWrite: 'Skriv', modeImage: 'Bild', modeCamera: 'Kamera', modeFile: 'Fil',
+  imageSub: 'Öppna en bild (png, jpeg, jpg, bmp) och ringa in texten med fingret.', openImage: 'Öppna bild', otherImage: 'Annan bild',
+  circleHint: 'Dra med fingret runt texten du vill översätta.', translateMarked: 'Översätt markerat', translateWhole: 'Översätt hela bilden',
+  editInWrite: 'Ändra under Skriv', imageEngineNote: 'Bilder läses på telefonen, eller av Claude om du valt det',
+  fileSub: 'Öppna .docx, .odt, .pdf, en bild eller en textfil. Texten hamnar i den vita rutan.', openFile: 'Öppna fil', otherFile: 'Annan fil',
+  readingFile: 'Läser filen…', markText: 'Markera texten du vill översätta', markHint: 'Håll på texten och dra för att markera. Inget markerat = allt översätts.',
+  markedChars: '{n} tecken markerade', translateAll: 'Översätt allt',
+  errFormat: 'Den filtypen kan inte läsas. Välj .docx, .odt, .pdf, en bild eller en textfil.',
+  // Learn
+  learnSub: 'Arabiska bokstäver enligt boken Iqraʾa!', learnMenu: 'Meny', showQuestions: 'Visa frågor', showQuestionsSub: 'Frågor under varje bokstav. Av från början.',
+  bookCredit: 'Bilder ur Iqraʾa! av Samir Muric (privat bruk).', openBook: 'Öppna boken (PDF)', bookErr: 'Boken kunde inte öppnas. Installera en PDF-läsare.',
+  learnProgress: '{n} av {m} bokstäver lärda', vowelSigns: 'Vokaltecken', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler',
+  questions: 'Frågor', quizScore: '{n} av {m} rätt', tryAgain: 'Försök igen', sound: 'Ljud', listen: 'Lyssna',
+  joinsYes: 'Kopplas ihop med bokstaven efter.', joinsNo: 'Kopplas inte ihop med bokstaven efter.',
+  makhraj: 'Uttalsplats (makhraj)', letterForms: 'Bokstavens former', formsHelp: 'Från höger: ensam, i början, i mitten och i slutet av ett ord.',
+  learned: 'Lärd', markLearned: 'Markera som lärd', tapToListen: 'Tryck på ett exempel för att lyssna.',
+  // Dhikr
+  dhikrSub: 'Räknare, Daily Awrad och ṣalawāt', resetCount: 'Nollställ', awradWithIhda: 'Dagens awrād med Ihdāʾ', salawatTitle: 'Ṣalawāt',
+  // Settings
+  manual: 'Manual', manualSub: 'Så använder du Alif', privacy: 'Integritet', privacySub: 'Vad som stannar på telefonen',
+  privacyItems: [
+    ['Plats', 'Av från början. Utan plats väljer du ort i en lista. Påslagen används positionen bara för bönetider och Qibla och sparas bara på telefonen.'],
+    ['Mikrofon', 'Alif använder inte mikrofonen. Tillståndet är spärrat i appen.'],
+    ['Kamera och bilder', 'Bilden läses på telefonen (Tesseract). Den skickas bara iväg om du själv väljer Claude eller Google Lens.'],
+    ['Bönetider och hijri', 'Ortens koordinater skickas till Aladhan (api.aladhan.com) för att hämta månadens tider. Inget annat skickas.'],
+    ['Översättning', 'På telefonen (ML Kit) lämnar texten inte telefonen. MyMemory och Claude får texten du översätter.'],
+    ['Uppdateringar', 'Appen frågar ibland efter senaste versionen. Inget om dig skickas.'],
+  ] as [string, string][],
+};
+
+const en2: typeof sv2 = {
+  tabToday: 'Today', tabTranslate: 'Translate', tabLearn: 'Learn', tabDhikr: 'Dhikr',
+  developer: 'Developer: Claes Sundman · Scandinavian Nexum Consulting',
+  updateReady: 'Tap here to download and install.',
+  today: 'Today', nextPrayer: 'Next prayer', todayIs: 'Today:', inDays: 'in {n} days', sacredMonth: 'Sacred month', hijriMonth: 'Hijri month',
+  awradStepsDone: 'steps done today', notifOn: 'notification on', notifOff: 'notification off',
+  prayerTimes: 'Prayer times', prayerTimesSub: 'Place, method, ʿaṣr and notifications',
+  asrStandard: 'Standard', calcOnPhone: 'calculated on the phone', sourceAladhan: 'From Aladhan, saved for the whole month.', sourcePhone: 'Calculated on the phone (no saved month yet). Fetched from Aladhan when there is internet.',
+  refresh: 'Refresh', place: 'Place', change: 'Change', myPlace: 'My location',
+  useLocation: 'Use my location', useLocationSub: 'Off by default. When on, the phone’s position is used for prayer times and the Qibla and checked when the app starts. The position is only saved on the phone.',
+  locationDenied: 'Location is not allowed. Pick a town from the list, or allow location for Alif in the phone’s settings.',
+  calculation: 'Calculation', mwlSub: 'Fajr 18° and ʿIshāʾ 17° below the horizon.',
+  asrSub: 'Ḥanafī: when the shadow is twice the length of the object. Standard (Shāfiʿī, Mālikī, Ḥanbalī): the same length.',
+  highLat: 'Short summer nights', hlAngle: 'Angle', hlMiddle: 'Middle of night', hlSeventh: '1/7 of night',
+  highLatSub: 'In Sweden the sun does not reach 18° below the horizon in summer. Fajr and ʿIshāʾ are then taken as a part of the night: angle (default), the middle of the night or a seventh of the night.',
+  prayerNotifs: 'Notifications', prayerNotifsSub: 'A notification at every prayer, on the lock screen too. Set six days ahead and renewed when the app is opened.',
+  onTime: 'Reminders on time', onTimeSub: 'OnePlus and other phones may delay notifications to save battery. Allow "Alarms & reminders" and exempt Alif from battery saving.',
+  allowAlarms: 'Allow alarms & reminders', batterySettings: 'Battery saving',
+  prayerChannel: 'Prayer times', prayerNotifBody: 'Time for {p} ({c})',
+  searchCity: 'Search town', otherPlace: 'Another place in the world', otherPlaceSub: 'Type the town in the search box above and the country here, for example Istanbul and Turkey.',
+  countryPh: 'Country (e.g. Turkey)', findPlace: 'Find "{q}"', cityNotFound: 'The place was not found. Check the spelling and the country.',
+  qibla: 'Qibla', qiblaSub: 'Direction of the Kaʿba', locationOn: 'The phone’s position', locationOffList: 'Chosen from the list · location off',
+  noCompass: 'The phone has no compass.', compassStarting: 'Starting the compass…', facingQibla: 'You are facing the Qibla',
+  turnBy: 'Turn {n}° to the {dir}', right: 'right', left: 'left', holdFlat: 'Hold the phone flat',
+  compassHelp: 'The direction is worked out from the place. Remove magnetic cases. If the compass is off, move the phone in a figure eight a few times. With location on, Android’s own compass (true north) is used; otherwise the magnetometer, corrected for the magnetic declination in Scandinavia.',
+  hijriCalendar: 'Hijri calendar', prevMonth: 'Previous month', nextMonth: 'Next month',
+  hijriLegend: 'Large number = Hijri day, small = Gregorian date. Dot = Monday/Thursday (sunna fast). Gold edge = special day.',
+  specialDays: 'Special days', theMonths: 'The months', sacred: 'sacred',
+  hijriSource: 'The date follows the Umm al-Qurā calendar (from Aladhan once fetched, otherwise calculated). If your mosque follows the moon sighting, move the date ±1 day in Settings.',
+  hijriAdjust: 'Hijri date', hijriAdjustSub: 'Move one day if your mosque follows the moon sighting', day: 'day',
+  continueReading: 'Continue reading', verse: 'verse', bookmark: 'Bookmark', bookmarked: 'Saved',
+  modeWrite: 'Write', modeImage: 'Picture', modeCamera: 'Camera', modeFile: 'File',
+  imageSub: 'Open a picture (png, jpeg, jpg, bmp) and draw round the text with your finger.', openImage: 'Open picture', otherImage: 'Another picture',
+  circleHint: 'Drag your finger round the text you want translated.', translateMarked: 'Translate marked', translateWhole: 'Translate the whole picture',
+  editInWrite: 'Edit under Write', imageEngineNote: 'Pictures are read on the phone, or by Claude if you chose it',
+  fileSub: 'Open a .docx, .odt, .pdf, a picture or a text file. The text goes into the white box.', openFile: 'Open file', otherFile: 'Another file',
+  readingFile: 'Reading the file…', markText: 'Mark the text you want translated', markHint: 'Press and drag on the text to mark it. Nothing marked = everything is translated.',
+  markedChars: '{n} characters marked', translateAll: 'Translate all',
+  errFormat: 'That kind of file cannot be read. Choose a .docx, .odt, .pdf, a picture or a text file.',
+  learnSub: 'The Arabic letters, following the book Iqraʾa!', learnMenu: 'Menu', showQuestions: 'Show questions', showQuestionsSub: 'Questions under each letter. Off by default.',
+  bookCredit: 'Pictures from Iqraʾa! by Samir Muric (private use).', openBook: 'Open the book (PDF)', bookErr: 'The book could not be opened. Install a PDF viewer.',
+  learnProgress: '{n} of {m} letters learned', vowelSigns: 'Vowel signs', vowelSignsSub: 'fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and long vowels',
+  questions: 'Questions', quizScore: '{n} of {m} right', tryAgain: 'Try again', sound: 'Sound', listen: 'Listen',
+  joinsYes: 'Joins the letter after it.', joinsNo: 'Does not join the letter after it.',
+  makhraj: 'Where it is pronounced (makhraj)', letterForms: 'The letter’s forms', formsHelp: 'From the right: alone, at the start, in the middle and at the end of a word.',
+  learned: 'Learned', markLearned: 'Mark as learned', tapToListen: 'Tap an example to listen.',
+  dhikrSub: 'Counter, Daily Awrad and ṣalawāt', resetCount: 'Reset', awradWithIhda: 'Today’s awrād with the Ihdāʾ', salawatTitle: 'Ṣalawāt',
+  manual: 'Manual', manualSub: 'How to use Alif', privacy: 'Privacy', privacySub: 'What stays on the phone',
+  privacyItems: [
+    ['Location', 'Off by default. Without it you pick a town from a list. When on, the position is only used for prayer times and the Qibla and is only saved on the phone.'],
+    ['Microphone', 'Alif does not use the microphone. The permission is blocked in the app.'],
+    ['Camera and pictures', 'The picture is read on the phone (Tesseract). It is only sent anywhere if you choose Claude or Google Lens yourself.'],
+    ['Prayer times and Hijri', 'The town’s coordinates are sent to Aladhan (api.aladhan.com) to fetch the month’s times. Nothing else is sent.'],
+    ['Translation', 'On the phone (ML Kit) the text does not leave the phone. MyMemory and Claude receive the text you translate.'],
+    ['Updates', 'The app now and then asks for the latest version. Nothing about you is sent.'],
+  ] as [string, string][],
+};
+
+export type Strings = typeof sv & typeof sv2;
+export const dict: Record<Lang, Strings> = { sv: { ...sv, ...sv2 }, en: { ...en, ...en2 } };

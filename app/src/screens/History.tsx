@@ -8,13 +8,13 @@ import { Body, Btn, H1, Header, Screen, SmallBtn, Sub, Text } from '../ui';
 
 const when = (at: number, lang: string) => new Date(at).toLocaleString(lang === 'sv' ? 'sv-SE' : 'en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-export default function History({ open }: { open: (id: string) => void }) {
+export default function History({ open, hideTitle }: { open: (id: string) => void; hideTitle?: boolean }) {
   const { t, theme, history, lang, clearHistory } = useApp();
   const kind = { camera: t.kindCamera, text: t.kindText, quran: t.kindQuran };
   return (
     <View style={{ flex: 1, gap: 12 }}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 12 }}>
-        <View style={{ flex: 1 }}><H1>{t.historyTitle}</H1><Sub>{t.historySub}</Sub></View>
+        <View style={{ flex: 1 }}>{hideTitle ? null : <><H1>{t.historyTitle}</H1><Sub>{t.historySub}</Sub></>}</View>
         {history.length ? <SmallBtn title={t.clear} onPress={() => Alert.alert(t.clearHistory, t.clearHistoryConfirm, [{ text: t.cancel, style: 'cancel' }, { text: t.delete, style: 'destructive', onPress: clearHistory }])} /> : null}
       </View>
       {!history.length ? <Body muted>{t.noHistory}</Body> : null}

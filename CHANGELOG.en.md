@@ -2,6 +2,19 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.4.0
+- **New menu with five tabs:** Today, Qur’an, Translate, Learn and Dhikr, with new icons (Translate is an old dip pen with an Arabic stroke). The menu floats slightly see-through over the page. Settings open with the gear in the top right corner, which glows when a new version is out. History is under Settings.
+- **Today:** a prayer clock (24 hours, the sun moves round and the next prayer glows with a countdown), today’s times with a notification per prayer, Daily Awrad, Qibla, the Hijri month and the next special day. At the bottom a picture of Mecca, Medina or Hagia Sophia with Allāhumma ṣalli ʿalā sayyidinā Muḥammad in gold – a new picture every time you tap Today.
+- **Prayer times** from Aladhan with Muslim World League, default Stockholm, ʿaṣr Ḥanafī (Standard optional) and a rule for short summer nights. Pick a Swedish town, look up a place anywhere or use your location (off by default). Saved for the whole month and calculated on the phone without internet. Notifications at the five prayers.
+- **Hijri calendar** with the Islamic month names in Arabic, transliteration and English/Swedish, the sacred months, special days and a ±1 day adjustment.
+- **Qibla compass** with direction, distance and a buzz when you face it.
+- **Qur’an:** the Swedish and English translations are built in, so the whole Qur’an works offline. Continue reading and bookmarks.
+- **Translate:** Write, Picture (open png/jpeg/bmp and draw round the text), Camera and File (.docx, .odt, .pdf, pictures and text – mark it in the white box and translate).
+- **Learn to read** following the book Iqraʾa!: all letters with the book’s pictures of where they are pronounced and their forms, Listen, vowel signs and questions switched on in the ⋮ menu (off by default). The whole book opens as a PDF.
+- **Dhikr:** counter with vibration and goals, Daily Awrad with the Ihdāʾ and ṣalawāt.
+- **Manual** in Swedish and English under Settings, and a privacy page.
+- The release notes are shown in the language chosen in Settings.
+
 ## 0.3.3
 - **Ihdāʾ (dedication)** in the Daily Awrad with the whole text: Arabic with vowel marks, tajwīd transliteration and its meaning in Swedish or English. You choose the living shaykh named in the last line (none, Shaykh Hishām Kabbānī or Shaykh ʿĀdil ar-Rabbānī).
 - Transliteration keeps ﷺ and writes tāʾ marbūṭa without a vowel as -h.

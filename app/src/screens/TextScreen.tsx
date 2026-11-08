@@ -7,11 +7,11 @@ import { hasArabic, isVocalized, transliterate } from '../core/translit';
 import { directionOf, errorText, textEngine, translateText } from '../translate';
 import { engineLabel } from './Settings';
 import { ResultView } from '../result';
-import { Body, Btn, Card, H1, Label, Segmented, SmallBtn, Sub, Text, TextInput } from '../ui';
+import { Body, Btn, Card, H1, Label, Segmented, SmallBtn, Sub, TAB_SPACE, Text, TextInput } from '../ui';
 import { Route } from '../nav';
 import { useQuran } from '../library';
 
-export default function TextScreen({ go, openSurah }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void }) {
+export default function TextScreen({ go, openSurah, hideTitle, initial }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void; hideTitle?: boolean; initial?: { text: string; at: number } }) {
   const app = useApp();
   const { t, theme, scheme, mode } = app;
   const quran = useQuran();
@@ -21,6 +21,8 @@ export default function TextScreen({ go, openSurah }: { go: (r: Route) => void; 
   const [err, setErr] = useState('');
   const [noKey, setNoKey] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  // Text sent here from another part of the app (for example the part of a file the person marked).
+  useEffect(() => { if (initial?.text) { setText(initial.text); setManual(null); setResult(null); } }, [initial?.at]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const auto = directionOf(text);
   const dir = manual ?? auto;
@@ -59,8 +61,8 @@ export default function TextScreen({ go, openSurah }: { go: (r: Route) => void; 
   }, [text, dir, app.live, free, engine, app.lang]);
 
   return (
-    <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-      <View><H1>{t.textTitle}</H1><Sub>{t.textSub}</Sub></View>
+    <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+      {hideTitle ? <Sub>{t.textSub}</Sub> : <View><H1>{t.textTitle}</H1><Sub>{t.textSub}</Sub></View>}
       <Card>
         <Segmented<Direction> options={[['ar2x', t.dirAr], ['x2ar', t.dirX]]} value={dir} onChange={d => setManual(d === auto ? null : d)} />
         <TextInput
