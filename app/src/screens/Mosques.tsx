@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Linking, Pressable, View } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../store';
 import { Route } from '../nav';
@@ -48,7 +49,23 @@ export default function MosquesScreen({ onBack, go }: { onBack: () => void; go: 
   const MapView = getMapView();
   const [sel, setSel] = useState(-1);
   const [center, setCenter] = useState<number[]>([place.lat, place.lng, 11, 1]);
-  const sorted = useMemo(() => (list ? sortByDistance(list, place) : []), [list, place]);
+  const [me, setMe] = useState<{ lat: number; lng: number } | null>(null);
+  const from = useMemo(() => me ?? { lat: place.lat, lng: place.lng }, [me, place.lat, place.lng]);
+  const sorted = useMemo(() => (list ? sortByDistance(list, from) : []), [list, from]);
+  // The dot button: zooms in on where the phone is now. Asks for location only when the button is pressed;
+  // without permission it falls back to the place chosen for prayer times.
+  const toMe = async () => {
+    try {
+      let perm = await Location.getForegroundPermissionsAsync();
+      if (!perm.granted && perm.canAskAgain) perm = await Location.requestForegroundPermissionsAsync();
+      if (!perm.granted) { setCenter([place.lat, place.lng, 12, Date.now()]); return; }
+      const last = await Location.getLastKnownPositionAsync({ maxAge: 120000 }).catch(() => null);
+      if (last) { setMe({ lat: last.coords.latitude, lng: last.coords.longitude }); setCenter([last.coords.latitude, last.coords.longitude, 15, Date.now()]); }
+      const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      setMe({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      setCenter([pos.coords.latitude, pos.coords.longitude, 15, Date.now()]);
+    } catch { setCenter([place.lat, place.lng, 12, Date.now()]); }
+  };
   const pins = useMemo(() => (list ?? []).map(m => ({ lat: m.lat, lng: m.lng, title: m.name })), [list]);
   const chosen = sel >= 0 && list ? list[sel] : null;
   const nearest = sorted[0];
@@ -61,7 +78,7 @@ export default function MosquesScreen({ onBack, go }: { onBack: () => void; go: 
   }
   return (
     <View style={{ flex: 1, backgroundColor: theme.bg }}>
-      <MapView style={{ flex: 1 }} pins={pins} selected={sel} center={center} showMe={useLocation}
+      <MapView style={{ flex: 1 }} pins={pins} selected={sel} center={center} showMe={useLocation || !!me}
         onMarkerPress={e => setSel(e.nativeEvent.index)} />
       {/* legend */}
       <View pointerEvents="box-none" style={{ position: 'absolute', top: i.top + 10, left: 12, right: 76 }}>
@@ -69,14 +86,14 @@ export default function MosquesScreen({ onBack, go }: { onBack: () => void; go: 
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Svg width={14} height={14} viewBox="0 0 14 14"><Circle cx={7} cy={7} r={6} fill="#172629" stroke={gold} strokeWidth={1.5} /><Path d="M4 9.5V8a3 3 0 0 1 6 0v1.5z" fill={gold} /></Svg>
             <Text style={{ fontSize: 13, color: '#EAF1EF' }}>{t.mosque}</Text>
-            {useLocation ? <><View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#4A90E2', marginLeft: 8 }} /><Text style={{ fontSize: 13, color: '#EAF1EF' }}>{t.you}</Text></> : null}
+            {useLocation || me ? <><View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#4A90E2', marginLeft: 8 }} /><Text style={{ fontSize: 13, color: '#EAF1EF' }}>{t.you}</Text></> : null}
           </View>
         </View>
       </View>
       {/* round buttons */}
       <View style={{ position: 'absolute', top: i.top + 10, right: 12, gap: 10 }}>
         <RoundBtn label={t.back} onPress={onBack}><Text style={{ color: gold, fontSize: 26, marginTop: -3 }}>‹</Text></RoundBtn>
-        <RoundBtn label={t.myPlaceBtn} onPress={() => setCenter([place.lat, place.lng, 12, Date.now()])}>
+        <RoundBtn label={t.myPlaceBtn} onPress={toMe}>
           <Svg width={24} height={24} viewBox="0 0 24 24"><Circle cx={12} cy={12} r={4} fill={gold} /><Circle cx={12} cy={12} r={8} stroke={gold} strokeWidth={1.6} fill="none" /><Path d="M12 1v4M12 19v4M1 12h4M19 12h4" stroke={gold} strokeWidth={1.6} /></Svg>
         </RoundBtn>
       </View>
@@ -89,10 +106,10 @@ export default function MosquesScreen({ onBack, go }: { onBack: () => void; go: 
           <View style={{ gap: 4 }}>
             <Text style={{ fontSize: 17, fontWeight: '700', color: gold }}>{chosen.name}</Text>
             <Text style={{ fontSize: 13, color: '#EAF1EF' }}>{[chosen.addr, chosen.city].filter(Boolean).join(' · ') || t.noAddress}</Text>
-            <Text style={{ fontSize: 12, color: '#B7C6C3' }}>{`${distanceKm(place, chosen).toFixed(1).replace('.', lang === 'sv' ? ',' : '.')} km · ${t.source}: ${chosen.src.replace('osm', 'OpenStreetMap').replace('wikidata', 'Wikidata')}`}</Text>
+            <Text style={{ fontSize: 12, color: '#B7C6C3' }}>{`${distanceKm(from, chosen).toFixed(1).replace('.', lang === 'sv' ? ',' : '.')} km · ${t.source}: ${chosen.src.replace('osm', 'OpenStreetMap').replace('wikidata', 'Wikidata')}`}</Text>
           </View>
         ) : list ? (
-          <Text style={{ fontSize: 13.5, color: '#EAF1EF' }}>{`${t.mosquesCount.replace('{n}', String(list.length))}${nearest ? ` · ${t.nearest}: ${nearest.name} (${distanceKm(place, nearest).toFixed(1)} km)` : ''}`}</Text>
+          <Text style={{ fontSize: 13.5, color: '#EAF1EF' }}>{`${t.mosquesCount.replace('{n}', String(list.length))}${nearest ? ` · ${t.nearest}: ${nearest.name} (${distanceKm(from, nearest).toFixed(1)} km)` : ''}`}</Text>
         ) : null}
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <View style={{ flex: 1 }}><Btn title={t.list} kind="secondary" onPress={() => go({ name: 'mosqueList' })} /></View>
