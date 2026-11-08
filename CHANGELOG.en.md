@@ -2,6 +2,13 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.0
+- **Recitation** in every sūra: a player at the bottom, verse by verse, the verse being recited is highlighted and followed. Default Maḥmūd Khalīl al-Ḥuṣarī; more reciters in Settings › Recitation.
+- **Download sūras** with the ⤓ arrow in the sūra list or the player – then they play offline. Wifi only by default, and downloaded audio can be removed.
+- **Tajwīd colours** with a legend, **word by word** (word meanings in English) and **ḥifẓ mode** (the text is hidden, each verse repeated 1–10 times).
+- **Repetition cards** for the letters in Learn.
+- **Backup** of settings, bookmarks, history and progress in a file.
+
 ## 0.4.3
 - Learn to read: the letter’s four forms are shown two by two, with a number in a ring (1 alone, 2 at the start, 3 in the middle, 4 at the end) so the order is clear.
 

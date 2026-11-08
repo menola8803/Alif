@@ -53,6 +53,11 @@ type Saved = {
   updateTag: string; updateChecked: number; // newest version found (the gear glows)
   homeImg: number;                     // picture last shown on Today
   notifV2: boolean;                    // old notifications cleared once after the update to 0.4.0
+  // Recitation and reading aids (0.5.0)
+  reciter: string; wifiOnly: boolean;   // al-Ḥuṣarī by default; downloads only on wifi
+  tajweed: boolean; wbw: boolean;       // tajwīd colours, word by word
+  hifz: boolean; hifzRepeat: number;    // memorising: text hidden until tapped, each verse repeated
+  learnCards: Record<string, { box: number; due: number }>; // repetition cards (Leitner boxes)
 };
 
 const KEY = 'alif.state.v1';
@@ -73,6 +78,7 @@ const empty = (): Saved => ({
   learnQuiz: false, learnDone: [],
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
+  reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
 });
 
 type Prefs = Omit<Saved, 'history'>;
@@ -83,6 +89,8 @@ type Ctx = Saved & {
   addHistory: (kind: EntryKind, r: Result) => Entry;
   removeHistory: (id: string) => void; clearHistory: () => void;
   loadSurah: (n: number, ed: string) => Promise<SurahText | null>;
+  backup: () => object;
+  restore: (data: any) => boolean;
   saveSurah: (s: SurahText) => void;
 };
 const C = createContext<Ctx>(null as unknown as Ctx);
@@ -139,8 +147,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const saveSurah = useCallback((st: SurahText) => { AsyncStorage.setItem(SURAH_KEY(st.number, st.edition), JSON.stringify(st)).catch(() => {}); }, []);
 
+  // Backup: everything saved in the app except the API key (that stays in the phone's secure store).
+  const backup = useCallback(() => ({ app: 'Alif', format: 1, at: new Date().toISOString(), data: s }), [s]);
+  const restore = useCallback((j: any) => {
+    const data = j?.app === 'Alif' && j?.data && typeof j.data === 'object' ? j.data : null;
+    if (!data) return false;
+    const merged = { ...empty(), ...data };
+    if (!themes[merged.themeName as ThemeName]) merged.themeName = 'dark';
+    if (merged.lang !== 'sv' && merged.lang !== 'en') merged.lang = phoneLang();
+    if (!Array.isArray(merged.history)) merged.history = [];
+    setS(merged);
+    return true;
+  }, []);
+
   const value = useMemo<Ctx>(() => ({
-    ...s, ready, theme: themes[s.themeName], t: dict[s.lang], apiKey, setApiKey, setPrefs, addHistory, removeHistory, clearHistory, loadSurah, saveSurah,
-  }), [s, ready, apiKey, setApiKey, setPrefs, addHistory, removeHistory, clearHistory, loadSurah, saveSurah]);
+    ...s, ready, theme: themes[s.themeName], t: dict[s.lang], apiKey, setApiKey, setPrefs, addHistory, removeHistory, clearHistory, loadSurah, saveSurah, backup, restore,
+  }), [s, ready, apiKey, setApiKey, setPrefs, addHistory, removeHistory, clearHistory, loadSurah, saveSurah, backup, restore]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }

@@ -20,4 +20,7 @@ export type Route =
   | { name: 'qibla' }
   | { name: 'hijri' }
   | { name: 'letter'; id: string }
-  | { name: 'signs' };
+  | { name: 'signs' }
+  | { name: 'recitation' }
+  | { name: 'backup' }
+  | { name: 'cards' };

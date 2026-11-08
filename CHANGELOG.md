@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0
+- **Recitation** i varje sura: spelare längst ner, vers för vers, versen som läses markeras och följs. Förval Maḥmūd Khalīl al-Ḥuṣarī; fler recitatörer under Inställningar › Recitation.
+- **Ladda ner suror** med pilen ⤓ i suralistan eller i spelaren – sedan spelas de utan nät. Bara på wifi som förval, och nedladdat ljud kan tas bort.
+- **Tajwīd-färger** med förklaring, **ord för ord** (ordens betydelse på engelska) och **ḥifẓ-läge** (texten döljs, varje vers upprepas 1–10 gånger).
+- **Repetitionskort** för bokstäverna i Lär dig.
+- **Säkerhetskopia** av inställningar, bokmärken, historik och framsteg i en fil.
+
 ## 0.4.3
 - Lär dig läsa: bokstavens fyra former visas två och två, med en siffra i en ring (1 ensam, 2 i början, 3 i mitten, 4 i slutet) så ordningen syns.
 

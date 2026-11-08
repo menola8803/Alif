@@ -10,6 +10,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
 import { PrayerProvider } from './src/prayer';
+import { RecitationProvider } from './src/recitation';
+import { BackupScreen, CardsScreen, RecitationScreen } from './src/screens/More';
 import { Route } from './src/nav';
 import { Screen, TabBar, TabName } from './src/ui';
 import { HOME_IMAGES } from './src/homeImages';
@@ -101,6 +103,9 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'hijri': return <HijriScreen onBack={pop} />;
       case 'letter': return <LetterScreen key={r.id} id={r.id} onBack={pop} go={l => setStack(s => [...s.slice(0, -1), l])} />;
       case 'signs': return <SignsScreen onBack={pop} />;
+      case 'recitation': return <RecitationScreen onBack={pop} />;
+      case 'backup': return <BackupScreen onBack={pop} />;
+      case 'cards': return <CardsScreen onBack={pop} />;
       default:
         return (
           <Screen bottom={false}>
@@ -140,7 +145,7 @@ function Root() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AppProvider><QuranProvider><PrayerProvider><Root /></PrayerProvider></QuranProvider></AppProvider>
+      <AppProvider><QuranProvider><PrayerProvider><RecitationProvider><Root /></RecitationProvider></PrayerProvider></QuranProvider></AppProvider>
     </SafeAreaProvider>
   );
 }

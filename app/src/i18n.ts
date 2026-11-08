@@ -391,5 +391,47 @@ const en2: typeof sv2 = {
   ] as [string, string][],
 };
 
-export type Strings = typeof sv & typeof sv2;
-export const dict: Record<Lang, Strings> = { sv: { ...sv, ...sv2 }, en: { ...en, ...en2 } };
+// ---- 0.5.0: recitation, tajwīd, word by word, ḥifẓ, cards, backup ----
+const sv3 = {
+  recitation: 'Recitation', recitationSub: 'Recitatör och nedladdning av ljud',
+  recitationHelp: 'Ljudet kommer vers för vers från Islamic Network (samma källa som AlQuran Cloud). Utan nedladdning strömmas det. Nedladdade suror spelas utan nät. Ljudet spelas bara medan Alif är öppen.',
+  downloads: 'Nedladdat', downloadedStats: '{n} suror · {mb} MB', wholeQuranSize: 'Hela Koranen med en recitatör ≈ 1 GB.',
+  wifiOnly: 'Ladda ner bara på wifi', removeDownloads: 'Ta bort nedladdat ljud',
+  downloadSurah: 'Ladda ner suran', downloadFail: 'Nedladdningen avbröts. Kontrollera internet och försök igen.', needWifi: 'Anslut till wifi, eller slå av "Ladda ner bara på wifi" under Inställningar › Recitation.',
+  onPhone: 'på telefonen', streamed: 'strömmas', listenSurah: 'Lyssna på suran', play: 'Spela', pause: 'Pausa', playFrom: 'Spela från vers',
+  tajweedColors: 'Tajwīd-färger', wordByWord: 'Ord för ord',
+  tajweedRules: { hamza_wasl: 'tyst / waṣl', silent: 'tyst', lam_shamsiyya: 'tyst lām', madd_normal: 'madd 2', madd_permissible: 'madd 2–6', madd_necessary: 'madd 6', madd_obligatory: 'madd 4–5',
+    qalqala: 'qalqala', ikhfa_shafawi: 'ikhfāʾ shafawī', ikhfa: 'ikhfāʾ', idgham_shafawi: 'idghām shafawī', iqlab: 'iqlāb', idgham_ghunna: 'idghām med ghunna',
+    idgham_no_ghunna: 'idghām utan ghunna', idgham_mutajanisayn: 'idghām', idgham_mutaqaribayn: 'idghām', ghunna: 'ghunna' } as Record<string, string>,
+  wbwNote: 'Ordens betydelse på engelska (quran.com har ingen svensk ord-för-ord). Sparas på telefonen.', wbwFail: 'Ord för ord kunde inte hämtas. Kontrollera internet.',
+  hifzMode: 'Ḥifẓ (memorera)', hifzSub: 'Texten döljs tills du trycker. Varje vers upprepas så här många gånger:', tapToShow: 'Tryck för att visa', hideAgain: 'Dölj igen',
+  cards: 'Repetitionskort', cardsShort: 'Öva bokstäverna lite varje dag', cardsSub: '{n} kort att öva idag',
+  cardsDone: 'Inga kort kvar idag. Kom tillbaka i morgon.', again: 'Igen', knewIt: 'Kunde', cardBoxes: 'Lådor', newCards: 'nya',
+  cardsHelp: 'Kan du bokstaven flyttas kortet till nästa låda och kommer tillbaka efter 1, 2, 4, 8 och 16 dagar. "Igen" lägger det först.',
+  backup: 'Säkerhetskopia', backupSub: 'Spara och läs in allt i en fil',
+  backupHelp: 'Sparar inställningar, bokmärken, läsläge, historik, dhikr-räkning, lärda bokstäver och repetitionskort i en fil som du kan spara var du vill. API-nyckeln tas inte med.',
+  backupSave: 'Spara säkerhetskopia', backupLoad: 'Läs in säkerhetskopia', backupRestored: 'Säkerhetskopian är inläst.', backupWrong: 'Filen är ingen säkerhetskopia från Alif.', backupFail: 'Kunde inte spara filen.',
+};
+const en3: typeof sv3 = {
+  recitation: 'Recitation', recitationSub: 'Reciter and audio downloads',
+  recitationHelp: 'The audio comes verse by verse from Islamic Network (the same source as AlQuran Cloud). Without a download it is streamed. Downloaded sūras play without internet. Audio only plays while Alif is open.',
+  downloads: 'Downloaded', downloadedStats: '{n} sūras · {mb} MB', wholeQuranSize: 'The whole Qur’an with one reciter ≈ 1 GB.',
+  wifiOnly: 'Download on wifi only', removeDownloads: 'Remove downloaded audio',
+  downloadSurah: 'Download the sūra', downloadFail: 'The download stopped. Check the internet and try again.', needWifi: 'Connect to wifi, or turn off "Download on wifi only" in Settings › Recitation.',
+  onPhone: 'on the phone', streamed: 'streamed', listenSurah: 'Listen to the sūra', play: 'Play', pause: 'Pause', playFrom: 'Play from verse',
+  tajweedColors: 'Tajwīd colours', wordByWord: 'Word by word',
+  tajweedRules: { hamza_wasl: 'silent / waṣl', silent: 'silent', lam_shamsiyya: 'silent lām', madd_normal: 'madd 2', madd_permissible: 'madd 2–6', madd_necessary: 'madd 6', madd_obligatory: 'madd 4–5',
+    qalqala: 'qalqala', ikhfa_shafawi: 'ikhfāʾ shafawī', ikhfa: 'ikhfāʾ', idgham_shafawi: 'idghām shafawī', iqlab: 'iqlāb', idgham_ghunna: 'idghām with ghunna',
+    idgham_no_ghunna: 'idghām without ghunna', idgham_mutajanisayn: 'idghām', idgham_mutaqaribayn: 'idghām', ghunna: 'ghunna' } as Record<string, string>,
+  wbwNote: 'Word meanings in English (from quran.com). Saved on the phone.', wbwFail: 'Word by word could not be fetched. Check the internet.',
+  hifzMode: 'Ḥifẓ (memorising)', hifzSub: 'The text is hidden until you tap it. Each verse is repeated this many times:', tapToShow: 'Tap to show', hideAgain: 'Hide again',
+  cards: 'Repetition cards', cardsShort: 'Practise the letters a little every day', cardsSub: '{n} cards to practise today',
+  cardsDone: 'No cards left today. Come back tomorrow.', again: 'Again', knewIt: 'Knew it', cardBoxes: 'Boxes', newCards: 'new',
+  cardsHelp: 'When you know the letter the card moves to the next box and comes back after 1, 2, 4, 8 and 16 days. "Again" puts it first.',
+  backup: 'Backup', backupSub: 'Save and restore everything in a file',
+  backupHelp: 'Saves settings, bookmarks, reading position, history, dhikr counts, learned letters and repetition cards in a file you can keep anywhere. The API key is not included.',
+  backupSave: 'Save backup', backupLoad: 'Restore backup', backupRestored: 'The backup has been restored.', backupWrong: 'The file is not an Alif backup.', backupFail: 'Could not save the file.',
+};
+
+export type Strings = typeof sv & typeof sv2 & typeof sv3;
+export const dict: Record<Lang, Strings> = { sv: { ...sv, ...sv2, ...sv3 }, en: { ...en, ...en2, ...en3 } };

@@ -5,6 +5,8 @@ import { useApp } from '../store';
 import { SURAHS } from '../core/quran';
 import { arabicDigits } from '../translate';
 import { useQuran } from '../library';
+import { SurahDownload } from '../quranParts';
+import { useRecitation } from '../recitation';
 import { Card, PageTitle, SmallBtn, TAB_SPACE, Text, TextInput } from '../ui';
 
 /** Eight-pointed star with a number in it (verse and sūra numbers). */
@@ -23,6 +25,7 @@ export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number
 export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: number, ayah?: number) => void; onAwrad: () => void; onGear: () => void; glow: boolean }) {
   const { t, theme, lastRead, bookmarks } = useApp();
   const lib = useQuran();
+  const rec = useRecitation();
   const [q, setQ] = useState('');
   const list = useMemo(() => {
     const k = q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[ʿʾ'-]/g, '');
@@ -75,6 +78,7 @@ export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: numbe
       <FlatList
         data={list}
         keyExtractor={s => String(s.number)}
+        extraData={`${rec.version}:${JSON.stringify(rec.progress)}`}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: TAB_SPACE }}
@@ -84,9 +88,10 @@ export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: numbe
             <StarNum n={s.number} />
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 16, fontWeight: '600', color: theme.ink }}>{s.name}</Text>
-              <Text style={{ fontSize: 13, color: theme.muted }}>{s.ayahs} {t.verses}</Text>
+              <Text style={{ fontSize: 13, color: theme.muted }}>{s.ayahs} {t.verses}{rec.progress[s.number] ? ` · ${rec.progress[s.number].done}/${rec.progress[s.number].total}` : ''}</Text>
             </View>
             <Text style={{ fontFamily: theme.fonts.arabic, fontSize: 19, lineHeight: 34, color: theme.arabicInk }}>{lib.surahName(s.number) ?? arabicDigits(s.number)}</Text>
+            <SurahDownload n={s.number} />
           </Pressable>
         )}
       />

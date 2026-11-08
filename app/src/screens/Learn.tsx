@@ -67,6 +67,13 @@ export default function Learn({ go, onGear, glow }: { go: (r: Route) => void; on
         {bookErr ? <Text style={{ fontSize: 12.5, color: theme.danger }}>{t.bookErr}</Text> : null}
       </Card>
       <Text style={{ fontSize: 13, color: theme.muted }}>{t.learnProgress.replace('{n}', String(learnDone.length)).replace('{m}', String(LETTERS.length))}</Text>
+      <Pressable accessibilityRole="button" onPress={() => go({ name: 'cards' })}>
+        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Arabic size={30} selectable={false} style={{ width: 54, textAlign: 'center', lineHeight: 52 }}>ب ت</Arabic>
+          <View style={{ flex: 1 }}><Text style={{ fontSize: 15, fontWeight: '700', color: theme.ink }}>{t.cards}</Text><Text style={{ fontSize: 12.5, color: theme.muted }}>{t.cardsShort}</Text></View>
+          <Text style={{ color: theme.muted, fontSize: 18 }}>›</Text>
+        </Card>
+      </Pressable>
       <Pressable accessibilityRole="button" onPress={() => go({ name: 'signs' })}>
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderColor: theme.primary }}>
           <Arabic size={30} selectable={false} style={{ width: 54, textAlign: 'center', lineHeight: 52 }}>بَ بِ بُ</Arabic>

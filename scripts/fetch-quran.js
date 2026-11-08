@@ -12,6 +12,7 @@ const EDITIONS = [
   ['quran-uthmani', 'Tanzil Quran Text (Uthmani), tanzil.net, via api.alquran.cloud'],
   ['sv.bernstrom', 'Knut Bernström, Koranens budskap, via api.alquran.cloud'],
   ['en.sahih', 'Saheeh International, via api.alquran.cloud'],
+  ['quran-tajweed', 'Tanzil Uthmani text with tajwīd marks, via api.alquran.cloud'],
 ];
 
 async function get(edition, tries = 4) {

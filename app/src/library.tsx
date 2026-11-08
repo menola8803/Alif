@@ -99,3 +99,10 @@ export function QuranProvider({ children }: { children: React.ReactNode }) {
   }), [arabic, translation, status, bundled, edition, ensure]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }
+
+// Tajwīd-marked text (built in by the APK workflow; empty in the repository, then the colours are simply not shown).
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const TAJWEED: QuranData = require('../assets/quran/quran-tajweed.json');
+const tajweedReady = completeQuran(TAJWEED);
+export const hasTajweed = () => tajweedReady;
+export const tajweedText = (surah: number, ayah: number): string | null => (tajweedReady ? TAJWEED.surahs[surah - 1]?.ayahs[ayah - 1] ?? null : null);

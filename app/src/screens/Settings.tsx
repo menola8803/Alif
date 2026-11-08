@@ -19,9 +19,10 @@ import type { Strings } from '../i18n';
 
 export const engineLabel = (t: Strings, e: 'claude' | 'device' | 'mymemory') => (e === 'claude' ? t.engClaude : e === 'device' ? t.engDevice : t.engMyMemory);
 import { uses12h } from '../reminder';
+import { RECITERS } from '../core/recite';
 
 export default function Settings({ go, onBack }: { go: (r: Route) => void; onBack: () => void }) {
-  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine, place, school, hijriAdjust, setPrefs, updateTag, history } = useApp();
+  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine, place, school, hijriAdjust, setPrefs, updateTag, history, reciter } = useApp();
   const version = Constants.expoConfig?.version ?? '0.0.0';
   const newer = !!updateTag && isNewer(updateTag, version);
   return (
@@ -42,6 +43,7 @@ export default function Settings({ go, onBack }: { go: (r: Route) => void; onBac
           <Row title={t.translitSet} sub={t.translitSetSub} right={`${mode === 'tajwid' ? t.modeTajwid : t.modeWords} · ${scheme === 'academic' ? t.schemeAcademic : t.schemeSimple}`} onPress={() => go({ name: 'translit' })} />
           <Row title={t.engines} sub={t.enginesSub} right={engineLabel(t, textEngine({ engine, apiKey }))} onPress={() => go({ name: 'ai' })} />
           <Row title={t.quranEdition} sub={t.quranEditionSub} right={pickEdition(lang, editions[lang])} onPress={() => go({ name: 'edition' })} />
+          <Row title={t.recitation} sub={t.recitationSub} right={RECITERS.find(r => r.id === reciter)?.name.split(' ').slice(-1)[0] ?? ''} onPress={() => go({ name: 'recitation' })} />
         </Card>
         <Card>
           <Row title={t.prayerTimes} sub={t.prayerTimesSub} right={`${place.name} · ${school === 'hanafi' ? 'Ḥanafī' : t.asrStandard}`} onPress={() => go({ name: 'prayer' })} />
@@ -54,6 +56,7 @@ export default function Settings({ go, onBack }: { go: (r: Route) => void; onBac
         </Card>
         <Card>
           <Row title={t.historyTitle} sub={t.historySub} right={String(history.length)} onPress={() => go({ name: 'history' })} />
+          <Row title={t.backup} sub={t.backupSub} onPress={() => go({ name: 'backup' })} />
           <Row title={t.manual} sub={t.manualSub} onPress={() => go({ name: 'manual' })} />
           <Row title={t.privacy} sub={t.privacySub} onPress={() => go({ name: 'privacy' })} />
         </Card>
