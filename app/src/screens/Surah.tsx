@@ -234,7 +234,6 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
                 </View> : null}
                 {wbw ? <Text style={{ fontSize: 12, color: wbwErr ? theme.danger : theme.muted }}>{wbwErr || (words ? t.wbwNote : t.loading)}</Text> : null}
                 {tajweed && hasTajweed() ? <TajweedLegend /> : null}
-                <Text style={{ fontSize: 12, color: theme.muted }} onPress={() => go({ name: 'edition' })}>{data.edition}{cached ? ` · ${t.offlineCached}` : ''} ›</Text>
               </Card>
               {data.arabicName ? <Arabic size={34} center color={theme.primary}>{data.arabicName}</Arabic> : null}
               {data.bismillah ? (
