@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.0';
+export const MANUAL_VERSION = '0.5.1';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -33,6 +33,14 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Riktningen mot Kaʿba räknas ut från vald plats. Håll telefonen plant: appen säger hur många grader du ska vrida, och telefonen vibrerar kort när du står rätt.',
       'Ta av magnetiska skal. Visar kompassen fel – rör telefonen i en åtta några gånger.',
     ] },
+    { title: 'Moskéer', items: [
+      'Kortet Moskéer på Idag (eller knappen på Qibla-sidan) öppnar kartan över moskéer i Sverige, med en ikon för varje moské. Kartan är OpenStreetMap, som i Trace.',
+      'Tryck på en ikon för namn, adress, avstånd och vägbeskrivning. Knappen uppe till höger flyttar kartan till din plats; Lista visar alla moskéer efter avstånd, med sökning.',
+      'Moskéerna kommer från OpenStreetMap, Wikidata och islam.se och följer med appen. Din position visas bara om du har slagit på plats.',
+    ] },
+    { title: 'Widget', items: [
+      'Håll fingret på hemskärmen › Widgetar › Alif. Widgeten visar nästa bön och tid, hijri-datum, ort och dagens fem tider. Den uppdateras när du öppnar Alif och efter varje bön.',
+    ] },
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
       '"Fortsätt läsa" tar dig dit du slutade. Tryck "Bokmärke" vid en vers för att spara den; bokmärkena visas överst på Koranen.',
@@ -43,7 +51,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Överst i en sura: Tajwīd-färger (reglerna i färg med förklaring), Ord för ord (varje ords betydelse på engelska) och Ḥifẓ: texten döljs tills du trycker och varje vers upprepas 1, 3, 5 eller 10 gånger.',
     ] },
     { title: 'Översätt', items: [
-      'Välj överst: Skriv, Bild, Kamera eller Fil.',
+      'Välj överst: Skriv, Lyssna, Bild, Kamera eller Fil.',
+      'Lyssna: slå först på mikrofonen under Inställningar › Mikrofon. Tryck på mikrofonen och låt någon läsa arabiska – texten visas i den beige rutan, under den translitterationen (kan slås av) och när du trycker Stoppa översättningen.',
       'Skriv: skriv eller klistra in arabiska (blir translitteration och svenska/engelska) eller svenska/engelska (blir arabiska).',
       'Bild: öppna en bild (png, jpeg, jpg, bmp), dra med fingret runt texten och tryck "Översätt markerat" – eller översätt hela bilden.',
       'Kamera: rikta mot texten och ta en bild.',
@@ -60,6 +69,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Dhikr', items: [
       'Välj dhikr överst och tryck på cirkeln för att räkna. Telefonen vibrerar kort vid varje tryck och längre när målet är nått. Välj mål med knapparna under.',
       'Här finns också Daily Awrad (med Ihdāʾ) och ṣalawāt.',
+      'Räkna med volymknapparna: slå på det på Dhikr-sidan, så räknar båda volymknapparna ett steg medan sidan är öppen.',
     ] },
     { title: 'Inställningar', items: [
       'Språk (svenska/engelska), tema, translitteration, översättning, Koranöversättning, bönetider, Daily Awrad-påminnelse (21:00), hijri ±1 dag, historik, manual, integritet, uppdatering och Om.',
@@ -67,7 +77,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Säkerhetskopia: spara allt (utom API-nyckeln) i en fil och läs in den igen, till exempel på en ny telefon.',
     ] },
     { title: 'Integritet', items: [
-      'Plats är av från början. Mikrofonen används inte av Alif.',
+      'Plats och mikrofon är av från början.',
+      'Mikrofonen används bara av Lyssna medan du har tryckt på den, och stängs när du trycker Stoppa, byter sida eller lämnar appen. Med "Bara på telefonen" (förval) lämnar ljudet aldrig telefonen.',
       'Kameran och textigenkänningen arbetar på telefonen. Bilder och text skickas bara iväg om du själv väljer Claude, MyMemory eller Google Lens.',
     ] },
   ],
@@ -99,6 +110,14 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The direction of the Kaʿba is worked out from the chosen place. Hold the phone flat: the app tells you how many degrees to turn, and the phone gives a short buzz when you face it.',
       'Remove magnetic cases. If the compass is off, move the phone in a figure eight a few times.',
     ] },
+    { title: 'Mosques', items: [
+      'The Mosques card on Today (or the button on the Qibla page) opens the map of mosques in Sweden, with an icon for each mosque. The map is OpenStreetMap, as in Trace.',
+      'Tap an icon for the name, address, distance and directions. The button in the top right moves the map to your place; List shows all mosques by distance, with search.',
+      'The mosques come from OpenStreetMap, Wikidata and islam.se and are built into the app. Your position is only shown if you have turned location on.',
+    ] },
+    { title: 'Widget', items: [
+      'Hold your finger on the home screen › Widgets › Alif. The widget shows the next prayer and its time, the Hijri date, the place and today’s five times. It is updated when you open Alif and after every prayer.',
+    ] },
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',
       '"Continue reading" takes you to where you stopped. Tap "Bookmark" at a verse to save it; bookmarks are shown at the top of the Qur’an page.',
@@ -109,7 +128,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'At the top of a sūra: Tajwīd colours (the rules in colour with a legend), Word by word (each word’s meaning in English) and Ḥifẓ: the text is hidden until you tap it and each verse is repeated 1, 3, 5 or 10 times.',
     ] },
     { title: 'Translate', items: [
-      'Choose at the top: Write, Picture, Camera or File.',
+      'Choose at the top: Write, Listen, Picture, Camera or File.',
+      'Listen: first turn the microphone on in Settings › Microphone. Tap the microphone and let someone read Arabic – the text appears in the beige box, the transliteration under it (can be turned off) and, when you tap Stop, the translation.',
       'Write: type or paste Arabic (gives transliteration and English/Swedish) or English/Swedish (gives Arabic).',
       'Picture: open a picture (png, jpeg, jpg, bmp), draw round the text with a finger and tap "Translate marked" – or translate the whole picture.',
       'Camera: point at the text and take a picture.',
@@ -126,6 +146,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Dhikr', items: [
       'Choose the dhikr at the top and tap the circle to count. The phone gives a short buzz at every tap and a longer one at the goal. Choose the goal with the buttons below.',
       'Daily Awrad (with the Ihdāʾ) and ṣalawāt are here too.',
+      'Count with the volume buttons: turn it on on the Dhikr page, and both volume buttons count one step while the page is open.',
     ] },
     { title: 'Settings', items: [
       'Language (Swedish/English), theme, transliteration, translation, Qur’an translation, prayer times, Daily Awrad reminder (9:00 PM), Hijri ±1 day, history, manual, privacy, update and About.',
@@ -133,7 +154,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Backup: save everything (except the API key) in a file and restore it, for example on a new phone.',
     ] },
     { title: 'Privacy', items: [
-      'Location is off by default. Alif does not use the microphone.',
+      'Location and microphone are off by default.',
+      'The microphone is only used by Listen while you have pressed it, and is closed when you press Stop, change page or leave the app. With "On the phone only" (default) the audio never leaves the phone.',
       'The camera and text recognition work on the phone. Pictures and text are only sent anywhere if you choose Claude, MyMemory or Google Lens yourself.',
     ] },
   ],

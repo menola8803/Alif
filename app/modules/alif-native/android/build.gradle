@@ -19,4 +19,6 @@ dependencies {
   implementation 'com.google.mlkit:translate:17.0.3'
   // On-device text recognition of Arabic script (Tesseract, from JitPack; see expo-build-properties in app.json).
   implementation 'cz.adaptech.tesseract4android:tesseract4android:4.9.0'
+  // OpenStreetMap map for the mosques (the same library as in the Trace app).
+  implementation 'org.osmdroid:osmdroid-android:6.1.20'
 }

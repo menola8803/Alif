@@ -39,6 +39,11 @@ jobs:
         # The Arabic (Uthmani) text goes into app/assets/quran so the APK has it offline. If this fails, the app downloads it on first start.
         continue-on-error: true
         run: node scripts/fetch-quran.js
+      - name: Collect the mosques in Sweden
+        # OpenStreetMap, Wikidata and islam.se into app/assets/mosques.json. If this fails, the app asks OpenStreetMap itself.
+        continue-on-error: true
+        timeout-minutes: 25
+        run: node scripts/fetch-mosques.js
       - name: Generate Android project
         working-directory: app
         run: npx expo prebuild --platform android --no-install

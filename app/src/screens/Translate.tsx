@@ -12,8 +12,9 @@ import { useQuran } from '../library';
 import { Arabic, Body, Btn, Card, Label, PageTitle, Segmented, SmallBtn, Sub, TAB_SPACE, Text, TextInput } from '../ui';
 import TextScreen from './TextScreen';
 import CameraScreen from './CameraScreen';
+import Listen from './Listen';
 
-export type TranslateMode = 'write' | 'image' | 'camera' | 'file';
+export type TranslateMode = 'write' | 'listen' | 'image' | 'camera' | 'file';
 
 /** The Translate tab: write, a picture, the camera or a file – chosen at the top. */
 export default function Translate({ go, openSurah, onGear, glow, mode, setMode }: { go: (r: Route) => void; openSurah: (s: number, a: number) => void; onGear: () => void; glow: boolean; mode: TranslateMode; setMode: (m: TranslateMode) => void }) {
@@ -23,9 +24,10 @@ export default function Translate({ go, openSurah, onGear, glow, mode, setMode }
   return (
     <View style={{ flex: 1, gap: 12 }}>
       <PageTitle title={t.tabTranslate} onGear={onGear} glow={glow} />
-      <Segmented<TranslateMode> options={[['write', t.modeWrite], ['image', t.modeImage], ['camera', t.modeCamera], ['file', t.modeFile]]} value={mode} onChange={setMode} />
+      <Segmented<TranslateMode> options={[['write', t.modeWrite], ['listen', t.modeListen], ['image', t.modeImage], ['camera', t.modeCamera], ['file', t.modeFile]]} value={mode} onChange={setMode} />
       <View style={{ flex: 1 }}>
         {mode === 'write' ? <TextScreen go={go} openSurah={openSurah} hideTitle initial={sent} /> : null}
+        {mode === 'listen' ? <Listen go={go} /> : null}
         {mode === 'image' ? <ImageScreen go={go} openSurah={openSurah} toWrite={toWrite} /> : null}
         {mode === 'camera' ? <CameraScreen go={go} openSurah={openSurah} openWrite={() => setMode('write')} hideTitle /> : null}
         {mode === 'file' ? <FileScreen toWrite={toWrite} /> : null}

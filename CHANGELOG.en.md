@@ -2,6 +2,12 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.1
+- **Mosque map** (Today › Mosques): an OpenStreetMap map as in Trace with all the mosques in Sweden (OpenStreetMap, Wikidata and islam.se), name, address, distance, directions and a list by distance.
+- **Listen** under Translate: spoken Arabic becomes text in a beige box, transliteration and translation. The microphone is off by default, only open while you listen and closed when you leave the page; "On the phone only" is the default so no audio is sent to Google.
+- **Home screen widget** with the next prayer, the Hijri date and today’s times.
+- **Dhikr with the volume buttons** (turned on on the Dhikr page).
+
 ## 0.5.0
 - **Recitation** in every sūra: a player at the bottom, verse by verse, the verse being recited is highlighted and followed. Default Maḥmūd Khalīl al-Ḥuṣarī; more reciters in Settings › Recitation.
 - **Download sūras** with the ⤓ arrow in the sūra list or the player – then they play offline. Wifi only by default, and downloaded audio can be removed.

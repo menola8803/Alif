@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+- **Moskékarta** (Idag › Moskéer): OpenStreetMap-karta som i Trace med alla moskéer i Sverige (OpenStreetMap, Wikidata och islam.se), namn, adress, avstånd, vägbeskrivning och lista efter avstånd.
+- **Lyssna** under Översätt: arabiskt tal blir text i en beige ruta, translitteration och översättning. Mikrofonen är av från början, öppen bara medan du lyssnar och stängs när du lämnar sidan; "Bara på telefonen" är förval så inget ljud skickas till Google.
+- **Widget** på hemskärmen med nästa bön, hijri-datum och dagens tider.
+- **Dhikr med volymknapparna** (slås på på Dhikr-sidan).
+
 ## 0.5.0
 - **Recitation** i varje sura: spelare längst ner, vers för vers, versen som läses markeras och följs. Förval Maḥmūd Khalīl al-Ḥuṣarī; fler recitatörer under Inställningar › Recitation.
 - **Ladda ner suror** med pilen ⤓ i suralistan eller i spelaren – sedan spelas de utan nät. Bara på wifi som förval, och nedladdat ljud kan tas bort.

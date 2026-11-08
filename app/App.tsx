@@ -11,7 +11,8 @@ import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
 import { PrayerProvider } from './src/prayer';
 import { RecitationProvider } from './src/recitation';
-import { BackupScreen, CardsScreen, RecitationScreen } from './src/screens/More';
+import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen } from './src/screens/More';
+import MosquesScreen, { MosqueListScreen } from './src/screens/Mosques';
 import { Route } from './src/nav';
 import { Screen, TabBar, TabName } from './src/ui';
 import { HOME_IMAGES } from './src/homeImages';
@@ -99,13 +100,16 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'reminder': return <ReminderScreen onBack={pop} />;
       case 'prayer': return <PrayerScreen onBack={pop} go={push} />;
       case 'city': return <CityScreen onBack={pop} />;
-      case 'qibla': return <QiblaScreen onBack={pop} />;
+      case 'qibla': return <QiblaScreen onBack={pop} onMosques={() => push({ name: 'mosques' })} />;
       case 'hijri': return <HijriScreen onBack={pop} />;
       case 'letter': return <LetterScreen key={r.id} id={r.id} onBack={pop} go={l => setStack(s => [...s.slice(0, -1), l])} />;
       case 'signs': return <SignsScreen onBack={pop} />;
       case 'recitation': return <RecitationScreen onBack={pop} />;
       case 'backup': return <BackupScreen onBack={pop} />;
       case 'cards': return <CardsScreen onBack={pop} />;
+      case 'mosques': return <MosquesScreen onBack={pop} go={push} />;
+      case 'mosqueList': return <MosqueListScreen onBack={pop} />;
+      case 'micSettings': return <MicSettingsScreen onBack={pop} />;
       default:
         return (
           <Screen bottom={false}>
@@ -114,7 +118,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
               {tab === 'quran' && <Quran open={(n, ayah) => push({ name: 'surah', n, ayah })} onAwrad={() => push({ name: 'awrad' })} onGear={gear} glow={glow} />}
               {tab === 'translate' && <Translate go={push} openSurah={openSurah} onGear={gear} glow={glow} mode={mode} setMode={setMode} />}
               {tab === 'learn' && <Learn go={push} onGear={gear} glow={glow} />}
-              {tab === 'dhikr' && <Dhikr go={push} onGear={gear} glow={glow} />}
+              {tab === 'dhikr' && <Dhikr go={push} onGear={gear} glow={glow} focused={r.name === 'tabs'} />}
             </View>
             <TabBar tab={tab} setTab={setTab} />
           </Screen>

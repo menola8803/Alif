@@ -1,17 +1,18 @@
-import React from 'react';
-import { Pressable, ScrollView, Vibration, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { AppState, Pressable, ScrollView, Vibration, View } from 'react-native';
+import { AlifNativeModule } from '../../modules/alif-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useApp } from '../store';
 import { Route } from '../nav';
 import { DHIKR, targetOf } from '../core/dhikr';
 import { SALAWAT, SALAWAT_SAYYIDINA } from '../core/awrad';
-import { Arabic, Card, Label, PageTitle, SmallBtn, TAB_SPACE, Text } from '../ui';
+import { Arabic, Card, Label, PageTitle, SmallBtn, TAB_SPACE, Text, Toggle } from '../ui';
 
 const TARGETS = [33, 99, 100, 313, 1000];
 
 /** Dhikr counter (tap the circle; a short buzz each time and a longer one at the goal), Daily Awrad and ṣalawāt. */
-export default function Dhikr({ go, onGear, glow }: { go: (r: Route) => void; onGear: () => void; glow: boolean }) {
-  const { t, theme, lang, dhikrSel, dhikrCounts, dhikrTargets, setPrefs } = useApp();
+export default function Dhikr({ go, onGear, glow, focused = true }: { go: (r: Route) => void; onGear: () => void; glow: boolean; focused?: boolean }) {
+  const { t, theme, lang, dhikrSel, dhikrCounts, dhikrTargets, setPrefs, dhikrVolume } = useApp();
   const d = DHIKR.find(x => x.id === dhikrSel) ?? DHIKR[0];
   const count = dhikrCounts[d.id] ?? 0;
   const target = targetOf(d, dhikrTargets);
@@ -21,6 +22,18 @@ export default function Dhikr({ go, onGear, glow }: { go: (r: Route) => void; on
     setPrefs({ dhikrCounts: { ...dhikrCounts, [d.id]: n } });
     if (n === target) Vibration.vibrate([0, 120, 80, 220]); else Vibration.vibrate(12);
   };
+  // Volume buttons count while this page is on screen and the option is on; otherwise they change the volume as usual.
+  const tapRef = useRef(tap); tapRef.current = tap;
+  const [active, setActive] = useState(AppState.currentState === 'active');
+  useEffect(() => { const s = AppState.addEventListener('change', st => setActive(st === 'active')); return () => s.remove(); }, []);
+  const capture = dhikrVolume && focused && active;
+  useEffect(() => {
+    if (!AlifNativeModule) return;
+    AlifNativeModule.captureVolumeKeys(capture);
+    if (!capture) return;
+    const sub = AlifNativeModule.addListener('onVolumeKey', () => tapRef.current());
+    return () => { sub.remove(); AlifNativeModule?.captureVolumeKeys(false); };
+  }, [capture]);
   const reset = () => setPrefs({ dhikrCounts: { ...dhikrCounts, [d.id]: 0 } });
   const R = 120, C = 2 * Math.PI * R, part = Math.min(1, count / target);
 
@@ -59,6 +72,7 @@ export default function Dhikr({ go, onGear, glow }: { go: (r: Route) => void; on
         ))}
         <SmallBtn title={t.resetCount} onPress={reset} />
       </View>
+      {AlifNativeModule ? <Card style={{ paddingVertical: 8 }}><Toggle title={t.volumeCount} on={dhikrVolume} onChange={v => setPrefs({ dhikrVolume: v })} /><Text style={{ fontSize: 12.5, color: theme.muted }}>{t.volumeCountSub}</Text></Card> : null}
 
       <Pressable accessibilityRole="button" onPress={() => go({ name: 'awrad' })}>
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderColor: theme.primary }}>

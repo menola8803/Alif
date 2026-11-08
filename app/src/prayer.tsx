@@ -8,7 +8,8 @@ import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
 import { useApp } from './store';
 import { PRAYER_TR, PrayerDay, SALAH, calcDay, fetchMonth, hhmm, nextPrayer, ymd } from './core/prayer';
-import { offsetFor } from './core/hijri';
+import { MONTHS, offsetFor, toHijri } from './core/hijri';
+import { AlifNativeModule } from '../modules/alif-native';
 
 export type PrayerSource = 'aladhan' | 'phone';
 type Ctx = {
@@ -140,6 +141,23 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey]);
+
+  // Home screen widget: the times of today and the next two days, the Hijri date and the place.
+  useEffect(() => {
+    if (!ready || !AlifNativeModule) return;
+    try {
+      const base = new Date();
+      const out = [0, 1, 2].map(k => {
+        const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + k);
+        const day = dayFor(d);
+        const times: Record<string, number> = {};
+        for (const p of SALAH) { const at = new Date(d); at.setHours(0, day.times[p], 0, 0); times[p] = at.getTime(); }
+        return { date: day.date, times };
+      });
+      const h = toHijri(base, hijriAuto + hijriAdjust);
+      AlifNativeModule.setWidgetData(JSON.stringify({ days: out, names: PRAYER_TR, labelNext: t.nextPrayer.toUpperCase(), hijri: `${h.d} ${MONTHS[h.m - 1].tr} ${h.y}`, place: place.name }));
+    } catch {}
+  }, [ready, days, todayKey, place.name, hijriAuto, hijriAdjust, t.nextPrayer, dayFor]);
 
   const value = useMemo<Ctx>(() => ({
     today, tomorrow, source, now, next: nextPrayer(now, today, tomorrow), dayFor, refresh: () => { loading.current = ''; load(); },

@@ -23,4 +23,7 @@ export type Route =
   | { name: 'signs' }
   | { name: 'recitation' }
   | { name: 'backup' }
-  | { name: 'cards' };
+  | { name: 'cards' }
+  | { name: 'mosques' }
+  | { name: 'mosqueList' }
+  | { name: 'micSettings' };

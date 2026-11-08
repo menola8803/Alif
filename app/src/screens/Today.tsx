@@ -82,6 +82,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
         <Tile half title={t.qibla} sub={`${Math.round(q)}° ${compassPoint(q, lang)}`} onPress={() => go({ name: 'qibla' })} />
         <Tile half title={month.tr} sub={`${t.hijriMonth} ${h.m}`} onPress={() => go({ name: 'hijri' })} right={<Arabic size={17} selectable={false} style={{ lineHeight: 30 }}>{month.ar}</Arabic>} />
       </View>
+      <Tile title={t.mosques} sub={t.mosquesSub} onPress={() => go({ name: 'mosques' })} />
       <Tile gold title={special.days === 0 ? `${t.todayIs} ${special.day.tr}` : `${special.day.tr}`}
         sub={special.days === 0 ? special.day[lang] : `${special.day[lang]} · ${shortDate(special.date, lang)} · ${t.inDays.replace('{n}', String(special.days))}`}
         onPress={() => go({ name: 'hijri' })} />

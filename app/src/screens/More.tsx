@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Linking, Pressable, ScrollView, View } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
@@ -126,6 +126,42 @@ export function CardsScreen({ onBack }: { onBack: () => void }) {
             ))}
           </View>
           <Text style={{ fontSize: 12.5, color: theme.muted }}>{t.cardsHelp}</Text>
+        </Card>
+      </ScrollView>
+    </Screen>
+  );
+}
+
+/** Settings › Microphone: off by default; what happens when it is on. */
+export function MicSettingsScreen({ onBack }: { onBack: () => void }) {
+  const { t, theme, micOn, micOnlyPhone, listenTranslit, setPrefs } = useApp();
+  const [msg, setMsg] = useState('');
+  const setMic = async (on: boolean) => {
+    setMsg('');
+    if (!on) { setPrefs({ micOn: false }); setMsg(t.micOffDone); return; }
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { requestRecordingPermissionsAsync } = require('expo-audio');
+      const r = await requestRecordingPermissionsAsync();
+      if (!r.granted) { setMsg(t.micDenied); return; }
+    } catch { setMsg(t.micDenied); return; }
+    setPrefs({ micOn: true });
+  };
+  return (
+    <Screen>
+      <Header title={t.micTitle} sub={t.micSub} onBack={onBack} />
+      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }}>
+        <Card>
+          <Toggle title={t.micToggle} on={micOn} onChange={setMic} />
+          <Toggle title={t.micOnlyPhone} on={micOnlyPhone} onChange={v => setPrefs({ micOnlyPhone: v })} />
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.micOnlyPhoneSub}</Text>
+          <Toggle title={t.listenTranslit} on={listenTranslit} onChange={v => setPrefs({ listenTranslit: v })} />
+          {msg ? <Text style={{ color: theme.accent }}>{msg}</Text> : null}
+          {!micOn ? <Btn title={t.openPhoneSettings} kind="secondary" onPress={() => Linking.openSettings().catch(() => {})} /> : null}
+        </Card>
+        <Card style={{ borderColor: theme.primary }}>
+          <Label color={theme.primary}>{t.micRulesTitle}</Label>
+          {t.micRules.map((r, i) => <Body key={i}>• {r}</Body>)}
         </Card>
       </ScrollView>
     </Screen>

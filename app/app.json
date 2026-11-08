@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -12,7 +12,8 @@
       "infoPlist": {
         "NSCameraUsageDescription": "Alif uses the camera to read Arabic text.",
         "NSPhotoLibraryUsageDescription": "Alif reads Arabic text in pictures you choose.",
-        "NSLocationWhenInUseUsageDescription": "Alif uses your location for prayer times and the Qibla, only if you turn it on."
+        "NSLocationWhenInUseUsageDescription": "Alif uses your location for prayer times and the Qibla, only if you turn it on.",
+        "NSMicrophoneUsageDescription": "Alif listens to Arabic only while you use Listen, after you turn the microphone on in Settings."
       }
     },
     "android": {
@@ -34,14 +35,14 @@
         "VIBRATE",
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "SCHEDULE_EXACT_ALARM"
+        "SCHEDULE_EXACT_ALARM",
+        "RECORD_AUDIO"
       ],
       "blockedPermissions": [
-        "android.permission.RECORD_AUDIO",
         "android.permission.ACCESS_BACKGROUND_LOCATION",
         "android.permission.FOREGROUND_SERVICE_LOCATION"
       ],
-      "versionCode": 500
+      "versionCode": 501
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -66,8 +67,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Alif reads Arabic text in pictures you choose.",
-          "microphonePermission": false
+          "photosPermission": "Alif reads Arabic text in pictures you choose."
         }
       ],
       "expo-secure-store",
@@ -97,6 +97,7 @@
           "enableBackgroundPlayback": false
         }
       ],
+      "./plugins/withVolumeKeys",
       [
         "expo-build-properties",
         {

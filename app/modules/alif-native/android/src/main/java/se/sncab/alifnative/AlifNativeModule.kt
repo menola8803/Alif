@@ -6,6 +6,15 @@ import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import java.io.File
 import java.io.FileOutputStream
 import com.google.mlkit.common.model.DownloadConditions
@@ -23,8 +32,51 @@ import expo.modules.kotlin.modules.ModuleDefinition
 //  - translate: Google ML Kit (Arabic <-> Swedish/English), works offline once the language models are downloaded
 //  - ocr: Tesseract with the Arabic trained data that the app downloads into <dataPath>/tessdata
 class AlifNativeModule : Module() {
+  private val main = Handler(Looper.getMainLooper())
+  private var recognizer: SpeechRecognizer? = null
+  private val ctx: Context get() = appContext.reactContext ?: throw Exception("No context")
+
   override fun definition() = ModuleDefinition {
     Name("AlifNative")
+    Events("onSpeech", "onVolumeKey")
+
+    OnCreate { AlifKeys.listener = { dir -> sendEvent("onVolumeKey", mapOf("dir" to dir)) } }
+    OnDestroy {
+      AlifKeys.capture = false
+      AlifKeys.listener = null
+      main.post { stopRecognizer() }
+    }
+
+    // ---- Map (osmdroid) ----
+    View(AlifMapView::class) {
+      Events("onMarkerPress")
+      Prop("pins") { view: AlifMapView, pins: List<MosquePin> -> view.setPins(pins) }
+      Prop("selected") { view: AlifMapView, i: Int -> view.setSelected(i) }
+      Prop("center") { view: AlifMapView, c: List<Double> -> view.setCenter(c) }
+      Prop("showMe") { view: AlifMapView, on: Boolean -> view.setShowMe(on) }
+    }
+
+    // ---- Volume buttons as dhikr counter ----
+    Function("captureVolumeKeys") { on: Boolean -> AlifKeys.capture = on }
+
+    // ---- Home screen widget ----
+    Function("setWidgetData") { json: String ->
+      ctx.getSharedPreferences(AlifWidget.PREFS, Context.MODE_PRIVATE).edit().putString("data", json).apply()
+      AlifWidget.refresh(ctx)
+    }
+
+    // ---- Listening (speech to text). Only started from the Listen screen; the microphone is closed by stopListening,
+    // by an error or end of speech, and when the module is destroyed. With onlyOnPhone the on-device recogniser is used
+    // (Android 12+ with the Arabic offline language pack); then nothing is sent to Google. ----
+    AsyncFunction("speechInfo") {
+      val c = ctx
+      mapOf(
+        "available" to SpeechRecognizer.isRecognitionAvailable(c),
+        "onDevice" to (Build.VERSION.SDK_INT >= 31 && SpeechRecognizer.isOnDeviceRecognitionAvailable(c)),
+      )
+    }
+    Function("startListening") { lang: String, onlyOnPhone: Boolean -> main.post { startRecognizer(lang, onlyOnPhone) } }
+    Function("stopListening") { main.post { stopRecognizer() } }
 
     AsyncFunction("translate") { text: String, from: String, to: String, allowDownload: Boolean, promise: Promise ->
       val src = TranslateLanguage.fromLanguageTag(from)
@@ -148,5 +200,55 @@ class AlifNativeModule : Module() {
     val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
     out.setPixels(px, 0, w, 0, 0, w, h)
     return out
+  }
+
+  private fun emit(type: String, text: String = "", error: Int = 0) {
+    sendEvent("onSpeech", mapOf("type" to type, "text" to text, "error" to error))
+  }
+
+  private fun startRecognizer(lang: String, onlyOnPhone: Boolean) {
+    stopRecognizer()
+    val c = try { ctx } catch (e: Exception) { emit("error", error = -1); return }
+    val r = if (onlyOnPhone) {
+      if (Build.VERSION.SDK_INT >= 31 && SpeechRecognizer.isOnDeviceRecognitionAvailable(c)) SpeechRecognizer.createOnDeviceSpeechRecognizer(c)
+      else { emit("error", error = -2); return }
+    } else {
+      if (!SpeechRecognizer.isRecognitionAvailable(c)) { emit("error", error = -3); return }
+      SpeechRecognizer.createSpeechRecognizer(c)
+    }
+    recognizer = r
+    r.setRecognitionListener(object : RecognitionListener {
+      override fun onReadyForSpeech(params: Bundle?) { emit("ready") }
+      override fun onBeginningOfSpeech() {}
+      override fun onRmsChanged(rmsdB: Float) {}
+      override fun onBufferReceived(buffer: ByteArray?) {}
+      override fun onEndOfSpeech() { emit("speechEnd") }
+      override fun onError(error: Int) { emit("error", error = error); stopRecognizer() }
+      override fun onResults(results: Bundle?) {
+        emit("final", results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: "")
+        stopRecognizer()
+      }
+      override fun onPartialResults(partialResults: Bundle?) {
+        val t = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: ""
+        if (t.isNotEmpty()) emit("partial", t)
+      }
+      override fun onEvent(eventType: Int, params: Bundle?) {}
+    })
+    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+      putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+      putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang)
+      putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+      if (onlyOnPhone) putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+    }
+    r.startListening(intent)
+  }
+
+  private fun stopRecognizer() {
+    val r = recognizer ?: return
+    recognizer = null
+    try { r.stopListening() } catch (_: Exception) {}
+    try { r.cancel() } catch (_: Exception) {}
+    try { r.destroy() } catch (_: Exception) {}
+    emit("closed")
   }
 }

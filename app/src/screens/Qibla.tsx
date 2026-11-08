@@ -5,14 +5,14 @@ import { Magnetometer } from 'expo-sensors';
 import * as Location from 'expo-location';
 import { useApp } from '../store';
 import { angleDiff, compassPoint, declination, distanceKm, headingFromMag, qibla } from '../core/qibla';
-import { Arabic, Card, Header, Screen, Text } from '../ui';
+import { Arabic, Btn, Card, Header, Screen, Text } from '../ui';
 
 /**
  * Qibla compass. The direction is worked out on the phone from the chosen place. The phone's compass shows which way the
  * phone points: with location on, Android's own heading (true north) is used; otherwise the magnetometer, corrected for
  * the magnetic declination in Scandinavia. A short vibration when the phone points at the Qibla.
  */
-export default function QiblaScreen({ onBack }: { onBack: () => void }) {
+export default function QiblaScreen({ onBack, onMosques }: { onBack: () => void; onMosques?: () => void }) {
   const { t, theme, lang, place, useLocation } = useApp();
   const { width } = useWindowDimensions();
   const target = qibla(place.lat, place.lng);
@@ -110,6 +110,7 @@ export default function QiblaScreen({ onBack }: { onBack: () => void }) {
         </Text>
         <Text style={{ textAlign: 'center', fontSize: 13, color: theme.muted }}>{t.holdFlat}</Text>
         <Card><Text style={{ fontSize: 13, lineHeight: 19, color: theme.muted }}>{t.compassHelp}</Text></Card>
+        {onMosques ? <Btn title={t.mosquesNear} kind="secondary" onPress={onMosques} /> : null}
       </ScrollView>
     </Screen>
   );

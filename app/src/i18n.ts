@@ -325,7 +325,7 @@ const sv2 = {
   manual: 'Manual', manualSub: 'Så använder du Alif', privacy: 'Integritet', privacySub: 'Vad som stannar på telefonen',
   privacyItems: [
     ['Plats', 'Av från början. Utan plats väljer du ort i en lista. Påslagen används positionen bara för bönetider och Qibla och sparas bara på telefonen.'],
-    ['Mikrofon', 'Alif använder inte mikrofonen. Tillståndet är spärrat i appen.'],
+    ['Mikrofon', 'Av från början. Används bara av Lyssna medan du har tryckt på den, och stängs när du lämnar sidan. Med "Bara på telefonen" lämnar ljudet inte telefonen.'],
     ['Kamera och bilder', 'Bilden läses på telefonen (Tesseract). Den skickas bara iväg om du själv väljer Claude eller Google Lens.'],
     ['Bönetider och hijri', 'Ortens koordinater skickas till Aladhan (api.aladhan.com) för att hämta månadens tider. Inget annat skickas.'],
     ['Översättning', 'På telefonen (ML Kit) lämnar texten inte telefonen. MyMemory och Claude får texten du översätter.'],
@@ -383,7 +383,7 @@ const en2: typeof sv2 = {
   manual: 'Manual', manualSub: 'How to use Alif', privacy: 'Privacy', privacySub: 'What stays on the phone',
   privacyItems: [
     ['Location', 'Off by default. Without it you pick a town from a list. When on, the position is only used for prayer times and the Qibla and is only saved on the phone.'],
-    ['Microphone', 'Alif does not use the microphone. The permission is blocked in the app.'],
+    ['Microphone', 'Off by default. Only used by Listen while you have pressed it, and closed when you leave the page. With "On the phone only" the audio does not leave the phone.'],
     ['Camera and pictures', 'The picture is read on the phone (Tesseract). It is only sent anywhere if you choose Claude or Google Lens yourself.'],
     ['Prayer times and Hijri', 'The town’s coordinates are sent to Aladhan (api.aladhan.com) to fetch the month’s times. Nothing else is sent.'],
     ['Translation', 'On the phone (ML Kit) the text does not leave the phone. MyMemory and Claude receive the text you translate.'],
@@ -433,5 +433,63 @@ const en3: typeof sv3 = {
   backupSave: 'Save backup', backupLoad: 'Restore backup', backupRestored: 'The backup has been restored.', backupWrong: 'The file is not an Alif backup.', backupFail: 'Could not save the file.',
 };
 
-export type Strings = typeof sv & typeof sv2 & typeof sv3;
-export const dict: Record<Lang, Strings> = { sv: { ...sv, ...sv2, ...sv3 }, en: { ...en, ...en2, ...en3 } };
+// ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
+const sv4 = {
+  mosques: 'Moskéer', mosquesSub: 'Karta över moskéer i Sverige', mosquesNear: 'Moskéer nära dig', mosque: 'Moské', you: 'Du',
+  myPlaceBtn: 'Min plats', list: 'Lista', directions: 'Vägbeskrivning', nearestBtn: 'Närmaste', nearest: 'närmast',
+  mosquesCount: '{n} moskéer', noAddress: 'Adress saknas', source: 'Källa', from: 'från', searchMosque: 'Sök moské eller ort',
+  loadingMosques: 'Hämtar moskéer…', mosquesFail: 'Moskéerna kunde inte hämtas. Kontrollera internet.',
+  mapNotAvailable: 'Kartan finns bara i den installerade appen.',
+  mosqueSources: 'Källor: OpenStreetMap-bidragsgivare (ODbL), Wikidata och islam.se. Platser kan vara ungefärliga.',
+  modeListen: 'Lyssna', listenSub: 'Tryck och låt någon läsa eller tala arabiska. Texten visas i rutan, sedan translitteration och översättning.',
+  micOffTitle: 'Mikrofonen är av', micOffBody: 'Alif använder inte mikrofonen förrän du slår på den. Slå på den under Inställningar › Mikrofon.',
+  micToSettings: 'Till mikrofoninställningar', micRecording: 'Lyssnar – tryck för att stoppa', tapToListenMic: 'Tryck för att lyssna', stop: 'Stoppa',
+  heardArabic: 'Hörd arabiska', micPhoneOnly: 'Bara på telefonen – ljudet lämnar inte telefonen.',
+  micViaGoogle: 'Taligenkänningen kan skicka ljudet till Google medan du lyssnar.',
+  micNoOffline: 'Taligenkänning på telefonen saknas. Ladda ner arabiska för offline-taligenkänning i telefonens inställningar (Google › Röst), eller slå av "Bara på telefonen".',
+  micNoService: 'Telefonen har ingen taligenkänning.', micDenied: 'Mikrofonen är inte tillåten för Alif.', micError: 'Taligenkänningen avbröts. Försök igen.',
+  openPhoneSettings: 'Öppna telefonens inställningar',
+  micTitle: 'Mikrofon', micSub: 'Lyssna: tal till text', micToggle: 'Tillåt mikrofonen för Lyssna', micOnlyPhone: 'Bara på telefonen',
+  micOnlyPhoneSub: 'Förval. Används bara telefonens egen taligenkänning (Android 12 eller senare med arabiska nedladdat), så inget ljud skickas till Google.',
+  listenTranslit: 'Visa translitteration under Lyssna', micOffDone: 'Mikrofonen är av. Vill du även ta bort tillståndet: öppna telefonens inställningar › Behörigheter.',
+  micRulesTitle: 'Så används mikrofonen',
+  micRules: [
+    'Av från början. Tillståndet efterfrågas först när du slår på den här.',
+    'Bara öppen medan du har tryckt på Lyssna – en röd markering visas, och Android visar sin gröna mikrofonprick.',
+    'Stängs direkt när du trycker Stoppa, byter flik eller sida, låser skärmen eller lämnar appen.',
+    'Ingen annan del av Alif använder mikrofonen. Ingen lyssning i bakgrunden och inget väckningsord.',
+    'Med "Bara på telefonen" lämnar ljudet aldrig telefonen.',
+  ],
+  volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
+};
+const en4: typeof sv4 = {
+  mosques: 'Mosques', mosquesSub: 'Map of mosques in Sweden', mosquesNear: 'Mosques near you', mosque: 'Mosque', you: 'You',
+  myPlaceBtn: 'My place', list: 'List', directions: 'Directions', nearestBtn: 'Nearest', nearest: 'nearest',
+  mosquesCount: '{n} mosques', noAddress: 'No address', source: 'Source', from: 'from', searchMosque: 'Search mosque or town',
+  loadingMosques: 'Fetching mosques…', mosquesFail: 'The mosques could not be fetched. Check the internet.',
+  mapNotAvailable: 'The map is only in the installed app.',
+  mosqueSources: 'Sources: OpenStreetMap contributors (ODbL), Wikidata and islam.se. Places may be approximate.',
+  modeListen: 'Listen', listenSub: 'Tap and let someone read or speak Arabic. The text appears in the box, then the transliteration and the translation.',
+  micOffTitle: 'The microphone is off', micOffBody: 'Alif does not use the microphone until you turn it on. Turn it on in Settings › Microphone.',
+  micToSettings: 'Microphone settings', micRecording: 'Listening – tap to stop', tapToListenMic: 'Tap to listen', stop: 'Stop',
+  heardArabic: 'Heard Arabic', micPhoneOnly: 'On the phone only – the audio does not leave the phone.',
+  micViaGoogle: 'The speech recognition may send the audio to Google while you listen.',
+  micNoOffline: 'Speech recognition on the phone is missing. Download Arabic for offline speech recognition in the phone’s settings (Google › Voice), or turn off "On the phone only".',
+  micNoService: 'The phone has no speech recognition.', micDenied: 'The microphone is not allowed for Alif.', micError: 'The speech recognition stopped. Try again.',
+  openPhoneSettings: 'Open the phone’s settings',
+  micTitle: 'Microphone', micSub: 'Listen: speech to text', micToggle: 'Allow the microphone for Listen', micOnlyPhone: 'On the phone only',
+  micOnlyPhoneSub: 'Default. Only the phone’s own speech recognition is used (Android 12 or later with Arabic downloaded), so no audio is sent to Google.',
+  listenTranslit: 'Show transliteration under Listen', micOffDone: 'The microphone is off. To remove the permission too: open the phone’s settings › Permissions.',
+  micRulesTitle: 'How the microphone is used',
+  micRules: [
+    'Off by default. The permission is only asked for when you turn it on here.',
+    'Only open while you have pressed Listen – a red mark is shown, and Android shows its green microphone dot.',
+    'Closed at once when you press Stop, change tab or page, lock the screen or leave the app.',
+    'No other part of Alif uses the microphone. No listening in the background and no wake word.',
+    'With "On the phone only" the audio never leaves the phone.',
+  ],
+  volumeCount: 'Count with the volume buttons', volumeCountSub: 'Both volume buttons count one step while the Dhikr page is open. Otherwise they change the volume as usual.',
+};
+
+export type Strings = typeof sv & typeof sv2 & typeof sv3 & typeof sv4;
+export const dict: Record<Lang, Strings> = { sv: { ...sv, ...sv2, ...sv3, ...sv4 }, en: { ...en, ...en2, ...en3, ...en4 } };

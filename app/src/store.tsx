@@ -58,6 +58,11 @@ type Saved = {
   tajweed: boolean; wbw: boolean;       // tajwīd colours, word by word
   hifz: boolean; hifzRepeat: number;    // memorising: text hidden until tapped, each verse repeated
   learnCards: Record<string, { box: number; due: number }>; // repetition cards (Leitner boxes)
+  // 0.5.1
+  micOn: boolean;                      // the microphone may be used by Listen (OFF until the person turns it on)
+  micOnlyPhone: boolean;               // recognise speech only on the phone (nothing sent to Google)
+  listenTranslit: boolean;             // show the transliteration box under Listen
+  dhikrVolume: boolean;                // count dhikr with the volume buttons on the Dhikr page
 };
 
 const KEY = 'alif.state.v1';
@@ -79,6 +84,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

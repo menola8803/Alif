@@ -1,1 +1,11 @@
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <application>
+    <!-- Home screen widget: next prayer, Hijri date, today's times -->
+    <receiver android:name="se.sncab.alifnative.AlifWidget" android:exported="false" android:label="Alif">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/alif_widget_info" />
+    </receiver>
+  </application>
+</manifest>
