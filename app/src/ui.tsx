@@ -140,17 +140,21 @@ export function Choice({ title, sub, on, onPress, children }: { title: string; s
   );
 }
 
-/** Two or three options side by side. */
+/** Options side by side, in the same see-through look as the menu at the bottom. */
 export function Segmented<T extends string>({ options, value, onChange }: { options: [T, string][]; value: T; onChange: (v: T) => void }) {
   const { theme } = useApp();
+  const glass = theme.dark ? 'rgba(19,34,37,0.78)' : 'rgba(250,248,244,0.86)';
+  const gold = theme.dark ? 'rgba(232,176,74,0.5)' : theme.line;
   return (
-    <View style={{ flexDirection: 'row', backgroundColor: theme.chip, borderRadius: 14, padding: 4, gap: 4 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: glass, borderColor: theme.dark ? 'rgba(232,176,74,0.22)' : theme.line, borderWidth: 1, borderRadius: 20, padding: 4, gap: 2 }}>
       {options.map(([k, label]) => {
         const on = k === value;
         return (
           <Pressable key={k} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => onChange(k)}
-            style={{ flex: 1, minHeight: 38, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? theme.card : 'transparent', borderWidth: on ? 1 : 0, borderColor: theme.line, paddingHorizontal: 6 }}>
-            <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '600', color: on ? theme.ink : theme.muted }}>{label}</Text>
+            style={{ flex: 1, minHeight: 44, borderRadius: 16, alignItems: 'center', justifyContent: 'center', gap: 2, paddingHorizontal: 4,
+              backgroundColor: on ? (theme.dark ? 'rgba(232,176,74,0.12)' : theme.chip) : 'transparent', borderWidth: on ? 1 : 0, borderColor: gold }}>
+            <Text numberOfLines={1} adjustsFontSizeToFit style={{ fontSize: 13, fontWeight: on ? '700' : '600', color: on ? theme.tabActive : theme.muted }}>{label}</Text>
+            {on ? <View style={{ width: 16, height: 3, borderRadius: 2, backgroundColor: theme.tabActive }} /> : null}
           </Pressable>
         );
       })}

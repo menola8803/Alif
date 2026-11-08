@@ -80,16 +80,15 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
         right={<Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>أَوْرَاد</Arabic>} />
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <Tile half title={t.qibla} sub={`${Math.round(q)}° ${compassPoint(q, lang)}`} onPress={() => go({ name: 'qibla' })} />
-        <Tile half title={month.tr} sub={`${t.hijriMonth} ${h.m}`} onPress={() => go({ name: 'hijri' })} right={<Arabic size={17} selectable={false} style={{ lineHeight: 30 }}>{month.ar}</Arabic>} />
+        <Tile half title={t.mosques} sub={t.mosquesNear} onPress={() => go({ name: 'mosques' })} />
       </View>
-      <Tile title={t.mosques} sub={t.mosquesSub} onPress={() => go({ name: 'mosques' })} />
-      <Tile gold title={special.days === 0 ? `${t.todayIs} ${special.day.tr}` : `${special.day.tr}`}
-        sub={special.days === 0 ? special.day[lang] : `${special.day[lang]} · ${shortDate(special.date, lang)} · ${t.inDays.replace('{n}', String(special.days))}`}
-        onPress={() => go({ name: 'hijri' })} />
-      {sacred.days <= 45 ? (
-        <Tile title={`${t.sacredMonth}: ${sacred.month.tr}`} sub={`${sacred.month[lang]} · ${shortDate(sacred.date, lang)} · ${t.inDays.replace('{n}', String(sacred.days))}`}
-          onPress={() => go({ name: 'hijri' })} right={<Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>{sacred.month.ar}</Arabic>} />
-      ) : null}
+      {/* One card for the Hijri calendar: the month, the next special day and, when it is near, the next sacred month. */}
+      <Tile gold title={`${h.d} ${month.tr} ${h.y}`}
+        sub={[
+          special.days === 0 ? `${t.todayIs} ${special.day.tr}` : `${special.day.tr} · ${shortDate(special.date, lang)} · ${t.inDays.replace('{n}', String(special.days))}`,
+          sacred.days <= 45 ? `${t.sacredMonth}: ${sacred.month.tr} · ${t.inDays.replace('{n}', String(sacred.days))}` : '',
+        ].filter(Boolean).join('\n')}
+        onPress={() => go({ name: 'hijri' })} right={<Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>{month.ar}</Arabic>} />
 
       <HomeArt index={image} height={320} />
     </ScrollView>
