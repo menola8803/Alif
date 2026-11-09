@@ -25,6 +25,9 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.googlecode.tesseract.android.TessBaseAPI
 import expo.modules.kotlin.Promise
+import android.app.Activity
+import android.media.RingtoneManager
+import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
@@ -35,6 +38,8 @@ class AlifNativeModule : Module() {
   private val main = Handler(Looper.getMainLooper())
   private var recognizer: SpeechRecognizer? = null
   private val ctx: Context get() = appContext.reactContext ?: throw Exception("No context")
+  private var soundPick: Promise? = null
+  private val PICK_SOUND = 7311
 
   override fun definition() = ModuleDefinition {
     Name("AlifNative")
@@ -45,6 +50,45 @@ class AlifNativeModule : Module() {
       AlifKeys.capture = false
       AlifKeys.listener = null
       main.post { stopRecognizer() }
+      AlifSound.stop()
+    }
+
+    // ---- Night clock: keep the screen on and set its brightness (-1 = the phone's own) ----
+    Function("screenAwake") { on: Boolean, brightness: Double ->
+      val w = appContext.currentActivity?.window ?: return@Function
+      if (on) w.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else w.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      val a = w.attributes
+      a.screenBrightness = if (on && brightness >= 0) brightness.toFloat() else android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+      w.attributes = a
+    }.runOnQueue(Queues.MAIN)
+
+    // ---- Sounds for the prayer notifications (adhan, phone sounds, own files) ----
+    Function("setPrayerChannels") { channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels) }
+    Function("previewSound") { sound: String -> main.post { AlifSound.preview(ctx, sound) } }
+    Function("stopSound") { main.post { AlifSound.stop() } }
+    AsyncFunction("importSound") { path: String, title: String -> AlifSound.import(ctx, path, title) }
+    AsyncFunction("pickPhoneSound") { current: String?, title: String, promise: Promise ->
+      val act = appContext.currentActivity
+      if (act == null) { promise.resolve(null); return@AsyncFunction }
+      soundPick?.resolve(null)
+      soundPick = promise
+      val i = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+        .putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, title)
+        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false)
+      if (current != null && current.startsWith("content://")) i.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(current))
+      act.startActivityForResult(i, PICK_SOUND)
+    }.runOnQueue(Queues.MAIN)
+    OnActivityResult { _, payload ->
+      if (payload.requestCode != PICK_SOUND) return@OnActivityResult
+      val p = soundPick ?: return@OnActivityResult
+      soundPick = null
+      @Suppress("DEPRECATION")
+      val u: Uri? = if (payload.resultCode == Activity.RESULT_OK) payload.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) else null
+      if (u == null) { p.resolve(null); return@OnActivityResult }
+      val name = try { RingtoneManager.getRingtone(ctx, u)?.getTitle(ctx) ?: "" } catch (e: Exception) { "" }
+      p.resolve(mapOf("uri" to u.toString(), "title" to name))
     }
 
     // ---- Map (osmdroid) ----

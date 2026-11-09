@@ -27,7 +27,8 @@ import Learn, { LetterScreen, SignsScreen } from './src/screens/Learn';
 import Dhikr from './src/screens/Dhikr';
 import { EntryScreen } from './src/screens/History';
 import Awrad, { ReminderScreen } from './src/screens/Awrad';
-import PrayerScreen, { CityScreen } from './src/screens/Prayer';
+import PrayerScreen, { CityScreen, PrayerSoundScreen } from './src/screens/Prayer';
+import NightClockScreen from './src/screens/NightClock';
 import QiblaScreen from './src/screens/Qibla';
 import HijriScreen from './src/screens/Hijri';
 import ManualScreen, { HistoryScreen, PrivacyScreen } from './src/screens/Manual';
@@ -112,7 +113,9 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'mosqueList': return <MosqueListScreen onBack={pop} />;
       case 'micSettings': return <MicSettingsScreen onBack={pop} />;
       case 'juz': return <JuzScreen key={r.n} n={r.n} onBack={pop} go={push} />;
-      case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} />;
+      case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} go={push} />;
+      case 'nightClock': return <NightClockScreen onBack={pop} />;
+      case 'prayerSound': return <PrayerSoundScreen onBack={pop} />;
       default:
         return (
           <Screen bottom={false}>

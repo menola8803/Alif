@@ -11,6 +11,12 @@ type AlifNative = {
   pdfPages(pdfUri: string, outDir: string, maxPages: number): Promise<string[]>;
   captureVolumeKeys(on: boolean): void;
   setWidgetData(json: string): void;
+  setPrayerChannels(channels: { id: string; name: string; sound: string; alarm: boolean }[]): void;
+  previewSound(sound: string): void;
+  stopSound(): void;
+  screenAwake(on: boolean, brightness: number): void;
+  importSound(path: string, title: string): Promise<string | null>;
+  pickPhoneSound(current: string | null, title: string): Promise<{ uri: string; title: string } | null>;
   speechInfo(): Promise<{ available: boolean; onDevice: boolean }>;
   startListening(lang: string, onlyOnPhone: boolean): void;
   stopListening(): void;

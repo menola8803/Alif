@@ -64,6 +64,10 @@ type Saved = {
   micOnlyPhone: boolean;               // recognise speech only on the phone (nothing sent to Google)
   listenTranslit: boolean;             // show the transliteration box under Listen
   dhikrVolume: boolean;                // count dhikr with the volume buttons on the Dhikr page
+  prayerSound: string;                 // 'default' | 'silent' | 'raw:adhan_…' | 'content://…' (see core/sounds)
+  prayerSoundName: string;             // the name of a sound from the phone
+  fajrAdhan: boolean;                  // the Fajr adhan at Fajr when an adhan is chosen
+  prayerAlarm: boolean;                // play at alarm volume
   quranView: 'surah' | 'juz';         // the Qur'an tab lists the sūras or the 30 parts
   widgetStyle: 'full' | 'times';      // home screen widget: everything, or only the five prayers with their times
   myMosques: Mosque[];                 // mosques the person has added on the map
@@ -89,7 +93,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', quranView: 'surah',
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', quranView: 'surah', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

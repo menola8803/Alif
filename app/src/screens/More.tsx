@@ -4,6 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
 import { useApp } from '../store';
+import { Route } from '../nav';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
 import { LETTERS } from '../core/learn';
@@ -171,7 +172,7 @@ export function MicSettingsScreen({ onBack }: { onBack: () => void }) {
 }
 
 /** Settings › Widget and screen saver: the look of the widget, with a preview in the same colours. */
-export function WidgetSettingsScreen({ onBack }: { onBack: () => void }) {
+export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (r: Route) => void }) {
   const { t, theme, widgetStyle, setPrefs } = useApp();
   const { today, next } = usePrayer();
   const gold = theme.dark ? '#E8B04A' : '#9C6B22';
@@ -202,9 +203,15 @@ export function WidgetSettingsScreen({ onBack }: { onBack: () => void }) {
         </View>
         <Card><Body>{t.widgetTheme}</Body><Body muted>{t.widgetHow}</Body></Card>
         <Card>
+          <Label>{t.nightClock}</Label>
+          <Body muted>{t.nightClockSub}</Body>
+          <Btn title={t.nightClockOpen} onPress={() => go({ name: 'nightClock' })} />
+        </Card>
+        <Card>
           <Label>{t.dreamTitle}</Label>
           <Body muted>{t.dreamHow}</Body>
           {Platform.OS === 'android' ? <Btn title={t.dreamOpen} kind="secondary" onPress={() => Linking.sendIntent('android.settings.DREAM_SETTINGS').catch(() => Linking.openSettings().catch(() => {}))} /> : null}
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.dreamMissing}</Text>
         </Card>
       </ScrollView>
     </Screen>

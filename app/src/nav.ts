@@ -28,4 +28,6 @@ export type Route =
   | { name: 'mosqueList' }
   | { name: 'micSettings' }
   | { name: 'widgetSettings' }
+  | { name: 'nightClock' }
+  | { name: 'prayerSound' }
   | { name: 'juz'; n: number; ayah?: { surah: number; n: number } };

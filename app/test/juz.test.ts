@@ -12,3 +12,14 @@ ok(SAJDA.every(([s, a]) => a <= SURAHS[s - 1].ayahs) && isSajda(96, 19) && !isSa
 ok(withoutSajdaSign('وَلَهُۥ يَسْجُدُونَ ۩') === 'وَلَهُۥ يَسْجُدُونَ', 'strip sign');
 if (fail) process.exit(1);
 console.log('juz: all ok');
+// sounds
+import { channelId, soundFor, ADHANS, FAJR_ADHAN } from '../src/core/sounds';
+{
+  let f = 0; const ok2 = (c: boolean, m: string) => { if (!c) { f++; console.log('FAIL', m); } };
+  ok2(ADHANS.length === 5, 'five adhans');
+  ok2(channelId('default', false) === channelId('default', false) && channelId('default', false) !== channelId('default', true), 'channel ids');
+  ok2(channelId('raw:adhan_makkah', false).startsWith('prayer-'), 'prefix');
+  ok2(soundFor('fajr', ADHANS[0].id, true) === FAJR_ADHAN.id && soundFor('dhuhr', ADHANS[0].id, true) === ADHANS[0].id && soundFor('fajr', 'default', true) === 'default' && soundFor('fajr', ADHANS[0].id, false) === ADHANS[0].id, 'fajr adhan');
+  if (f) process.exit(1);
+  console.log('sounds: all ok');
+}

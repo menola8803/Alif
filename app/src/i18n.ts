@@ -435,6 +435,13 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  close: 'Stäng', nightClock: 'Nattklocka', nightClockSub: 'Klocka och bönetider på hela skärmen, för natten eller när telefonen laddar. Skärmen hålls tänd och dämpad. Fungerar på alla telefoner, även OnePlus som saknar Androids skärmsläckare.', nightClockOpen: 'Öppna nattklockan',
+  dreamMissing: 'Hittar du inte Skärmsläckare i telefonens inställningar (till exempel på OnePlus) har telefonen inte den funktionen – använd nattklockan ovan i stället.',
+  prayerSound: 'Ljud vid bön', soundDefault: 'Telefonens aviseringsljud', soundSilent: 'Tyst (bara avisering)', adhanTitle: 'Adhan',
+  soundPhone: 'Ljud från telefonen…', soundPhoneSub: 'Välj ett alarm, en ringsignal eller ett aviseringsljud', soundFile: 'Egen ljudfil…', soundFileSub: 'Välj en ljudfil (mp3, m4a, ogg) från telefonen',
+  soundFileOld: 'Egna ljudfiler kräver Android 10 eller senare.', soundFailed: 'Ljudfilen kunde inte läggas in.',
+  fajrAdhan: 'Fajr-adhan vid Fajr', fajrAdhanSub: 'Med "aṣ-ṣalātu khayrun min an-nawm"', soundAlarm: 'Spela som alarm', soundAlarmSub: 'Använder alarmvolymen, så ljudet hörs även när aviseringsljudet är lågt.',
+  soundPlay: '▶', soundStop: '■', soundNote: 'Ljudet gäller alla böner du slagit på aviseringar för. Långa adhan kan kortas av vissa telefoner; tryck på aviseringen för att stoppa ljudet.',
   juz: 'Juz', bySurah: 'Suror', byJuz: 'Juz', sajdaHere: 'Sajda – här faller man ned', juzFrom: '{a} – {b}', sajdaCount: '{n} sajda',
   widgetTitle: 'Widget och skärmsläckare', widgetSub: 'Bönetiderna på hemskärmen', widgetFull: 'Allt', widgetTimes: 'Bara bönetider',
   widgetFullSub: 'Nästa bön, hijri-datum, ort och dagens tider', widgetTimesSub: 'De fem bönerna med namn och tid; nästa i fetstil',
@@ -474,6 +481,13 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  close: 'Close', nightClock: 'Night clock', nightClockSub: 'A clock and the prayer times on the whole screen, for the night or while the phone charges. The screen is kept on and dimmed. Works on every phone, also OnePlus, which has no Android screen saver.', nightClockOpen: 'Open the night clock',
+  dreamMissing: 'If there is no Screen saver in the phone’s settings (on OnePlus, for example), the phone does not have it – use the night clock above instead.',
+  prayerSound: 'Sound at prayer', soundDefault: 'The phone’s notification sound', soundSilent: 'Silent (notification only)', adhanTitle: 'Adhan',
+  soundPhone: 'Sound from the phone…', soundPhoneSub: 'Choose an alarm, a ringtone or a notification sound', soundFile: 'Own sound file…', soundFileSub: 'Choose a sound file (mp3, m4a, ogg) on the phone',
+  soundFileOld: 'Own sound files need Android 10 or later.', soundFailed: 'The sound file could not be added.',
+  fajrAdhan: 'Fajr adhan at Fajr', fajrAdhanSub: 'With "aṣ-ṣalātu khayrun min an-nawm"', soundAlarm: 'Play as an alarm', soundAlarmSub: 'Uses the alarm volume, so the sound is heard even when the notification volume is low.',
+  soundPlay: '▶', soundStop: '■', soundNote: 'The sound is used for every prayer you have turned notifications on for. Some phones cut long adhans short; tap the notification to stop the sound.',
   juz: 'Juz', bySurah: 'Surahs', byJuz: 'Juz', sajdaHere: 'Sajda – prostrate here', juzFrom: '{a} – {b}', sajdaCount: '{n} sajda',
   widgetTitle: 'Widget and screen saver', widgetSub: 'The prayer times on the home screen', widgetFull: 'Everything', widgetTimes: 'Prayer times only',
   widgetFullSub: 'Next prayer, Hijri date, place and today’s times', widgetTimesSub: 'The five prayers with name and time; the next in bold',

@@ -10,6 +10,7 @@ import { useApp } from './store';
 import { PRAYER_TR, PrayerDay, SALAH, calcDay, fetchMonth, hhmm, nextPrayer, ymd } from './core/prayer';
 import { MONTHS, offsetFor, toHijri } from './core/hijri';
 import { AlifNativeModule } from '../modules/alif-native';
+import { channelId, soundFor } from './core/sounds';
 
 export type PrayerSource = 'aladhan' | 'phone';
 type Ctx = {
@@ -42,7 +43,7 @@ export async function locate(): Promise<{ lat: number; lng: number; name: string
 }
 
 export function PrayerProvider({ children }: { children: React.ReactNode }) {
-  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle } = useApp();
+  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle, prayerSound, fajrAdhan, prayerAlarm } = useApp();
   const [days, setDays] = useState<Record<string, PrayerDay>>({});
   const [now, setNow] = useState(() => new Date());
   const placeKey = `${place.lat.toFixed(3)},${place.lng.toFixed(3)}.${school}.${highLat}`;
@@ -114,11 +115,18 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
         for (const n of all) if (n.identifier.startsWith('prayer-')) await Notifications.cancelScheduledNotificationAsync(n.identifier);
         const wanted = SALAH.filter(k => prayerNotify[k]);
         if (!wanted.length || cancelled) return;
+        // One channel per sound (Android fixes a channel's sound); with an adhan, Fajr has its own.
+        const chOf = (k: string) => (AlifNativeModule ? channelId(soundFor(k, prayerSound, fajrAdhan), prayerAlarm) : CHANNEL);
         if (Platform.OS === 'android') {
-          await Notifications.setNotificationChannelAsync(CHANNEL, {
-            name: t.prayerChannel, importance: Notifications.AndroidImportance.HIGH,
-            lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, vibrationPattern: [0, 300, 200, 300], lightColor: '#E8B04A',
-          });
+          if (AlifNativeModule) {
+            const sounds = [...new Set(wanted.map(k => soundFor(k, prayerSound, fajrAdhan)))];
+            AlifNativeModule.setPrayerChannels(sounds.map(s => ({ id: channelId(s, prayerAlarm), name: t.prayerChannel, sound: s, alarm: prayerAlarm })));
+          } else {
+            await Notifications.setNotificationChannelAsync(CHANNEL, {
+              name: t.prayerChannel, importance: Notifications.AndroidImportance.HIGH,
+              lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, vibrationPattern: [0, 300, 200, 300], lightColor: '#E8B04A',
+            });
+          }
         }
         const perm = await Notifications.getPermissionsAsync();
         if (!perm.granted) return;
@@ -132,7 +140,7 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
             await Notifications.scheduleNotificationAsync({
               identifier: `prayer-${day.date}-${k}`,
               content: { title: `${PRAYER_TR[k]} · ${hhmm(day.times[k])}`, body: t.prayerNotifBody.replace('{p}', PRAYER_TR[k]).replace('{c}', place.name), data: { open: 'today' } },
-              trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: at, channelId: CHANNEL },
+              trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: at, channelId: chOf(k) },
             });
           }
         }
@@ -140,7 +148,7 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey]);
+  }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey, prayerSound, fajrAdhan, prayerAlarm]);
 
   // Home screen widget: the times of today and the next two days, the Hijri date and the place.
   useEffect(() => {

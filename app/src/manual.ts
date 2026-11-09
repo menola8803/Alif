@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.3';
+export const MANUAL_VERSION = '0.5.4';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -15,6 +15,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Datum och hijri-datum överst.',
       'Bönetidsklockan: en 24-timmarsklocka med midnatt nertill och middag överst. Varje bön är en prick på ringen, solen går runt i realtid och nästa bön lyser i guld med nedräkning i mitten. Tryck på klockan för alla tider och inställningar.',
       'Raden med tider: tryck på en bön för att slå av eller på dess avisering (● på, ○ av).',
+      'Ljud vid bön (Inställningar › Bönetider › Ljud vid bön): telefonens ljud, tyst, fem adhan (Makkah, al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, al-Qaṭāmī) med provlyssning, Fajr-adhan vid Fajr, ett alarm eller en ringsignal från telefonen eller en egen ljudfil. "Spela som alarm" använder alarmvolymen.',
       'Korten för Daily Awrad, Qibla och Moskéer öppnar respektive sida. Guldkortet visar hijri-datum, nästa särskilda dag och nästa heliga månad och öppnar hijri-kalendern.',
       'Längst ner en av bilderna från Mecka, Medina och Hagia Sofia med Allāhumma ṣalli ʿalā sayyidinā Muḥammad i guld. En ny bild väljs varje gång du trycker på Idag.',
     ] },
@@ -42,6 +43,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Widget', items: [
       'Håll fingret på hemskärmen › Widgetar › Alif. Widgeten visar nästa bön och tid, hijri-datum, ort och dagens fem tider. Den uppdateras när du öppnar Alif och efter varje bön.',
       'Under Inställningar › Widget och skärmsläckare väljer du Allt eller Bara bönetider (de fem bönerna med namn och tid, nästa i fetstil). Widgeten är guld på temats färg med tunn guldkant och följer Alifs ljusa eller mörka tema.',
+      'Nattklocka: Inställningar › Widget och skärmsläckare › Öppna nattklockan visar klocka och dagens bönetider på hela skärmen, tänd och dämpad (extra dämpad i ljust tema). Tryck på skärmen för Stäng. Fungerar på alla telefoner, även OnePlus som saknar Androids skärmsläckare.',
       'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare. Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
     ] },
     { title: 'Koranen', items: [
@@ -97,6 +99,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The date and the Hijri date at the top.',
       'The prayer clock: a 24-hour clock with midnight at the bottom and noon at the top. Each prayer is a dot on the ring, the sun moves round in real time and the next prayer glows in gold with a countdown in the middle. Tap the clock for all times and settings.',
       'The row of times: tap a prayer to turn its notification on or off (● on, ○ off).',
+      'Sound at prayer (Settings › Prayer times › Sound at prayer): the phone’s sound, silent, five adhans (Makkah, al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, al-Qaṭāmī) with a preview, the Fajr adhan at Fajr, an alarm or ringtone from the phone or an own sound file. "Play as an alarm" uses the alarm volume.',
       'The cards for Daily Awrad, Qibla and Mosques open their pages. The gold card shows the Hijri date, the next special day and the next sacred month and opens the Hijri calendar.',
       'At the bottom one of the pictures of Mecca, Medina and Hagia Sophia with Allāhumma ṣalli ʿalā sayyidinā Muḥammad in gold. A new picture is chosen every time you tap Today.',
     ] },
@@ -124,6 +127,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Widget', items: [
       'Hold your finger on the home screen › Widgets › Alif. The widget shows the next prayer and its time, the Hijri date, the place and today’s five times. It is updated when you open Alif and after every prayer.',
       'Under Settings › Widget and screen saver you choose Everything or Prayer times only (the five prayers with name and time, the next in bold). The widget is gold on the theme’s colour with a thin gold border and follows Alif’s light or dark theme.',
+      'Night clock: Settings › Widget and screen saver › Open the night clock shows a clock and today’s prayer times on the whole screen, kept on and dimmed (extra dimmed in the light theme). Tap the screen for Close. Works on every phone, also OnePlus, which has no Android screen saver.',
       'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver. A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',
     ] },
     { title: 'Qur’an', items: [
