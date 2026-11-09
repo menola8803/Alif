@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { BackHandler, View } from 'react-native';
+import { BackHandler, Vibration, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_600SemiBold, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold } from '@expo-google-fonts/plus-jakarta-sans';
@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
 import { PrayerProvider } from './src/prayer';
-import { RecitationProvider } from './src/recitation';
+import { RecitationProvider, useRecitation } from './src/recitation';
 import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen, WidgetSettingsScreen } from './src/screens/More';
 import MosquesScreen, { MosqueListScreen } from './src/screens/Mosques';
 import { Route } from './src/nav';
@@ -38,7 +38,8 @@ import Settings, { AboutScreen, AiScreen, EditionScreen, LanguageScreen, ThemeSc
 const UPDATE_EVERY = 6 * 3600 * 1000;
 
 function Content({ splashDone }: { splashDone: boolean }) {
-  const { ready, updateTag, updateChecked, homeImg, setPrefs } = useApp();
+  const { ready, updateTag, updateChecked, homeImg, setPrefs, t } = useApp();
+  const rec = useRecitation();
   const [stack, setStack] = useState<Route[]>([{ name: 'tabs' }]);
   const [tab, setTabState] = useState<TabName>('today');
   const [mode, setMode] = useState<TranslateMode>('write');
@@ -80,6 +81,8 @@ function Content({ splashDone }: { splashDone: boolean }) {
   }, [stack.length, pop, tab, setTab]);
 
   const gear = () => push({ name: 'settings' });
+  // The Qur'an tab shows the verse being recited (sūra:verse); a long press stops it, a tap on the open tab goes to it.
+  const quranBadge = rec.now ? { quran: { label: `${rec.now.playing ? '▶' : '❚❚'} ${rec.now.surah}:${rec.now.ayah}`, a11y: t.tabPlaying.replace('{v}', `${rec.now.surah}:${rec.now.ayah}`), active: rec.now.playing } } : undefined;
   const r = stack[stack.length - 1];
   const reminder = <ReminderManager openAwrad={openAwrad} active={splashDone && r.name !== 'awrad'} />;
   return <>{reminder}{screen()}</>;
@@ -126,7 +129,8 @@ function Content({ splashDone }: { splashDone: boolean }) {
               {tab === 'learn' && <Learn go={push} onGear={gear} glow={glow} />}
               {tab === 'dhikr' && <Dhikr go={push} onGear={gear} glow={glow} focused={r.name === 'tabs'} />}
             </View>
-            <TabBar tab={tab} setTab={setTab} />
+            <TabBar tab={tab} badges={quranBadge} onLong={k => { if (k === 'quran') { Vibration.vibrate(40); rec.stop(); } }}
+              setTab={k => (k === 'quran' && tab === 'quran' && rec.now ? openSurah(rec.now.surah, rec.now.ayah) : setTab(k))} />
           </Screen>
         );
     }

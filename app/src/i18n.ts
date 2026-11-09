@@ -435,6 +435,7 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  tabPlaying: 'spelar {v} · tryck länge för att stoppa',
   close: 'Stäng', nightClock: 'Nattklocka', nightClockSub: 'Klocka och bönetider på hela skärmen, för natten eller när telefonen laddar. Skärmen hålls tänd och dämpad. Fungerar på alla telefoner, utan att du ändrar något i telefonens inställningar.', nightClockOpen: 'Öppna nattklockan',
   dreamMissing: 'Viktigt: ställ in "När den ska visas" på "Vid laddning" (inte bara "när den är dockad"), annars visas den bara i en dockningsstation. Ögat bredvid Alif visar den direkt. Saknar telefonen Skärmsläckare, använd nattklockan ovan.',
   prayerSound: 'Ljud vid bön', soundDefault: 'Telefonens aviseringsljud', soundSilent: 'Tyst (bara avisering)', adhanTitle: 'Adhan',
@@ -481,6 +482,7 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  tabPlaying: 'playing {v} · hold to stop',
   close: 'Close', nightClock: 'Night clock', nightClockSub: 'A clock and the prayer times on the whole screen, for the night or while the phone charges. The screen is kept on and dimmed. Works on every phone, without changing anything in the phone’s settings.', nightClockOpen: 'Open the night clock',
   dreamMissing: 'Important: set "When to start" to "While charging" (not only "while docked"), otherwise it only shows in a dock. The eye next to Alif shows it at once. If the phone has no Screen saver, use the night clock above.',
   prayerSound: 'Sound at prayer', soundDefault: 'The phone’s notification sound', soundSilent: 'Silent (notification only)', adhanTitle: 'Adhan',

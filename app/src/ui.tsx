@@ -224,7 +224,9 @@ function TabIcon({ tab, color, fill }: { tab: TabName; color: string; fill: stri
 }
 
 /** The bottom menu: floats over the page and is slightly see-through, so long pages show faintly behind it. */
-export function TabBar({ tab, setTab }: { tab: TabName; setTab: (t: TabName) => void }) {
+/** A tab can show what is going on (the verse being recited) and react to a long press (stop it). */
+export type TabBadge = { label: string; a11y: string; active: boolean };
+export function TabBar({ tab, setTab, badges, onLong }: { tab: TabName; setTab: (t: TabName) => void; badges?: Partial<Record<TabName, TabBadge>>; onLong?: (t: TabName) => void }) {
   const { theme, t } = useApp();
   const i = useSafeAreaInsets();
   const items: [TabName, string][] = [['today', t.tabToday], ['quran', t.tabQuran], ['translate', t.tabTranslate], ['learn', t.tabLearn], ['dhikr', t.tabDhikr]];
@@ -235,10 +237,14 @@ export function TabBar({ tab, setTab }: { tab: TabName; setTab: (t: TabName) => 
         const on = tab === k, color = on ? theme.tabActive : theme.muted;
         const fill = on ? (theme.dark ? 'rgba(232,176,74,0.22)' : 'rgba(38,35,31,0.12)') : (theme.dark ? 'rgba(183,198,195,0.08)' : 'rgba(106,99,88,0.08)');
         return (
-          <Pressable key={k} accessibilityRole="tab" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={() => setTab(k)}
+          <Pressable key={k} accessibilityRole="tab" accessibilityLabel={badges?.[k] ? `${label} · ${badges[k]!.a11y}` : label} accessibilityState={{ selected: on }} onPress={() => setTab(k)}
+            onLongPress={onLong && badges?.[k] ? () => onLong(k) : undefined} delayLongPress={450}
             style={{ flex: 1, minHeight: 60, borderRadius: 19, alignItems: 'center', justifyContent: 'center', gap: 2, backgroundColor: on ? (theme.dark ? 'rgba(232,176,74,0.12)' : theme.chip) : 'transparent', borderWidth: on ? 1 : 0, borderColor: theme.dark ? 'rgba(232,176,74,0.5)' : theme.line }}>
-            <TabIcon tab={k} color={color} fill={fill} />
-            <Text numberOfLines={1} style={{ fontSize: 10.5, fontWeight: on ? '700' : '600', color, maxWidth: '100%', paddingHorizontal: 1 }}>{label}</Text>
+            <View>
+              <TabIcon tab={k} color={color} fill={fill} />
+              {badges?.[k] ? <View style={{ position: 'absolute', top: -2, right: -6, width: 9, height: 9, borderRadius: 5, backgroundColor: badges[k]!.active ? '#E8B04A' : theme.muted, borderWidth: 1.5, borderColor: glass }} /> : null}
+            </View>
+            <Text numberOfLines={1} style={{ fontSize: 10.5, fontWeight: on || badges?.[k] ? '700' : '600', color: badges?.[k] ? theme.tabActive : color, maxWidth: '100%', paddingHorizontal: 1 }}>{badges?.[k] ? badges[k]!.label : label}</Text>
             {on ? <View style={{ width: 16, height: 3, borderRadius: 2, backgroundColor: theme.tabActive }} /> : null}
           </Pressable>
         );

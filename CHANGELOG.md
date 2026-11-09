@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.4
+- Koran-knappen i menyn visar sura:vers som spelas; tryck länge för att stoppa.
 - Recitationen fortsätter när skärmen släcks med strömknappen eller du byter app, med paus/spela på låsskärmen.
 - Adhan-ljuden i Ogg Opus: hälften så stora (appen ca 5 MB mindre än med mp3).
 - Ljud vid bön: välj telefonens ljud, tyst, en av fem adhan (Makkah, Mishary al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, Nāṣir al-Qaṭāmī) med provlyssning, Fajr-adhan vid Fajr, ett alarm/ringsignal från telefonen eller en egen ljudfil; kan spelas som alarm.
