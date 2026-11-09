@@ -394,7 +394,7 @@ const en2: typeof sv2 = {
 // ---- 0.5.0: recitation, tajwīd, word by word, ḥifẓ, cards, backup ----
 const sv3 = {
   recitation: 'Recitation', recitationSub: 'Recitatör och nedladdning av ljud',
-  recitationHelp: 'Ljudet kommer vers för vers från Islamic Network (samma källa som AlQuran Cloud). Utan nedladdning strömmas det. Nedladdade suror spelas utan nät. Ljudet spelas bara medan Alif är öppen.',
+  recitationHelp: 'Ljudet kommer vers för vers från Islamic Network (samma källa som AlQuran Cloud). Utan nedladdning strömmas det. Nedladdade suror spelas utan nät. Recitationen fortsätter med släckt skärm och kan pausas från låsskärmen.',
   downloads: 'Nedladdat', downloadedStats: '{n} suror · {mb} MB', wholeQuranSize: 'Hela Koranen med en recitatör ≈ 1 GB.',
   wifiOnly: 'Ladda ner bara på wifi', removeDownloads: 'Ta bort nedladdat ljud',
   downloadSurah: 'Ladda ner suran', downloadFail: 'Nedladdningen avbröts. Kontrollera internet och försök igen.', needWifi: 'Anslut till wifi, eller slå av "Ladda ner bara på wifi" under Inställningar › Recitation.',
@@ -414,7 +414,7 @@ const sv3 = {
 };
 const en3: typeof sv3 = {
   recitation: 'Recitation', recitationSub: 'Reciter and audio downloads',
-  recitationHelp: 'The audio comes verse by verse from Islamic Network (the same source as AlQuran Cloud). Without a download it is streamed. Downloaded sūras play without internet. Audio only plays while Alif is open.',
+  recitationHelp: 'The audio comes verse by verse from Islamic Network (the same source as AlQuran Cloud). Without a download it is streamed. Downloaded sūras play without internet. The recitation goes on with the screen off and can be paused from the lock screen.',
   downloads: 'Downloaded', downloadedStats: '{n} sūras · {mb} MB', wholeQuranSize: 'The whole Qur’an with one reciter ≈ 1 GB.',
   wifiOnly: 'Download on wifi only', removeDownloads: 'Remove downloaded audio',
   downloadSurah: 'Download the sūra', downloadFail: 'The download stopped. Check the internet and try again.', needWifi: 'Connect to wifi, or turn off "Download on wifi only" in Settings › Recitation.',
