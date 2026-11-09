@@ -55,12 +55,14 @@ class AlifNativeModule : Module() {
 
     // ---- Night clock: keep the screen on and set its brightness (-1 = the phone's own) ----
     Function("screenAwake") { on: Boolean, brightness: Double ->
-      val w = appContext.currentActivity?.window ?: return@Function
-      if (on) w.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else w.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-      val a = w.attributes
-      a.screenBrightness = if (on && brightness >= 0) brightness.toFloat() else android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
-      w.attributes = a
-    }.runOnQueue(Queues.MAIN)
+      main.post {
+        val w = appContext.currentActivity?.window ?: return@post
+        if (on) w.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) else w.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val a = w.attributes
+        a.screenBrightness = if (on && brightness >= 0) brightness.toFloat() else android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+        w.attributes = a
+      }
+    }
 
     // ---- Sounds for the prayer notifications (adhan, phone sounds, own files) ----
     Function("setPrayerChannels") { channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels) }
