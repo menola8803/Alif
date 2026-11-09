@@ -2,7 +2,7 @@
 
 ## 0.5.4
 - Ljud vid bön: välj telefonens ljud, tyst, en av fem adhan (Makkah, Mishary al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, Nāṣir al-Qaṭāmī) med provlyssning, Fajr-adhan vid Fajr, ett alarm/ringsignal från telefonen eller en egen ljudfil; kan spelas som alarm.
-- Nattklocka: klocka och bönetider på hela skärmen, tänd och dämpad – fungerar även på OnePlus som saknar Androids skärmsläckare.
+- Nattklocka: klocka och bönetider på hela skärmen, tänd och dämpad – fungerar på alla telefoner. Skärmsläckaren: hjälptext om att välja "Vid laddning" och en förhandsbild.
 
 ## 0.5.3
 - Koranen: välj Suror eller Juz. Juz-listan visar de 30 delarna med namn, början, slut och antal sajda; en juz läses i ett svep över surorna. En guldlinje i suran visar var en ny juz börjar.

@@ -4,7 +4,7 @@ The app shows the section for a new version in the language chosen in Settings. 
 
 ## 0.5.4
 - Sound at prayer: choose the phone’s sound, silent, one of five adhans (Makkah, Mishary al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, Nāṣir al-Qaṭāmī) with a preview, the Fajr adhan at Fajr, an alarm/ringtone from the phone or an own sound file; can play as an alarm.
-- Night clock: a clock and the prayer times on the whole screen, kept on and dimmed – also on OnePlus, which has no Android screen saver.
+- Night clock: a clock and the prayer times on the whole screen, kept on and dimmed – works on every phone. Screen saver: help about choosing "While charging" and a preview picture.
 
 ## 0.5.3
 - Qur’an: choose Surahs or Juz. The juz list shows the 30 parts with name, start, end and number of sajdas; a juz is read straight through across the sūras. A gold line in a sūra shows where a new juz begins.

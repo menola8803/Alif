@@ -43,8 +43,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Widget', items: [
       'Håll fingret på hemskärmen › Widgetar › Alif. Widgeten visar nästa bön och tid, hijri-datum, ort och dagens fem tider. Den uppdateras när du öppnar Alif och efter varje bön.',
       'Under Inställningar › Widget och skärmsläckare väljer du Allt eller Bara bönetider (de fem bönerna med namn och tid, nästa i fetstil). Widgeten är guld på temats färg med tunn guldkant och följer Alifs ljusa eller mörka tema.',
-      'Nattklocka: Inställningar › Widget och skärmsläckare › Öppna nattklockan visar klocka och dagens bönetider på hela skärmen, tänd och dämpad (extra dämpad i ljust tema). Tryck på skärmen för Stäng. Fungerar på alla telefoner, även OnePlus som saknar Androids skärmsläckare.',
-      'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare. Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
+      'Nattklocka: Inställningar › Widget och skärmsläckare › Öppna nattklockan visar klocka och dagens bönetider på hela skärmen, tänd och dämpad (extra dämpad i ljust tema). Tryck på skärmen för Stäng. Fungerar på alla telefoner.',
+      'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare och ställ in När den ska visas på Vid laddning (med bara "dockad" visas den bara i en dockningsstation). Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
     ] },
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
@@ -127,8 +127,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Widget', items: [
       'Hold your finger on the home screen › Widgets › Alif. The widget shows the next prayer and its time, the Hijri date, the place and today’s five times. It is updated when you open Alif and after every prayer.',
       'Under Settings › Widget and screen saver you choose Everything or Prayer times only (the five prayers with name and time, the next in bold). The widget is gold on the theme’s colour with a thin gold border and follows Alif’s light or dark theme.',
-      'Night clock: Settings › Widget and screen saver › Open the night clock shows a clock and today’s prayer times on the whole screen, kept on and dimmed (extra dimmed in the light theme). Tap the screen for Close. Works on every phone, also OnePlus, which has no Android screen saver.',
-      'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver. A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',
+      'Night clock: Settings › Widget and screen saver › Open the night clock shows a clock and today’s prayer times on the whole screen, kept on and dimmed (extra dimmed in the light theme). Tap the screen for Close. Works on every phone.',
+      'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver and set When to start to While charging (with only "docked" it only shows in a dock). A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',
     ] },
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',

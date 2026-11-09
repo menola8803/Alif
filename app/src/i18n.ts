@@ -435,8 +435,8 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
-  close: 'Stäng', nightClock: 'Nattklocka', nightClockSub: 'Klocka och bönetider på hela skärmen, för natten eller när telefonen laddar. Skärmen hålls tänd och dämpad. Fungerar på alla telefoner, även OnePlus som saknar Androids skärmsläckare.', nightClockOpen: 'Öppna nattklockan',
-  dreamMissing: 'Hittar du inte Skärmsläckare i telefonens inställningar (till exempel på OnePlus) har telefonen inte den funktionen – använd nattklockan ovan i stället.',
+  close: 'Stäng', nightClock: 'Nattklocka', nightClockSub: 'Klocka och bönetider på hela skärmen, för natten eller när telefonen laddar. Skärmen hålls tänd och dämpad. Fungerar på alla telefoner, utan att du ändrar något i telefonens inställningar.', nightClockOpen: 'Öppna nattklockan',
+  dreamMissing: 'Viktigt: ställ in "När den ska visas" på "Vid laddning" (inte bara "när den är dockad"), annars visas den bara i en dockningsstation. Ögat bredvid Alif visar den direkt. Saknar telefonen Skärmsläckare, använd nattklockan ovan.',
   prayerSound: 'Ljud vid bön', soundDefault: 'Telefonens aviseringsljud', soundSilent: 'Tyst (bara avisering)', adhanTitle: 'Adhan',
   soundPhone: 'Ljud från telefonen…', soundPhoneSub: 'Välj ett alarm, en ringsignal eller ett aviseringsljud', soundFile: 'Egen ljudfil…', soundFileSub: 'Välj en ljudfil (mp3, m4a, ogg) från telefonen',
   soundFileOld: 'Egna ljudfiler kräver Android 10 eller senare.', soundFailed: 'Ljudfilen kunde inte läggas in.',
@@ -447,7 +447,7 @@ const sv4 = {
   widgetFullSub: 'Nästa bön, hijri-datum, ort och dagens tider', widgetTimesSub: 'De fem bönerna med namn och tid; nästa i fetstil',
   widgetTheme: 'Widgeten följer Alifs tema: mörkt (mörkgrönt med guld) eller ljust. Byt under Inställningar › Tema.',
   widgetHow: 'Lägg till: håll fingret på hemskärmen › Widgetar › Alif. På telefoner som har widgetar på låsskärmen finns den där också.',
-  dreamTitle: 'Skärmsläckare', dreamHow: 'Klocka och dagens bönetider i samma stil, på svart, när telefonen laddar. Med ljust tema tonas den ner och skärmen dämpas så den inte bländar. Välj Alif under telefonens Inställningar › Skärm › Skärmsläckare.',
+  dreamTitle: 'Skärmsläckare', dreamHow: 'Klocka och dagens bönetider i samma stil, på svart, när telefonen laddar. Med ljust tema tonas den ner och skärmen dämpas så den inte bländar. Välj Alif under telefonens Inställningar › Skärm › Skärmsläckare och ställ in När den ska visas på Vid laddning.',
   dreamOpen: 'Öppna skärmsläckare i telefonen',
   holdToReset: 'tryck länge för att nollställa',
   addMosque: 'Lägg till moské', addMosqueHint: 'Håll fingret på kartan där en moské saknas för att lägga till den.', mosqueName: 'Namn', mosqueAddr: 'Adress och ort (valfritt)',
@@ -481,8 +481,8 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
-  close: 'Close', nightClock: 'Night clock', nightClockSub: 'A clock and the prayer times on the whole screen, for the night or while the phone charges. The screen is kept on and dimmed. Works on every phone, also OnePlus, which has no Android screen saver.', nightClockOpen: 'Open the night clock',
-  dreamMissing: 'If there is no Screen saver in the phone’s settings (on OnePlus, for example), the phone does not have it – use the night clock above instead.',
+  close: 'Close', nightClock: 'Night clock', nightClockSub: 'A clock and the prayer times on the whole screen, for the night or while the phone charges. The screen is kept on and dimmed. Works on every phone, without changing anything in the phone’s settings.', nightClockOpen: 'Open the night clock',
+  dreamMissing: 'Important: set "When to start" to "While charging" (not only "while docked"), otherwise it only shows in a dock. The eye next to Alif shows it at once. If the phone has no Screen saver, use the night clock above.',
   prayerSound: 'Sound at prayer', soundDefault: 'The phone’s notification sound', soundSilent: 'Silent (notification only)', adhanTitle: 'Adhan',
   soundPhone: 'Sound from the phone…', soundPhoneSub: 'Choose an alarm, a ringtone or a notification sound', soundFile: 'Own sound file…', soundFileSub: 'Choose a sound file (mp3, m4a, ogg) on the phone',
   soundFileOld: 'Own sound files need Android 10 or later.', soundFailed: 'The sound file could not be added.',
@@ -493,7 +493,7 @@ const en4: typeof sv4 = {
   widgetFullSub: 'Next prayer, Hijri date, place and today’s times', widgetTimesSub: 'The five prayers with name and time; the next in bold',
   widgetTheme: 'The widget follows Alif’s theme: dark (dark green with gold) or light. Change it under Settings › Theme.',
   widgetHow: 'Add it: hold your finger on the home screen › Widgets › Alif. On phones with lock screen widgets it is there too.',
-  dreamTitle: 'Screen saver', dreamHow: 'A clock and today’s prayer times in the same style, on black, while the phone charges. With the light theme it is toned down and the screen dimmed so it does not dazzle. Choose Alif in the phone’s Settings › Display › Screen saver.',
+  dreamTitle: 'Screen saver', dreamHow: 'A clock and today’s prayer times in the same style, on black, while the phone charges. With the light theme it is toned down and the screen dimmed so it does not dazzle. Choose Alif in the phone’s Settings › Display › Screen saver, and set When to start to While charging.',
   dreamOpen: 'Open screen saver settings',
   holdToReset: 'hold to reset',
   addMosque: 'Add mosque', addMosqueHint: 'Hold your finger on the map where a mosque is missing to add it.', mosqueName: 'Name', mosqueAddr: 'Address and town (optional)',
