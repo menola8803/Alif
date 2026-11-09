@@ -7,7 +7,7 @@ import * as Network from 'expo-network';
 import { Directory, File, Paths } from 'expo-file-system';
 import { useApp } from './store';
 import { SURAHS } from './core/quran';
-import { audioUrl } from './core/recite';
+import { RECITERS, audioUrl } from './core/recite';
 
 export type Now = { surah: number; ayah: number; playing: boolean; loading: boolean; rep: number } | null;
 type Progress = Record<number, { done: number; total: number; error?: boolean }>;
@@ -42,6 +42,7 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
   settings.current = { reciter, repeat: hifz ? Math.max(1, hifzRepeat) : 1 };
 
   const set = (n: Now) => { cur.current = n; setNow(n); };
+  const lockScreen = useRef(false);
 
   const sourceFor = (surah: number, ayah: number, bitrate = 128) => {
     const f = ayahFile(settings.current.reciter, surah, ayah);
@@ -51,7 +52,8 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
 
   const load = useCallback((surah: number, ayah: number, rep = 1) => {
     if (!player.current) {
-      setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: false } as any).catch(() => {});
+      // Keeps playing when the screen is turned off or Alif is in the background, with controls on the lock screen.
+      setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: true, interruptionMode: 'doNotMix' } as any).catch(() => {});
       player.current = createAudioPlayer(null, { updateInterval: 250 } as any);
       player.current.addListener('playbackStatusUpdate', st => {
         const c = cur.current;
@@ -64,11 +66,18 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
           return;
         }
         if (c.loading && st.isLoaded && st.playing) set({ ...c, loading: false });
+        // Paused or started again from the lock screen.
+        else if (!c.loading && st.isLoaded && st.playing !== c.playing) set({ ...c, playing: st.playing });
       });
     }
     set({ surah, ayah, playing: true, loading: true, rep });
     player.current.replace(sourceFor(surah, ayah));
     player.current.play();
+    const meta = { title: `${SURAHS[surah - 1].name} ${surah}:${ayah}`, artist: RECITERS.find(r => r.id === settings.current.reciter)?.name ?? '', albumTitle: 'Alif' };
+    try {
+      if (!lockScreen.current) { player.current.setActiveForLockScreen(true, meta, { showSeekForward: false, showSeekBackward: false }); lockScreen.current = true; }
+      else player.current.updateLockScreenMetadata(meta);
+    } catch {}
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const play = useCallback((surah: number, ayah = 1) => load(surah, ayah, 1), [load]);
@@ -77,16 +86,21 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
     if (!c || !p) return;
     if (c.playing) { p.pause(); set({ ...c, playing: false }); } else { p.play(); set({ ...c, playing: true }); }
   }, []);
-  const stop = useCallback(() => { player.current?.pause(); set(null); }, []);
+  const stop = useCallback(() => {
+    player.current?.pause();
+    try { if (lockScreen.current) player.current?.setActiveForLockScreen(false); } catch {}
+    lockScreen.current = false;
+    set(null);
+  }, []);
   const step = useCallback((k: 1 | -1) => {
     const c = cur.current; if (!c) return;
     const a = Math.min(SURAHS[c.surah - 1].ayahs, Math.max(1, c.ayah + k));
     load(c.surah, a, 1);
   }, [load]);
 
-  // Stops when Alif goes to the background (no playing in the background).
+  // Playing goes on in the background; when Alif comes back, the screen catches up with what was played meanwhile.
   useEffect(() => {
-    const s = AppState.addEventListener('change', st => { if (st !== 'active' && cur.current?.playing) { player.current?.pause(); set({ ...cur.current, playing: false }); } });
+    const s = AppState.addEventListener('change', st => { if (st === 'active' && cur.current) set({ ...cur.current, playing: !!player.current?.playing }); });
     return () => s.remove();
   }, []);
   useEffect(() => () => { player.current?.remove(); player.current = null; }, []);

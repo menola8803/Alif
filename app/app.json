@@ -94,7 +94,7 @@
           "microphonePermission": false,
           "recordAudioAndroid": false,
           "enableBackgroundRecording": false,
-          "enableBackgroundPlayback": false
+          "enableBackgroundPlayback": true
         }
       ],
       "./plugins/withVolumeKeys",

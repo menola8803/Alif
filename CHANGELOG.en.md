@@ -3,6 +3,8 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.4
+- The recitation goes on when the screen is turned off with the power button or you switch apps, with pause/play on the lock screen.
+- The adhan sounds in Ogg Opus: half the size (the app about 5 MB smaller than with mp3).
 - Sound at prayer: choose the phone’s sound, silent, one of five adhans (Makkah, Mishary al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, Nāṣir al-Qaṭāmī) with a preview, the Fajr adhan at Fajr, an alarm/ringtone from the phone or an own sound file; can play as an alarm.
 - Night clock: a clock and the prayer times on the whole screen, kept on and dimmed – works on every phone. Screen saver: help about choosing "While charging" and a preview picture.
 

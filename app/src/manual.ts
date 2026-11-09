@@ -54,7 +54,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Daily Awrad med Ihdāʾ öppnas från Idag, Koranen eller Dhikr. Tryck på ett kort för att räkna; tryck länge för att nollställa just den räknaren.',
       'Recitation: spelaren längst ner i en sura spelar vers för vers (▶). Tryck på versens nummer eller "▶" vid en vers för att börja där. Versen som läses markeras och följs.',
       'Ladda ner: pilen ⤓ till höger i suralistan eller i spelaren. En ring visar hur långt det kommit, en grön bock när suran finns på telefonen och spelas utan nät. Tryck på ringen för att avbryta.',
-      'Recitatör (förval al-Ḥuṣarī), "bara wifi" och borttagning av ljud finns under Inställningar › Recitation. Ljudet spelas bara medan Alif är öppen.',
+      'Recitatör (förval al-Ḥuṣarī), "bara wifi" och borttagning av ljud finns under Inställningar › Recitation. Recitationen fortsätter när du släcker skärmen eller byter app, och kan pausas från låsskärmen och aviseringen.',
       'Överst i en sura: Tajwīd-färger (reglerna i färg med förklaring), Ord för ord (varje ords betydelse på engelska) och Ḥifẓ: texten döljs tills du trycker och varje vers upprepas 1, 3, 5 eller 10 gånger.',
     ] },
     { title: 'Översätt', items: [
@@ -138,7 +138,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Daily Awrad with the Ihdāʾ opens from Today, the Qur’an or Dhikr. Tap a card to count; hold it to reset that counter.',
       'Recitation: the player at the bottom of a sūra plays verse by verse (▶). Tap a verse number or "▶" at a verse to start there. The verse being recited is highlighted and followed.',
       'Download: the ⤓ arrow on the right in the sūra list or in the player. A ring shows the progress, a green tick when the sūra is on the phone and plays offline. Tap the ring to cancel.',
-      'Reciter (default al-Ḥuṣarī), "wifi only" and removing audio are in Settings › Recitation. Audio only plays while Alif is open.',
+      'Reciter (default al-Ḥuṣarī), "wifi only" and removing audio are in Settings › Recitation. The recitation goes on when you turn the screen off or switch apps, and can be paused from the lock screen and the notification.',
       'At the top of a sūra: Tajwīd colours (the rules in colour with a legend), Word by word (each word’s meaning in English) and Ḥifẓ: the text is hidden until you tap it and each verse is repeated 1, 3, 5 or 10 times.',
     ] },
     { title: 'Translate', items: [
