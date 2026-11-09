@@ -45,6 +45,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Under Inställningar › Widget och skärmsläckare väljer du Allt eller Bara bönetider (de fem bönerna med namn och tid, nästa i fetstil). Widgeten är guld på temats färg med tunn guldkant och följer Alifs ljusa eller mörka tema.',
       'Nattklocka: Inställningar › Widget och skärmsläckare › Öppna nattklockan visar klocka och dagens bönetider på hela skärmen, tänd och dämpad (extra dämpad i ljust tema). Tryck på skärmen för Stäng. Fungerar på alla telefoner.',
       'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare och ställ in När den ska visas på Vid laddning (med bara "dockad" visas den bara i en dockningsstation). Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
+      'Skärmsläckaren startar bara när skärmen slocknar av sig själv medan telefonen laddar – inte när du trycker på strömknappen. Ögat bredvid Alif i telefonens lista visar den direkt.',
+      'Visas den inte (vanligt på OnePlus): tillåt Alif under Inställningar › Appar › Alif › Batteri (Tillåt bakgrundsaktivitet / Ingen begränsning) och slå på Automatisk start om det finns. Always-on display kan också ta över – stäng av den och prova igen. Annars: använd nattklockan.',
     ] },
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
@@ -85,6 +87,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Integritet', items: [
       'Plats och mikrofon är av från början.',
+      'Alif ber aldrig om "Visa ovanpå andra appar" (därför är reglaget grått i telefonens inställningar) och behöver det inte – inte heller för skärmsläckaren eller nattklockan.',
       'Mikrofonen används bara av Lyssna medan du har tryckt på den, och stängs när du trycker Stoppa, byter sida eller lämnar appen. Med "Bara på telefonen" (förval) lämnar ljudet aldrig telefonen.',
       'Kameran och textigenkänningen arbetar på telefonen. Bilder och text skickas bara iväg om du själv väljer Claude, MyMemory eller Google Lens.',
     ] },
@@ -129,6 +132,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Under Settings › Widget and screen saver you choose Everything or Prayer times only (the five prayers with name and time, the next in bold). The widget is gold on the theme’s colour with a thin gold border and follows Alif’s light or dark theme.',
       'Night clock: Settings › Widget and screen saver › Open the night clock shows a clock and today’s prayer times on the whole screen, kept on and dimmed (extra dimmed in the light theme). Tap the screen for Close. Works on every phone.',
       'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver and set When to start to While charging (with only "docked" it only shows in a dock). A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',
+      'The screen saver only starts when the screen goes off by itself while the phone charges – not when you press the power button. The eye next to Alif in the phone’s list shows it at once.',
+      'If it does not show (common on OnePlus): allow Alif under Settings › Apps › Alif › Battery (Allow background activity / Unrestricted) and turn on Auto-launch if it exists. Always-on display can also take over – turn it off and try again. Otherwise: use the night clock.',
     ] },
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',
@@ -169,6 +174,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Privacy', items: [
       'Location and microphone are off by default.',
+      'Alif never asks for "Display over other apps" (that is why the switch is grey in the phone’s settings) and does not need it – not for the screen saver or the night clock either.',
       'The microphone is only used by Listen while you have pressed it, and is closed when you press Stop, change page or leave the app. With "On the phone only" (default) the audio never leaves the phone.',
       'The camera and text recognition work on the phone. Pictures and text are only sent anywhere if you choose Claude, MyMemory or Google Lens yourself.',
     ] },
