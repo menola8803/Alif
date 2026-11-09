@@ -25,6 +25,7 @@ jobs:
           api-level: 34
           target: google_apis
           arch: x86_64
+          profile: pixel_6
           disable-animations: true
           script: |
             adb install -r alif.apk
@@ -43,7 +44,8 @@ jobs:
             adb logcat -d > logcat.txt
             grep -iE "AlifDream|FATAL|AndroidRuntime|DreamService|Dream|alifnative" logcat.txt | tail -200 > dream-log.txt || true
             echo "=== DREAM LOG ==="; cat dream-log.txt; echo "=== DUMPSYS ==="; head -60 dreams.txt
-            for f in app dream1 dream2; do ffmpeg -v error -y -i $f.png -vf scale=270:-1 -q:v 8 $f.jpg; echo "=== IMG $f ==="; base64 -w0 $f.jpg; echo; done
+            python3 -m pip install -q pillow
+            for f in app dream1 dream2; do python3 -c "import sys;from PIL import Image;i=Image.open(sys.argv[1]).convert('RGB');i.thumbnail((300,600));i.save(sys.argv[2],quality=60)" $f.png $f.jpg; echo "=== IMG $f ==="; base64 -w0 $f.jpg; echo; done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
