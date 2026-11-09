@@ -21,6 +21,7 @@ import Splash from './src/screens/Splash';
 import Today from './src/screens/Today';
 import Quran from './src/screens/Quran';
 import Surah from './src/screens/Surah';
+import JuzScreen from './src/screens/Juz';
 import Translate, { TranslateMode } from './src/screens/Translate';
 import Learn, { LetterScreen, SignsScreen } from './src/screens/Learn';
 import Dhikr from './src/screens/Dhikr';
@@ -110,13 +111,14 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'mosques': return <MosquesScreen onBack={pop} go={push} />;
       case 'mosqueList': return <MosqueListScreen onBack={pop} />;
       case 'micSettings': return <MicSettingsScreen onBack={pop} />;
+      case 'juz': return <JuzScreen key={r.n} n={r.n} onBack={pop} go={push} />;
       case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} />;
       default:
         return (
           <Screen bottom={false}>
             <View style={{ flex: 1 }}>
               {tab === 'today' && <Today go={push} onGear={gear} glow={glow} image={Math.max(0, image)} />}
-              {tab === 'quran' && <Quran open={(n, ayah) => push({ name: 'surah', n, ayah })} onAwrad={() => push({ name: 'awrad' })} onGear={gear} glow={glow} />}
+              {tab === 'quran' && <Quran open={(n, ayah) => push({ name: 'surah', n, ayah })} openJuz={n => push({ name: 'juz', n })} onAwrad={() => push({ name: 'awrad' })} onGear={gear} glow={glow} />}
               {tab === 'translate' && <Translate go={push} openSurah={openSurah} onGear={gear} glow={glow} mode={mode} setMode={setMode} />}
               {tab === 'learn' && <Learn go={push} onGear={gear} glow={glow} />}
               {tab === 'dhikr' && <Dhikr go={push} onGear={gear} glow={glow} focused={r.name === 'tabs'} />}

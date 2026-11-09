@@ -2,6 +2,10 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.3
+- Qur’an: choose Surahs or Juz. The juz list shows the 30 parts with name, start, end and number of sajdas; a juz is read straight through across the sūras. A gold line in a sūra shows where a new juz begins.
+- Sajda: the sign ۩ in gold and "Sajda – prostrate here" at the 15 sajda verses, in both sūras and juz.
+
 ## 0.5.2
 - Widget: gold design with a thin gold border, follows the light/dark theme; choose Everything or Prayer times only under Settings › Widget and screen saver. Can be put on the lock screen where the phone supports it.
 - Screen saver with a clock and the prayer times (toned down in the light theme).

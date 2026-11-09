@@ -435,6 +435,7 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  juz: 'Juz', bySurah: 'Suror', byJuz: 'Juz', sajdaHere: 'Sajda – här faller man ned', juzFrom: '{a} – {b}', sajdaCount: '{n} sajda',
   widgetTitle: 'Widget och skärmsläckare', widgetSub: 'Bönetiderna på hemskärmen', widgetFull: 'Allt', widgetTimes: 'Bara bönetider',
   widgetFullSub: 'Nästa bön, hijri-datum, ort och dagens tider', widgetTimesSub: 'De fem bönerna med namn och tid; nästa i fetstil',
   widgetTheme: 'Widgeten följer Alifs tema: mörkt (mörkgrönt med guld) eller ljust. Byt under Inställningar › Tema.',
@@ -473,6 +474,7 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  juz: 'Juz', bySurah: 'Surahs', byJuz: 'Juz', sajdaHere: 'Sajda – prostrate here', juzFrom: '{a} – {b}', sajdaCount: '{n} sajda',
   widgetTitle: 'Widget and screen saver', widgetSub: 'The prayer times on the home screen', widgetFull: 'Everything', widgetTimes: 'Prayer times only',
   widgetFullSub: 'Next prayer, Hijri date, place and today’s times', widgetTimesSub: 'The five prayers with name and time; the next in bold',
   widgetTheme: 'The widget follows Alif’s theme: dark (dark green with gold) or light. Change it under Settings › Theme.',

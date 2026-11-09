@@ -7,7 +7,8 @@ import { arabicDigits } from '../translate';
 import { useQuran } from '../library';
 import { SurahDownload } from '../quranParts';
 import { useRecitation } from '../recitation';
-import { Card, PageTitle, SmallBtn, TAB_SPACE, Text, TextInput } from '../ui';
+import { Arabic, Card, PageTitle, Segmented, SmallBtn, TAB_SPACE, Text, TextInput } from '../ui';
+import { JUZ, SAJDA, juzRange } from '../core/juz';
 
 /** Eight-pointed star with a number in it (verse and sūra numbers). */
 export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number; hideNumber?: boolean }) {
@@ -22,8 +23,8 @@ export function StarNum({ n, size = 40, hideNumber }: { n: number; size?: number
   );
 }
 
-export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: number, ayah?: number) => void; onAwrad: () => void; onGear: () => void; glow: boolean }) {
-  const { t, theme, lastRead, bookmarks } = useApp();
+export default function Quran({ open, openJuz, onAwrad, onGear, glow }: { open: (n: number, ayah?: number) => void; openJuz: (n: number) => void; onAwrad: () => void; onGear: () => void; glow: boolean }) {
+  const { t, theme, lastRead, bookmarks, quranView, setPrefs } = useApp();
   const lib = useQuran();
   const rec = useRecitation();
   const [q, setQ] = useState('');
@@ -73,6 +74,30 @@ export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: numbe
         </View>
         {lib.status === 'error' ? <SmallBtn title={t.libDownload} tone="accent" onPress={lib.ensure} /> : null}
       </Card>
+      <Segmented<'surah' | 'juz'> options={[['surah', t.bySurah], ['juz', t.byJuz]]} value={quranView} onChange={v => setPrefs({ quranView: v })} />
+      {quranView === 'juz' ? (
+        <FlatList
+          data={JUZ}
+          keyExtractor={z => String(z.n)}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: TAB_SPACE }}
+          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: theme.line, marginLeft: 56 }} />}
+          renderItem={({ item: z }) => {
+            const r = juzRange(z.n), last = r[r.length - 1];
+            const sajdas = SAJDA.filter(([s2, a2]) => r.some(([rs, ra, rb]) => rs === s2 && a2 >= ra && a2 <= rb)).length;
+            return (
+              <Pressable accessibilityRole="button" onPress={() => openJuz(z.n)} style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 10, opacity: pressed ? 0.7 : 1 })}>
+                <StarNum n={z.n} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 16, fontWeight: '600', color: theme.ink }}>{`${t.juz} ${z.n}`}</Text>
+                  <Text style={{ fontSize: 13, color: theme.muted }}>{`${t.juzFrom.replace('{a}', `${SURAHS[z.surah - 1].name} ${z.ayah}`).replace('{b}', `${SURAHS[last[0] - 1].name} ${last[2]}`)}${sajdas ? ` · ۩ ${t.sajdaCount.replace('{n}', String(sajdas))}` : ''}`}</Text>
+                </View>
+                <Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>{z.ar}</Arabic>
+              </Pressable>
+            );
+          }}
+        />
+      ) : <>
       <TextInput value={q} onChangeText={setQ} placeholder={t.searchSurah} placeholderTextColor={theme.muted}
         style={{ minHeight: 46, borderRadius: 14, borderWidth: 1, borderColor: theme.line, backgroundColor: theme.card, paddingHorizontal: 14, color: theme.ink, fontSize: 15 }} />
       <FlatList
@@ -95,6 +120,7 @@ export default function Quran({ open, onAwrad, onGear, glow }: { open: (n: numbe
           </Pressable>
         )}
       />
+      </>}
     </View>
   );
 }

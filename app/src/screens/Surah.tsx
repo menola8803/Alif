@@ -17,6 +17,7 @@ import { DownloadIcon, TajweedLegend } from '../quranParts';
 import { StarNum } from './Quran';
 import { Route } from '../nav';
 import { useQuran } from '../library';
+import { SAJDA_SIGN, isSajda, juzStartingAt, withoutSajdaSign } from '../core/juz';
 
 const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 
@@ -27,11 +28,13 @@ function VerseText({ a, surah }: { a: Ayah; surah: number }) {
   const marked = tajweed ? tajweedText(surah, a.n) : null;
   const pieces = useMemo(() => {
     if (!marked) return null;
-    const p = parseTajweed(marked);
+    const p = parseTajweed(marked).map(x => ({ ...x, text: x.text.replace(/\s*۩/g, '') }));
     return a.n === 1 && surah !== 1 && surah !== 9 ? dropBasmala(p) : p;
   }, [marked, a.n, surah]);
-  const end = <Arabic size={18} color={theme.primary}>{` ۝${arabicDigits(a.n)}`}</Arabic>;
-  if (!pieces) return <Arabic>{a.arabic}{end}</Arabic>;
+  // The sign of prostration ۩ is always drawn by the app, in gold, before the verse number.
+  const sajda = isSajda(surah, a.n);
+  const end = <Arabic size={18} color={theme.primary}>{`${sajda ? ` ${SAJDA_SIGN}` : ''} ۝${arabicDigits(a.n)}`}</Arabic>;
+  if (!pieces) return <Arabic>{withoutSajdaSign(a.arabic)}{end}</Arabic>;
   return (
     <Arabic>
       {pieces.map((p, i) => <RNText key={i} style={p.rule ? { color: TAJWEED_COLORS[p.rule][ink] } : null}>{p.text}</RNText>)}
@@ -56,7 +59,20 @@ function Words({ words }: { words: Word[] }) {
   );
 }
 
-function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; current: boolean; words?: Word[]; onPlay: () => void }) {
+/** A thin gold line with the part (juz) that starts here. */
+export function JuzMark({ n, ar }: { n: number; ar: string }) {
+  const { t, theme } = useApp();
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingTop: 12 }}>
+      <View style={{ flex: 1, height: 1, backgroundColor: theme.primary, opacity: 0.5 }} />
+      <Text style={{ fontSize: 12, fontWeight: '700', letterSpacing: 1, color: theme.primary }}>{`${t.juz.toUpperCase()} ${n}`}</Text>
+      <Arabic size={16} selectable={false} color={theme.primary} style={{ lineHeight: 28 }}>{ar}</Arabic>
+      <View style={{ flex: 1, height: 1, backgroundColor: theme.primary, opacity: 0.5 }} />
+    </View>
+  );
+}
+
+export function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; current: boolean; words?: Word[]; onPlay: () => void }) {
   const app = useApp();
   const { t, theme, scheme, mode, showTranslit, showTranslation, bookmarks, setPrefs, hifz } = app;
   const marked = bookmarks.some(b => b.n === surah && b.ayah === a.n);
@@ -66,8 +82,10 @@ function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; c
   const [busy, setBusy] = useState(false);
   const [res, setRes] = useState<Result | null>(null);
   const [err, setErr] = useState('');
-  const translit = transliterate(a.arabic, { scheme, mode });
+  const translit = transliterate(withoutSajdaSign(a.arabic), { scheme, mode });
   const hidden = hifz && !shown;
+  const juz = juzStartingAt(surah, a.n);
+  const sajda = isSajda(surah, a.n);
 
   const explain = async () => {
     if (res) { setRes(null); return; }
@@ -82,6 +100,8 @@ function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; c
   };
 
   return (
+    <>
+    {juz && !(surah === 1 && a.n === 1) ? <JuzMark n={juz.n} ar={juz.ar} /> : null}
     <View style={{ paddingVertical: 14, paddingHorizontal: 8, gap: 8, borderBottomWidth: 1, borderBottomColor: theme.line, backgroundColor: current ? theme.chip : 'transparent', borderRadius: current ? 16 : 0, marginHorizontal: -8 }}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
         <Pressable accessibilityRole="button" accessibilityLabel={`${t.playFrom} ${a.n}`} onPress={onPlay}><StarNum n={a.n} size={34} /></Pressable>
@@ -94,6 +114,12 @@ function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; c
           ) : <VerseText a={a} surah={surah} />}
         </View>
       </View>
+      {sajda ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-end', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10, borderWidth: 1, borderColor: theme.primary }}>
+          <Text style={{ fontSize: 12, fontWeight: '700', color: theme.primary }}>{t.sajdaHere}</Text>
+          <Arabic size={18} selectable={false} color={theme.primary} style={{ lineHeight: 28 }}>{SAJDA_SIGN}</Arabic>
+        </View>
+      ) : null}
       {!hidden && words ? <Words words={words} /> : null}
       {!hidden && showTranslit ? <Text selectable style={{ fontSize: 15.5, lineHeight: 23, color: theme.accent, fontWeight: '500' }}>{translit}</Text> : null}
       {!hidden && showTranslation && a.translation ? <Body>{a.translation}</Body> : null}
@@ -111,6 +137,7 @@ function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: number; c
       {err ? <Body muted>{err}</Body> : null}
       {res ? <ResultView r={res} /> : null}
     </View>
+    </>
   );
 }
 

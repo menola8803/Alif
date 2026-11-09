@@ -1,0 +1,14 @@
+import { JUZ, SAJDA, isSajda, juzOf, juzRange, juzStartingAt, withoutSajdaSign } from '../src/core/juz';
+import { SURAHS } from '../src/core/quran';
+let fail = 0;
+const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m); } };
+ok(JUZ.length === 30 && SAJDA.length === 15, 'counts');
+const total = JUZ.reduce((n, z) => n + juzRange(z.n).reduce((m, [, a, b]) => m + b - a + 1, 0), 0);
+ok(total === 6236, `all 6236 verses in exactly one part (${total})`);
+ok(juzOf(1, 1) === 1 && juzOf(2, 141) === 1 && juzOf(2, 142) === 2 && juzOf(114, 6) === 30 && juzOf(67, 1) === 29, 'juzOf');
+ok(juzStartingAt(15, 1)?.n === 14 && !juzStartingAt(15, 2), 'start');
+ok(JSON.stringify(juzRange(30)[0]) === '[78,1,40]' && juzRange(30).length === 37, 'juz 30');
+ok(SAJDA.every(([s, a]) => a <= SURAHS[s - 1].ayahs) && isSajda(96, 19) && !isSajda(96, 18), 'sajda');
+ok(withoutSajdaSign('وَلَهُۥ يَسْجُدُونَ ۩') === 'وَلَهُۥ يَسْجُدُونَ', 'strip sign');
+if (fail) process.exit(1);
+console.log('juz: all ok');

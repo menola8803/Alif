@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.3
+- Koranen: välj Suror eller Juz. Juz-listan visar de 30 delarna med namn, början, slut och antal sajda; en juz läses i ett svep över surorna. En guldlinje i suran visar var en ny juz börjar.
+- Sajda: tecknet ۩ i guld och "Sajda – här faller man ned" vid de 15 sajda-verserna, i både suror och juz.
+
 ## 0.5.2
 - Widget: gulddesign med tunn guldkant, följer ljust/mörkt tema; välj Allt eller Bara bönetider under Inställningar › Widget och skärmsläckare. Kan läggas på låsskärmen där telefonen stöder det.
 - Skärmsläckare med klocka och bönetider (nedtonad i ljust tema).

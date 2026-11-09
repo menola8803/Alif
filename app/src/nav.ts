@@ -27,4 +27,5 @@ export type Route =
   | { name: 'mosques' }
   | { name: 'mosqueList' }
   | { name: 'micSettings' }
-  | { name: 'widgetSettings' };
+  | { name: 'widgetSettings' }
+  | { name: 'juz'; n: number; ayah?: { surah: number; n: number } };
