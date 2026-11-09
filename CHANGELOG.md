@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.4
+- Manualen: nytt avsnitt om batteribegränsning (aviseringar, recitation, widget, skärmsläckare).
 - Koran-knappen i menyn visar sura:vers som spelas; tryck länge för att stoppa.
 - Recitationen fortsätter när skärmen släcks med strömknappen eller du byter app, med paus/spela på låsskärmen.
 - Adhan-ljuden i Ogg Opus: hälften så stora (appen ca 5 MB mindre än med mp3).

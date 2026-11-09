@@ -81,6 +81,12 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Här finns också Daily Awrad (med Ihdāʾ) och ṣalawāt.',
       'Räkna med volymknapparna: slå på det på Dhikr-sidan, så räknar båda volymknapparna ett steg medan sidan är öppen.',
     ] },
+    { title: 'Batteribegränsning', items: [
+      'Många telefoner (särskilt OnePlus, Samsung, Xiaomi och Huawei) stoppar appar i bakgrunden för att spara batteri. Då kan bönaviseringar komma sent eller inte alls, recitationen stanna med släckt skärm, widgeten visa gamla tider och skärmsläckaren inte starta.',
+      'Så tar du bort begränsningen: telefonens Inställningar › Appar › Alif › Batteri › slå på Tillåt bakgrundsanvändning och välj Obegränsad. Finns Automatisk start, slå på den också.',
+      'Tillåt också Alarm och påminnelser: Inställningar › Bönetider › Tillåt alarm och påminnelser (knappen öppnar rätt sida i telefonen). Knappen Batterisparläge där öppnar batterisidan.',
+      'Alif använder inte batteri i onödan: inget körs i bakgrunden utom aviseringarna, widgetens uppdatering efter varje bön och recitationen medan du lyssnar.',
+    ] },
     { title: 'Inställningar', items: [
       'Språk (svenska/engelska), tema, translitteration, översättning, Koranöversättning, bönetider, Daily Awrad-påminnelse (21:00), hijri ±1 dag, historik, manual, integritet, uppdatering och Om.',
       'Uppdatering: när en ny version finns lyser kugghjulet. Tryck "Ladda ner och installera".',
@@ -168,6 +174,12 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Choose the dhikr at the top and tap the circle to count. The phone gives a short buzz at every tap and a longer one at the goal. Choose the goal with the buttons below.',
       'Daily Awrad (with the Ihdāʾ) and ṣalawāt are here too.',
       'Count with the volume buttons: turn it on on the Dhikr page, and both volume buttons count one step while the page is open.',
+    ] },
+    { title: 'Battery restrictions', items: [
+      'Many phones (especially OnePlus, Samsung, Xiaomi and Huawei) stop apps in the background to save battery. Prayer notifications can then come late or not at all, the recitation can stop with the screen off, the widget can show old times and the screen saver may not start.',
+      'To lift the restriction: the phone’s Settings › Apps › Alif › Battery › turn on Allow background usage and choose Unrestricted. If there is Auto-launch, turn that on too.',
+      'Also allow Alarms & reminders: Settings › Prayer times › Allow alarms & reminders (the button opens the right page on the phone). The Battery saving button there opens the battery page.',
+      'Alif does not use battery needlessly: nothing runs in the background except the notifications, the widget update after each prayer and the recitation while you listen.',
     ] },
     { title: 'Settings', items: [
       'Language (Swedish/English), theme, transliteration, translation, Qur’an translation, prayer times, Daily Awrad reminder (9:00 PM), Hijri ±1 day, history, manual, privacy, update and About.',

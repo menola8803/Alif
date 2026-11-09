@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.4
+- Manual: new section on battery restrictions (notifications, recitation, widget, screen saver).
 - The Qur’an button in the menu shows the sūra:verse being played; hold it to stop.
 - The recitation goes on when the screen is turned off with the power button or you switch apps, with pause/play on the lock screen.
 - The adhan sounds in Ogg Opus: half the size (the app about 5 MB smaller than with mp3).
