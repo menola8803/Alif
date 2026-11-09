@@ -1,0 +1,14 @@
+# One-off clean-up, run by hand: removes the early releases (0.1.0 – 0.3.3) and their tags.
+name: Remove old releases
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          for t in v0.1.0 v0.1.1 v0.1.2 v0.2.0 v0.3.0 v0.3.1 v0.3.2 v0.3.3; do
+            gh release delete "$t" -R "${{ github.repository }}" --yes --cleanup-tag && echo "removed $t" || echo "not found $t"
+          done
