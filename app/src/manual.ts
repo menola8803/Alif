@@ -57,7 +57,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Recitation: spelaren längst ner i en sura spelar vers för vers (▶). Tryck på versens nummer eller "▶" vid en vers för att börja där. Versen som läses markeras och följs.',
       'Ladda ner: pilen ⤓ till höger i suralistan eller i spelaren. En ring visar hur långt det kommit, en grön bock när suran finns på telefonen och spelas utan nät. Tryck på ringen för att avbryta.',
       'Recitatör (förval al-Ḥuṣarī), "bara wifi" och borttagning av ljud finns under Inställningar › Recitation. Recitationen fortsätter när du släcker skärmen eller byter app, och kan pausas från låsskärmen och aviseringen.',
-      'Medan recitationen spelar visar Koran-knappen i menyn längst ner vilken sura och vers som läses (t.ex. ▶ 2:255). Tryck länge på den för att stoppa; tryck på den när du redan är på Koranen för att gå till versen.',
+      'Medan recitationen spelar visar Koran-knappen i menyn längst ner vilken sura och vers som läses i tunn text i stället för ikonen (t.ex. ▶ 2:255, ❚❚ när den är pausad). Tryck länge på den för att stoppa; tryck på den när du redan är på Koranen för att gå till versen.',
       'Överst i en sura: Tajwīd-färger (reglerna i färg med förklaring), Ord för ord (varje ords betydelse på engelska) och Ḥifẓ: texten döljs tills du trycker och varje vers upprepas 1, 3, 5 eller 10 gånger.',
     ] },
     { title: 'Översätt', items: [
@@ -151,7 +151,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Recitation: the player at the bottom of a sūra plays verse by verse (▶). Tap a verse number or "▶" at a verse to start there. The verse being recited is highlighted and followed.',
       'Download: the ⤓ arrow on the right in the sūra list or in the player. A ring shows the progress, a green tick when the sūra is on the phone and plays offline. Tap the ring to cancel.',
       'Reciter (default al-Ḥuṣarī), "wifi only" and removing audio are in Settings › Recitation. The recitation goes on when you turn the screen off or switch apps, and can be paused from the lock screen and the notification.',
-      'While the recitation plays, the Qur’an button in the menu at the bottom shows the sūra and verse being recited (e.g. ▶ 2:255). Hold it to stop; tap it when you are already on the Qur’an to go to the verse.',
+      'While the recitation plays, the Qur’an button in the menu at the bottom shows the sūra and verse being recited in thin text instead of the icon (e.g. ▶ 2:255, ❚❚ when paused). Hold it to stop; tap it when you are already on the Qur’an to go to the verse.',
       'At the top of a sūra: Tajwīd colours (the rules in colour with a legend), Word by word (each word’s meaning in English) and Ḥifẓ: the text is hidden until you tap it and each verse is repeated 1, 3, 5 or 10 times.',
     ] },
     { title: 'Translate', items: [

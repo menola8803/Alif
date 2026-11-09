@@ -82,7 +82,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
 
   const gear = () => push({ name: 'settings' });
   // The Qur'an tab shows the verse being recited (sūra:verse); a long press stops it, a tap on the open tab goes to it.
-  const quranBadge = rec.now ? { quran: { label: `${rec.now.playing ? '▶' : '❚❚'} ${rec.now.surah}:${rec.now.ayah}`, a11y: t.tabPlaying.replace('{v}', `${rec.now.surah}:${rec.now.ayah}`), active: rec.now.playing } } : undefined;
+  const quranBadge = rec.now ? { quran: { label: `${rec.now.surah}:${rec.now.ayah}`, a11y: t.tabPlaying.replace('{v}', `${rec.now.surah}:${rec.now.ayah}`), active: rec.now.playing } } : undefined;
   const r = stack[stack.length - 1];
   const reminder = <ReminderManager openAwrad={openAwrad} active={splashDone && r.name !== 'awrad'} />;
   return <>{reminder}{screen()}</>;
