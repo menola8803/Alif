@@ -1,0 +1,50 @@
+# Manual check of the screen saver (DreamService) and the widget on an Android emulator: installs the released APK,
+# starts the dream, takes screenshots and collects the log. Run from the Actions tab or `gh workflow run`.
+name: Screen saver test
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to test (e.g. v0.5.3)
+        required: true
+jobs:
+  dream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - name: Download the APK
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: gh release download "${{ inputs.tag }}" -R "${{ github.repository }}" -p 'Alif-v*.apk' -O alif.apk
+      - name: Run on the emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: |
+            adb install -r alif.apk
+            adb shell monkey -p se.sncab.alif -c android.intent.category.LAUNCHER 1; sleep 25
+            adb exec-out screencap -p > app.png
+            adb logcat -c
+            adb shell settings put secure screensaver_enabled 1
+            adb shell settings put secure screensaver_components se.sncab.alif/se.sncab.alifnative.AlifDream
+            adb shell settings put secure screensaver_activate_on_sleep 1
+            adb shell am start -n com.android.systemui/.Somnambulator || true
+            sleep 8; adb exec-out screencap -p > dream1.png
+            adb shell dumpsys dreams > dreams.txt || true
+            adb shell cmd dreams start-dreaming || true
+            sleep 8; adb exec-out screencap -p > dream2.png
+            adb logcat -d > logcat.txt
+            grep -iE "AlifDream|FATAL|AndroidRuntime|DreamService|Dream" logcat.txt | tail -200 > dream-log.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dream-test
+          path: |
+            *.png
+            *.txt
