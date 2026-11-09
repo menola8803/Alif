@@ -40,7 +40,9 @@ jobs:
             adb shell cmd dreams start-dreaming || true
             sleep 8; adb exec-out screencap -p > dream2.png
             adb logcat -d > logcat.txt
-            grep -iE "AlifDream|FATAL|AndroidRuntime|DreamService|Dream" logcat.txt | tail -200 > dream-log.txt || true
+            grep -iE "AlifDream|FATAL|AndroidRuntime|DreamService|Dream|alifnative" logcat.txt | tail -200 > dream-log.txt || true
+            echo "=== DREAM LOG ==="; cat dream-log.txt; echo "=== DUMPSYS ==="; head -60 dreams.txt
+            for f in app dream1 dream2; do convert $f.png -resize 270x -quality 60 $f.jpg; echo "=== IMG $f ==="; base64 -w0 $f.jpg; echo; done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
