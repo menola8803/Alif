@@ -72,7 +72,6 @@ export default function Dhikr({ go, onGear, glow, focused = true }: { go: (r: Ro
         ))}
         <SmallBtn title={t.resetCount} onPress={reset} />
       </View>
-      {AlifNativeModule ? <Card style={{ paddingVertical: 8 }}><Toggle title={t.volumeCount} on={dhikrVolume} onChange={v => setPrefs({ dhikrVolume: v })} /><Text style={{ fontSize: 12.5, color: theme.muted }}>{t.volumeCountSub}</Text></Card> : null}
 
       <Pressable accessibilityRole="button" onPress={() => go({ name: 'awrad' })}>
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderColor: theme.primary }}>

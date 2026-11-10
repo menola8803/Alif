@@ -22,7 +22,7 @@ import { uses12h } from '../reminder';
 import { RECITERS } from '../core/recite';
 
 export default function Settings({ go, onBack }: { go: (r: Route) => void; onBack: () => void }) {
-  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine, place, school, hijriAdjust, setPrefs, updateTag, history, reciter, micOn, widgetStyle } = useApp();
+  const { t, theme, lang, scheme, mode, apiKey, editions, reminderOn, reminderHour, reminderMinute, engine, place, school, hijriAdjust, setPrefs, updateTag, history, reciter, micOn, widgetStyle, dhikrVolume } = useApp();
   const version = Constants.expoConfig?.version ?? '0.0.0';
   const newer = !!updateTag && isNewer(updateTag, version);
   return (
@@ -58,6 +58,10 @@ export default function Settings({ go, onBack }: { go: (r: Route) => void; onBac
           <Row title={t.historyTitle} sub={t.historySub} right={String(history.length)} onPress={() => go({ name: 'history' })} />
           <Row title={t.widgetTitle} sub={t.widgetSub} right={widgetStyle === 'times' ? t.widgetTimes : t.widgetFull} onPress={() => go({ name: 'widgetSettings' })} />
           <Row title={t.micTitle} sub={t.micSub} right={micOn ? t.on : t.off} onPress={() => go({ name: 'micSettings' })} />
+          {AlifNativeModule ? <View style={{ paddingVertical: 6, gap: 2 }}>
+            <Toggle title={t.volumeCount} on={dhikrVolume} onChange={v => setPrefs({ dhikrVolume: v })} />
+            <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.volumeCountSub}</Text>
+          </View> : null}
           <Row title={t.backup} sub={t.backupSub} onPress={() => go({ name: 'backup' })} />
           <Row title={t.manual} sub={t.manualSub} onPress={() => go({ name: 'manual' })} />
           <Row title={t.privacy} sub={t.privacySub} onPress={() => go({ name: 'privacy' })} />

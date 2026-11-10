@@ -82,7 +82,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Dhikr', items: [
       'Välj dhikr överst och tryck på cirkeln för att räkna. Telefonen vibrerar kort vid varje tryck och längre när målet är nått. Välj mål med knapparna under.',
       'Här finns också Daily Awrad (med Ihdāʾ) och ṣalawāt.',
-      'Räkna med volymknapparna: slå på det på Dhikr-sidan, så räknar båda volymknapparna ett steg medan sidan är öppen.',
+      'Räkna dhikr med volymknapparna: slå på det under Inställningar. Då räknar båda volymknapparna ett steg (med en kort vibration) medan Dhikr-sidan är öppen, så du kan räkna utan att titta; annars ändrar de volymen som vanligt.',
     ] },
     { title: 'Batteribegränsning', items: [
       'Många telefoner (särskilt OnePlus, Samsung, Xiaomi och Huawei) stoppar appar i bakgrunden för att spara batteri. Då kan bönaviseringar komma sent eller inte alls, recitationen stanna med släckt skärm, widgeten visa gamla tider och skärmsläckaren inte starta.',
@@ -180,7 +180,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Dhikr', items: [
       'Choose the dhikr at the top and tap the circle to count. The phone gives a short buzz at every tap and a longer one at the goal. Choose the goal with the buttons below.',
       'Daily Awrad (with the Ihdāʾ) and ṣalawāt are here too.',
-      'Count with the volume buttons: turn it on on the Dhikr page, and both volume buttons count one step while the page is open.',
+      'Count dhikr with the volume buttons: turn it on under Settings. Both volume buttons then count one step (with a short buzz) while the Dhikr page is open, so you can count without looking; otherwise they change the volume as usual.',
     ] },
     { title: 'Battery restrictions', items: [
       'Many phones (especially OnePlus, Samsung, Xiaomi and Huawei) stop apps in the background to save battery. Prayer notifications can then come late or not at all, the recitation can stop with the screen off, the widget can show old times and the screen saver may not start.',

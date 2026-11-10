@@ -482,7 +482,7 @@ const sv4 = {
     'Ingen annan del av Alif använder mikrofonen. Ingen lyssning i bakgrunden och inget väckningsord.',
     'Med "Bara på telefonen" lämnar ljudet aldrig telefonen.',
   ],
-  volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
+  volumeCount: 'Räkna dhikr med volymknapparna', volumeCountSub: 'När det är på räknar både volym upp och volym ner ett steg i dhikr-räknaren – med en kort vibration – så du kan räkna utan att titta på skärmen, t.ex. med telefonen i fickan eller handen. Det gäller bara medan Dhikr-sidan är öppen och skärmen är tänd; på alla andra sidor och i andra appar ändrar knapparna volymen som vanligt.',
 };
 const en4: typeof sv4 = {
   awradSoundTitle: 'Sound for the reminder', awradSoundNote: 'The sound is used for the Daily Awrad reminder. "Play as an alarm" makes it heard even when the notification volume is low.',
@@ -532,7 +532,7 @@ const en4: typeof sv4 = {
     'No other part of Alif uses the microphone. No listening in the background and no wake word.',
     'With "On the phone only" the audio never leaves the phone.',
   ],
-  volumeCount: 'Count with the volume buttons', volumeCountSub: 'Both volume buttons count one step while the Dhikr page is open. Otherwise they change the volume as usual.',
+  volumeCount: 'Count dhikr with the volume buttons', volumeCountSub: 'When it is on, both volume up and volume down count one step in the dhikr counter – with a short buzz – so you can count without looking at the screen, e.g. with the phone in your pocket or hand. It only applies while the Dhikr page is open and the screen is on; on every other page and in other apps the buttons change the volume as usual.',
 };
 
 export type Strings = typeof sv & typeof sv2 & typeof sv3 & typeof sv4;
