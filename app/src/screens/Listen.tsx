@@ -9,7 +9,7 @@ import { transliterate } from '../core/translit';
 import { Result } from '../core/engine';
 import { errorText, translateText } from '../translate';
 import { useQuran } from '../library';
-import { Body, Btn, Card, Label, Sub, TAB_SPACE, Text } from '../ui';
+import { Body, Btn, Card, Label, Sub, TAB_SPACE, Text, useButtonLook } from '../ui';
 
 /**
  * Listen: Arabic speech → text (in a beige box) → transliteration → Swedish/English.
@@ -19,6 +19,7 @@ import { Body, Btn, Card, Label, Sub, TAB_SPACE, Text } from '../ui';
 export default function Listen({ go }: { go: (r: Route) => void }) {
   const app = useApp();
   const { t, theme, micOn, micOnlyPhone, listenTranslit, scheme, mode } = app;
+  const look = useButtonLook();
   const quran = useQuran();
   const [pressed, setPressed] = useState(false);
   const [active, setActive] = useState(AppState.currentState === 'active');
@@ -107,11 +108,11 @@ export default function Listen({ go }: { go: (r: Route) => void }) {
       <Sub>{t.listenSub}</Sub>
       <View style={{ alignItems: 'center', gap: 8 }}>
         <Pressable accessibilityRole="button" accessibilityLabel={listening ? t.stop : t.listen} onPress={listening ? stop : start}
-          style={({ pressed: p }) => ({ width: 120, height: 120, borderRadius: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: listening ? theme.danger : theme.primary, opacity: p ? 0.85 : 1 })}>
+          style={({ pressed: p }) => ({ width: 120, height: 120, borderRadius: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: listening ? 'rgba(232,119,109,0.14)' : look.bg, borderWidth: 2, borderColor: listening ? theme.danger : look.border, opacity: p ? 0.85 : 1 })}>
           <Svg width={48} height={48} viewBox="0 0 24 24">
-            {listening ? <Rect x={7} y={7} width={10} height={10} rx={2} fill={theme.onPrimary} /> : <>
-              <Rect x={9} y={3} width={6} height={11} rx={3} fill={theme.onPrimary} />
-              <Path d="M6 10.5a6 6 0 0 0 12 0M12 16.5V20M9 20.5h6" stroke={theme.onPrimary} strokeWidth={1.8} strokeLinecap="round" fill="none" />
+            {listening ? <Rect x={7} y={7} width={10} height={10} rx={2} fill={theme.danger} /> : <>
+              <Rect x={9} y={3} width={6} height={11} rx={3} fill={look.fg} />
+              <Path d="M6 10.5a6 6 0 0 0 12 0M12 16.5V20M9 20.5h6" stroke={look.fg} strokeWidth={1.8} strokeLinecap="round" fill="none" />
             </>}
           </Svg>
         </Pressable>

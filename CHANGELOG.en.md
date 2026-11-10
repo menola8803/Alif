@@ -3,7 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
-- Buttons: "Open screen saver settings" is a clear gold button; other secondary buttons have a gold outline and gold text so they look like buttons.
+- Every button in the app has the same look as the menu at the bottom: a faint gold tint, a thin gold border and gold text – no more solid yellow buttons (the play button and the microphone too).
 - Two categories both called "Prayer times" are now Prayer times and Prayer times – Fajr (the Fajr adhan has its own category).
 - **Sound for the Daily Awrad reminder:** the same choices as for the prayers (the phone’s sound, silent, adhan, a sound from the phone, an own file, as an alarm) under Daily Awrad › Reminder.
 - The recitation’s notification category is now called "Qur’an recitation" in the phone’s settings (was "expo_audio_channel").

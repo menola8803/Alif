@@ -7,7 +7,7 @@ import { Result } from '../core/engine';
 import { transliterate } from '../core/translit';
 import { arabicDigits, errorText, textEngine, translateText } from '../translate';
 import { ResultView } from '../result';
-import { Arabic, Body, Btn, Card, Header, Screen, Segmented, SmallBtn, Text, Toggle } from '../ui';
+import { Arabic, Body, Btn, Card, Header, Screen, Segmented, SmallBtn, Text, Toggle, useButtonLook } from '../ui';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
 import { TAJWEED_COLORS, dropBasmala, parseTajweed } from '../core/tajweed';
@@ -144,6 +144,7 @@ export function Verse({ a, surah, current, words, onPlay }: { a: Ayah; surah: nu
 /** Player at the bottom of a sūra: play/pause, previous/next verse, repeat count (ḥifẓ) and download. */
 function Player({ n }: { n: number }) {
   const { t, theme, reciter, hifz, hifzRepeat } = useApp();
+  const look = useButtonLook();
   const rec = useRecitation();
   const [msg, setMsg] = useState('');
   const here = rec.now && rec.now.surah === n ? rec.now : null;
@@ -161,8 +162,8 @@ function Player({ n }: { n: number }) {
       {msg ? <Text style={{ fontSize: 12, color: theme.danger, textAlign: 'center' }}>{msg}</Text> : null}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: theme.card, borderWidth: 1, borderColor: theme.line, borderRadius: 22, padding: 8 }}>
         <Pressable accessibilityRole="button" accessibilityLabel={here?.playing ? t.pause : t.play} onPress={() => (here ? rec.toggle() : rec.play(n, 1))}
-          style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: theme.primary, alignItems: 'center', justifyContent: 'center' }}>
-          {here?.loading ? <ActivityIndicator color={theme.onPrimary} /> : <Text style={{ color: theme.onPrimary, fontSize: 18, fontWeight: '700' }}>{here?.playing ? '❚❚' : '▶'}</Text>}
+          style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: look.bg, borderWidth: 1, borderColor: look.border, alignItems: 'center', justifyContent: 'center' }}>
+          {here?.loading ? <ActivityIndicator color={look.fg} /> : <Text style={{ color: look.fg, fontSize: 18, fontWeight: '700' }}>{here?.playing ? '❚❚' : '▶'}</Text>}
         </Pressable>
         <View style={{ flex: 1 }}>
           <Text numberOfLines={1} style={{ fontSize: 13.5, fontWeight: '700', color: theme.ink }}>{here ? `${t.verse} ${here.ayah} / ${SURAHS[n - 1].ayahs}${hifz && hifzRepeat > 1 ? ` · ${here.rep}/${hifzRepeat}` : ''}` : t.listenSurah}</Text>

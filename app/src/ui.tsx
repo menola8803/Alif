@@ -69,25 +69,37 @@ export function Card({ children, style }: { children: React.ReactNode; style?: V
   return <View style={[{ backgroundColor: theme.card, borderColor: theme.line, borderWidth: 1, borderRadius: 22, padding: 16, gap: 12 }, style]}>{children}</View>;
 }
 
+/** One look for every button, like the menu at the bottom: a gold tint, a thin gold border and gold text. */
+export function useButtonLook() {
+  const { theme } = useApp();
+  return {
+    bg: theme.dark ? 'rgba(232,176,74,0.12)' : theme.chip,
+    border: theme.dark ? 'rgba(232,176,74,0.55)' : theme.primary,
+    fg: theme.tabActive,
+  };
+}
+
 export function Btn({ title, onPress, kind = 'primary', disabled }: { title: string; onPress: () => void; kind?: 'primary' | 'secondary' | 'danger'; disabled?: boolean }) {
   const { theme } = useApp();
-  // Secondary buttons: gold outline and gold text on the chip colour, so they read as buttons inside a card too.
-  const bg = kind === 'primary' ? theme.primary : theme.chip;
-  const fg = kind === 'primary' ? theme.onPrimary : kind === 'danger' ? theme.danger : theme.primary;
+  const look = useButtonLook();
+  const danger = kind === 'danger';
   return (
     <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
-      style={({ pressed }) => ({ minHeight: 52, paddingHorizontal: 16, borderRadius: 16, backgroundColor: bg, opacity: disabled ? 0.5 : pressed ? 0.85 : 1, alignItems: 'center', justifyContent: 'center', borderWidth: kind === 'primary' ? 0 : 1, borderColor: kind === 'danger' ? theme.danger : theme.primary })}>
-      <Text style={{ color: fg, fontSize: 16, fontWeight: '600' }}>{title}</Text>
+      style={({ pressed }) => ({ minHeight: 52, paddingHorizontal: 16, borderRadius: 16, backgroundColor: danger ? 'transparent' : look.bg, opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
+        alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: danger ? theme.danger : look.border })}>
+      <Text style={{ color: danger ? theme.danger : look.fg, fontSize: 16, fontWeight: kind === 'primary' ? '700' : '600' }}>{title}</Text>
     </Pressable>
   );
 }
 
 export function SmallBtn({ title, onPress, tone, disabled }: { title: string; onPress: () => void; tone?: 'accent'; disabled?: boolean }) {
   const { theme } = useApp();
+  const look = useButtonLook();
+  // tone 'accent' marks the chosen one: a stronger gold border and bold text.
   return (
     <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
-      style={({ pressed }) => ({ minHeight: 40, paddingHorizontal: 14, borderRadius: 12, backgroundColor: theme.chip, borderWidth: tone === 'accent' ? 1 : 0, borderColor: theme.accent, alignItems: 'center', justifyContent: 'center', opacity: disabled ? 0.5 : pressed ? 0.8 : 1 })}>
-      <Text style={{ color: tone === 'accent' ? theme.accent : theme.ink, fontWeight: '600', fontSize: 14 }}>{title}</Text>
+      style={({ pressed }) => ({ minHeight: 40, paddingHorizontal: 14, borderRadius: 12, backgroundColor: tone === 'accent' ? look.bg : theme.chip, borderWidth: 1, borderColor: tone === 'accent' ? theme.tabActive : look.border, alignItems: 'center', justifyContent: 'center', opacity: disabled ? 0.5 : pressed ? 0.8 : 1 })}>
+      <Text style={{ color: look.fg, fontWeight: tone === 'accent' ? '700' : '600', fontSize: 14 }}>{title}</Text>
     </Pressable>
   );
 }
