@@ -1,6 +1,7 @@
 // Ḥurūf: the disjoined letters (al-ḥurūf al-muqaṭṭaʿāt) that open 29 sūras, after "Secrets of Muqatta'at in Ahadith
 // of Prophet (s)" on nurmuhammad.com (Naqshbandi-Haqqani). The explanations are short summaries in Alif's own words.
 export const HUROOF_SOURCE = 'https://nurmuhammad.com/secrets-of-muqattaat-in-hadiths-of-prophet-s/';
+export const LETTERS_SOURCE = 'https://nurmuhammad.com/letters-and-numbers/';
 
 type T = { sv: string; en: string };
 export type HLetter = { ar: string; tr: string; name: string; divine: string; divineAr: string; value: number };
@@ -110,6 +111,11 @@ export const H_SECTIONS: HSection[] = [
   { id: 'spread', title: { sv: 'Hur öppningarna fördelas', en: 'How the openings are spread' },
     text: { sv: 'En bokstav: Ṣād (38), Qāf (50), Nūn (68). Två bokstäver en gång var: Ṭā Hā (20), Ṭā Sīn (27), Yā Sīn (36). Ḥā Mīm öppnar sju suror i följd (40–46). Alif Lām Mīm öppnar sex (2, 3, 29–32), Alif Lām Rā fem (10, 11, 12, 14, 15) och Ṭā Sīn Mīm två (26, 28). Fyra bokstäver: Alif Lām Mīm Ṣād (7) och Alif Lām Mīm Rā (13). Fem bokstäver: Kāf Hā Yā ʿAyn Ṣād (19) och Ḥā Mīm ʿAyn Sīn Qāf (42) – sura 42 har alltså en dubbel öppning.',
       en: 'One letter: Ṣād (38), Qāf (50), Nūn (68). Two letters, once each: Ṭā Hā (20), Ṭā Sīn (27), Yā Sīn (36). Ḥā Mīm opens seven sūras in a row (40–46). Alif Lām Mīm opens six (2, 3, 29–32), Alif Lām Rā five (10, 11, 12, 14, 15) and Ṭā Sīn Mīm two (26, 28). Four letters: Alif Lām Mīm Ṣād (7) and Alif Lām Mīm Rā (13). Five letters: Kāf Hā Yā ʿAyn Ṣād (19) and Ḥā Mīm ʿAyn Sīn Qāf (42) – so sūra 42 has a double opening.' } },
+  { id: 'numbers', title: { sv: 'Bokstäver och tal – abjad', en: 'Letters and numbers – abjad' },
+    text: { sv: 'ʿIlm al-ḥurūf är kunskapen om bokstäverna och talen. Varje bokstav har ett värde i abjad-ordningen (abjad hawwaz ḥuṭṭī), och tabellen läses i tre block om nio – ental, tiotal och hundratal – plus Ghayn för tusen. Nurmuhammad.com kallar dem bokstävernas himmelska värden och ser tabellen som en nyckel till öppningarnas hemligheter. Den lilla siffran i hörnet är bokstavens plats i det vanliga alfabetet.',
+      en: 'ʿIlm al-ḥurūf is the knowledge of letters and numbers. Every letter has a value in the abjad order (abjad hawwaz ḥuṭṭī), and the table is read in three blocks of nine – ones, tens and hundreds – plus Ghayn for a thousand. Nurmuhammad.com calls them the letters’ heavenly values and sees the table as a key to the secrets of the openings. The small number in the corner is the letter’s place in the ordinary alphabet.' },
+    more: { sv: 'Med räknaren under tabellen kan du skriva ett arabiskt ord eller en fras och se dess värde bokstav för bokstav: الله blir 66, محمد 92 och basmala 786. Vokaltecken räknas inte; hamza räknas som Alif och tā marbūṭa som Hā. Värdena är en hjälp att se samband – inte ett sätt att spå.',
+      en: 'With the calculator under the table you can write an Arabic word or phrase and see its value letter by letter: الله comes to 66, محمد 92 and the basmala 786. Vowel signs are not counted; hamza counts as Alif and tāʾ marbūṭa as Hā. The values are a help to see connections – not a way to tell the future.' } },
 ];
 
 /** Closing words. */

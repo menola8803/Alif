@@ -36,3 +36,14 @@ import { H_LETTERS, OPENERS, MISSING7 } from '../src/core/huroof';
   if (f) process.exit(1);
   console.log('huroof: all ok');
 }
+// abjad
+import { ABJAD, abjadSum } from '../src/core/abjad';
+{
+  let f = 0; const ok4 = (c: boolean, m: string) => { if (!c) { f++; console.log('FAIL', m); } };
+  ok4(ABJAD.length === 28 && new Set(ABJAD.map(l => l.order)).size === 28, '28 letters, each place once');
+  ok4(abjadSum('الله') === 66 && abjadSum('مُحَمَّد') === 92, 'Allāh 66, Muḥammad 92');
+  ok4(abjadSum('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ') === 786, `basmala 786 (${abjadSum('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ')})`);
+  ok4(abjadSum('الم') === 71 && abjadSum('المص') === 161 && abjadSum('الر') === 231 && abjadSum('المر') === 271, 'the ḥadīth sums');
+  if (f) process.exit(1);
+  console.log('abjad: all ok');
+}

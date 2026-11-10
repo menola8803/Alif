@@ -3,8 +3,9 @@ import { ActivityIndicator, Image, Modal, Pressable, ScrollView, View, useWindow
 import { WebView } from 'react-native-webview';
 import { useApp } from '../store';
 import { Route } from '../nav';
-import { ABU_BAKR, HADITH_SUMS, HUROOF_SOURCE, H_HUMILITY, H_LETTERS, H_SECTIONS, MISSING7, OPENERS } from '../core/huroof';
-import { Arabic, Body, Btn, Card, Header, Screen, Text, useButtonLook } from '../ui';
+import { ABU_BAKR, HADITH_SUMS, HUROOF_SOURCE, H_HUMILITY, H_LETTERS, H_SECTIONS, LETTERS_SOURCE, MISSING7, OPENERS } from '../core/huroof';
+import { ABJAD, abjadParts } from '../core/abjad';
+import { Arabic, Body, Btn, Card, Header, Screen, Text, TextInput, useButtonLook } from '../ui';
 
 const TREE = require('../../assets/huroof/muqattaat-tree.png');
 const TREE_RATIO = 542 / 300;
@@ -19,6 +20,8 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
   const { width, height } = useWindowDimensions();
   const [big, setBig] = useState(false);
   const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [word, setWord] = useState('بسم الله الرحمن الرحيم');
+  const parts = abjadParts(word);
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
   const ys = useRef<Record<string, number>>({});
   const tile = (width - 32 - 16) / 3;
@@ -100,6 +103,39 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
           ))}
         </View>
       );
+      case 'numbers': {
+        // The abjad table in blocks of nine, then the calculator.
+        const cell = (width - 32 - 30 - 8 * 2) / 3;
+        return (
+          <View style={{ gap: 10 }}>
+            {[ABJAD.slice(0, 9), ABJAD.slice(9, 18), ABJAD.slice(18, 27), ABJAD.slice(27)].map((block, b) => (
+              <View key={b} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {block.map(l => (
+                  <View key={l.ar} style={{ width: cell, backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.line, borderRadius: 12, alignItems: 'center', paddingVertical: 4 }}>
+                    <Text style={{ position: 'absolute', top: 4, left: 6, fontSize: 10, color: theme.muted }}>{l.order}</Text>
+                    <Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 40 }}>{l.ar}</Arabic>
+                    <Text style={{ fontSize: 12, color: theme.ink }}>{l.tr}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: '800', color: theme.primary }}>{l.value}</Text>
+                  </View>
+                ))}
+              </View>
+            ))}
+            <View style={{ gap: 8, marginTop: 4 }}>
+              <Text style={{ fontSize: 11.5, fontWeight: '700', letterSpacing: 1.2, color: theme.accent }}>{t.abjadCalc.toUpperCase()}</Text>
+              <TextInput value={word} onChangeText={setWord} placeholder={t.abjadPlaceholder} style={{ fontFamily: 'Amiri_400Regular', fontSize: 22, textAlign: 'right', writingDirection: 'rtl' }} />
+              <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 6 }}>
+                {parts.map((l, i) => (
+                  <View key={i} style={{ alignItems: 'center', borderWidth: 1, borderColor: theme.line, borderRadius: 8, paddingHorizontal: 6 }}>
+                    <Arabic size={18} selectable={false} style={{ lineHeight: 30 }}>{l.ar}</Arabic>
+                    <Text style={{ fontSize: 11, color: theme.muted }}>{l.value}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={{ fontSize: 22, fontWeight: '800', color: theme.primary, textAlign: 'center' }}>{`= ${parts.reduce((n, l) => n + l.value, 0)}`}</Text>
+            </View>
+          </View>
+        );
+      }
       default: return null;
     }
   };
@@ -130,8 +166,9 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
           </View>
         ))}
         <Card><Body muted>{H_HUMILITY[lang]}</Body></Card>
-        <Btn title={t.readArticle} onPress={() => go({ name: 'article' })} />
-        <Text style={{ fontSize: 12, color: theme.muted, textAlign: 'center' }}>{`${t.source}: nurmuhammad.com – Secrets of Muqattaʿat in Ahadith of Prophet ﷺ`}</Text>
+        <Btn title={t.readArticle} onPress={() => go({ name: 'article', url: HUROOF_SOURCE, title: 'Secrets of Muqattaʿat' })} />
+        <Btn kind="secondary" title={t.readLetters} onPress={() => go({ name: 'article', url: LETTERS_SOURCE, title: 'Knowledge of Letters & Numbers' })} />
+        <Text style={{ fontSize: 12, color: theme.muted, textAlign: 'center' }}>{`${t.source}: nurmuhammad.com – Secrets of Muqattaʿat in Ahadith of Prophet ﷺ · Knowledge of Letters and Numbers`}</Text>
       </ScrollView>
 
       <Modal visible={big} transparent animationType="fade" onRequestClose={() => setBig(false)}>
@@ -148,13 +185,13 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
 }
 
 /** The whole article, shown inside Alif (needs internet). Links inside it are not followed. */
-export function ArticleScreen({ onBack }: { onBack: () => void }) {
+export function ArticleScreen({ onBack, url = HUROOF_SOURCE, title = 'Secrets of Muqattaʿat' }: { onBack: () => void; url?: string; title?: string }) {
   const { t, theme } = useApp();
   const [err, setErr] = useState(false);
   const [key, setKey] = useState(0);
   return (
     <Screen>
-      <Header title={t.articleTitle} sub="nurmuhammad.com · Secrets of Muqattaʿat" onBack={onBack} />
+      <Header title={t.articleTitle} sub={`nurmuhammad.com · ${title}`} onBack={onBack} />
       <View style={{ flex: 1, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: '#C9A05A', backgroundColor: '#fbfaf7', marginBottom: 8 }}>
         {err ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 20, backgroundColor: theme.card }}>
@@ -162,11 +199,11 @@ export function ArticleScreen({ onBack }: { onBack: () => void }) {
             <Btn title={t.tryAgainShort} onPress={() => { setErr(false); setKey(k => k + 1); }} />
           </View>
         ) : (
-          <WebView key={key} source={{ uri: HUROOF_SOURCE }} startInLoadingState
+          <WebView key={key} source={{ uri: url }} startInLoadingState
             renderLoading={() => <View style={{ position: 'absolute', inset: 0, alignItems: 'center', justifyContent: 'center' }}><ActivityIndicator color={theme.primary} /></View>}
             onError={() => setErr(true)} onHttpError={e => { if (e.nativeEvent.statusCode >= 500) setErr(true); }}
             // Only the article itself: links inside it are not followed.
-            onShouldStartLoadWithRequest={r => r.url.split('#')[0].replace(/\/$/, '') === HUROOF_SOURCE.replace(/\/$/, '') || r.url.startsWith('about:')}
+            onShouldStartLoadWithRequest={r => r.url.split('#')[0].replace(/\/$/, '') === url.replace(/\/$/, '') || r.url.startsWith('about:')}
             setSupportMultipleWindows={false} allowsLinkPreview={false} />
         )}
       </View>

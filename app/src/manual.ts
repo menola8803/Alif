@@ -73,8 +73,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Översättningsmotor väljs under Inställningar › Översättning.',
     ] },
     { title: 'Lär dig läsa', items: [
-      'Ḥurūf (kortet med الٓمٓ): de avskilda bokstäverna som öppnar 29 suror. Överst en rad med artikelns nio delar – tryck för att hoppa dit. Varje del är en utförlig sammanfattning (Visa mer för resten) med bokstäverna och Guds namn, al-Yāfiʿīs tabell (dag, ängel, namn), bilden över öppningarna (tryck för att förstora, tryck igen för att stänga), öppningarna med suror (tryck på en sura för att läsa den), كهيعص, abjad-hadithen och fördelningen.',
-      'Läs hela artikeln (längst ner på Ḥurūf-sidan) visar originalartikeln från nurmuhammad.com inuti Alif. Den kräver internet; länkar i artikeln följs inte.',
+      'Ḥurūf (kortet med الٓمٓ): de avskilda bokstäverna som öppnar 29 suror. Överst en rad med artikelns nio delar – tryck för att hoppa dit. Varje del är en utförlig sammanfattning (Visa mer för resten) med bokstäverna och Guds namn, al-Yāfiʿīs tabell (dag, ängel, namn), bilden över öppningarna (tryck för att förstora, tryck igen för att stänga), öppningarna med suror (tryck på en sura för att läsa den), كهيعص, abjad-hadithen, fördelningen och Bokstäver och tal: abjad-tabellen i block om nio (med bokstavens plats i alfabetet) och en abjad-räknare där du skriver arabiska och ser värdet bokstav för bokstav.',
+      'Läs hela artikeln och Läs sidan om bokstäver och tal (längst ner på Ḥurūf-sidan) visar originalsidorna från nurmuhammad.com inuti Alif. Den kräver internet; länkar i artikeln följs inte.',
       'Bokstäverna i samma ordning som boken Iqraʾa! (Samir Muric), med bokens bilder av var bokstaven uttalas och hur den skrivs: ensam, i början, i mitten och i slutet, i fyra rutor två och två, numrerade 1–4 från höger.',
       'Tryck ▶ Lyssna för att höra bokstaven (telefonens talsyntes). "Vokaltecken" visar fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler.',
       'Frågor slås på och av i menyn ⋮ uppe till höger (av från början).',
@@ -173,8 +173,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The translation engine is chosen in Settings › Translation.',
     ] },
     { title: 'Learn to read', items: [
-      'Ḥurūf (the card with الٓمٓ): the disjoined letters that open 29 sūras. At the top a row with the article’s nine parts – tap to jump there. Each part is a full summary (Show more for the rest) with the letters and Allah’s names, al-Yāfiʿī’s table (day, angel, name), the picture of the openings (tap to enlarge, tap again to close), the openings with their sūras (tap a sūra to read it), كهيعص, the abjad ḥadīth and how the openings are spread.',
-      'Read the whole article (at the bottom of the Ḥurūf page) shows the original article from nurmuhammad.com inside Alif. It needs internet; links in the article are not followed.',
+      'Ḥurūf (the card with الٓمٓ): the disjoined letters that open 29 sūras. At the top a row with the article’s nine parts – tap to jump there. Each part is a full summary (Show more for the rest) with the letters and Allah’s names, al-Yāfiʿī’s table (day, angel, name), the picture of the openings (tap to enlarge, tap again to close), the openings with their sūras (tap a sūra to read it), كهيعص, the abjad ḥadīth, how the openings are spread and Letters and numbers: the abjad table in blocks of nine (with the letter’s place in the alphabet) and an abjad calculator where you write Arabic and see the value letter by letter.',
+      'Read the whole article and Read the page on letters and numbers (at the bottom of the Ḥurūf page) show the original pages from nurmuhammad.com inside Alif. It needs internet; links in the article are not followed.',
       'The letters in the same order as the book Iqraʾa! (Samir Muric), with the book’s pictures of where each letter is pronounced and how it is written: alone, at the start, in the middle and at the end, in four boxes two by two, numbered 1–4 from the right.',
       'Tap ▶ Listen to hear the letter (the phone’s speech). "Vowel signs" shows fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and the long vowels.',
       'Questions are switched on and off in the ⋮ menu in the top right corner (off by default).',

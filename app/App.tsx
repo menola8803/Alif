@@ -120,7 +120,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} go={push} />;
       case 'nightClock': return <NightClockScreen onBack={pop} />;
       case 'huroof': return <HuroofScreen onBack={pop} go={push} />;
-      case 'article': return <ArticleScreen onBack={pop} />;
+      case 'article': return <ArticleScreen key={r.url} onBack={pop} url={r.url} title={r.title} />;
       case 'prayerSound': return <PrayerSoundScreen key={r.target ?? 'prayer'} onBack={pop} target={r.target} />;
       default:
         return (
