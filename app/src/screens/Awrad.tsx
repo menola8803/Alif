@@ -37,12 +37,6 @@ function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: nu
       {translit ? <Text selectable style={{ fontSize: 15, lineHeight: 22, color: theme.accent, fontWeight: '500' }}>{translit}</Text> : null}
       {meaning && showTranslation ? <Body muted>{meaning}</Body> : null}
       {s.note ? <Text style={{ fontSize: 13, lineHeight: 19, color: theme.muted, fontStyle: 'italic' }}>{s.note[lang]}</Text> : null}
-      {ihda ? (
-        <View style={{ gap: 6 }}>
-          <Text style={{ fontSize: 12, color: theme.muted }}>{t.ihdaShaykh}</Text>
-          <Segmented<IhdaShaykh> options={[['none', t.ihdaNone], ['hisham', 'Hishām Kabbānī'], ['adil', 'ʿĀdil ar-Rabbānī']]} value={ihdaShaykh} onChange={v => setPrefs({ ihdaShaykh: v })} />
-        </View>
-      ) : null}
       {need > 1 && !done ? <Text style={{ fontSize: 12, color: theme.muted }}>{n > 0 ? `${t.tapToCount} · ${t.holdToReset}` : t.tapToCount}</Text> : done ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.holdToReset}</Text> : null}
     </Pressable>
   );
@@ -87,9 +81,16 @@ export default function Awrad({ onBack, onReminder }: { onBack: () => void; onRe
             <SmallBtn title={t.awradReset} onPress={() => Alert.alert(t.awradReset, t.awradResetConfirm, [{ text: t.cancel, style: 'cancel' }, { text: 'OK', onPress: () => setPrefs({ awradDay: today, awradCounts: {} }) }])} />
           </View>
         </Card>
-        {steps.map(s => {
+        {steps.map((s, i) => {
           const n = counts[s.id] ?? 0;
-          return <Step key={s.id} s={s} n={n} need={need(s)} onTap={() => set(s.id, n >= need(s) ? n : n + 1)} onUndo={() => { if (n > 0) { Vibration.vibrate(40); set(s.id, 0); } }} />;
+          // A heading where part one and part two begin, as in the awrad booklet.
+          const head = i === 0 || steps[i - 1].part !== s.part;
+          return (
+            <React.Fragment key={s.id}>
+              {head ? <Text style={{ fontSize: 12, fontWeight: '700', letterSpacing: 1.2, color: theme.accent, marginTop: i ? 10 : 0 }}>{(s.part === 1 ? t.awradPart1 : t.awradPart2).toUpperCase()}</Text> : null}
+              <Step s={s} n={n} need={need(s)} onTap={() => set(s.id, n >= need(s) ? n : n + 1)} onUndo={() => { if (n > 0) { Vibration.vibrate(40); set(s.id, 0); } }} />
+            </React.Fragment>
+          );
         })}
         <Text style={{ fontSize: 12, color: theme.muted, lineHeight: 17 }}>{t.awradSource}</Text>
       </ScrollView>

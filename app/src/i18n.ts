@@ -86,8 +86,8 @@ const sv = {
   // Daily Awrad
   awrad: 'Daily Awrad', awradSub: 'De dagliga awrād i den naqshbandiska ṭarīqan',
   awradIntro: 'Läses en gång var 24:e timme, gärna på kvällen. Tryck på en rad för att räkna. Följ de antal din shaykh ger dig.',
-  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Murīd',
-  levelHelp: 'Nivå: nybörjare (mubtadiʾ), förberedd (mustaʿidd) eller murīd.',
+  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Ahl al-ʿAzm',
+  levelHelp: 'Nivå: nybörjare (mubtadiʾ), förberedd (mustaʿidd) eller de beslutsamma (ahl al-ʿazm).',
   awradProgress: 'Idag', awradDone: 'Dagens awrād är klara. Allāhumma taqabbal.', awradReset: 'Börja om idag', awradResetConfirm: 'Räkningen för idag nollställs.',
   tapToCount: 'Tryck för att räkna', countDone: 'Klar', optional: 'Valfritt', mtfNote: 'Måndag, torsdag och fredag: fler ṣalawāt.',
   reminder: 'Påminnelse', reminderSub: 'Varje dag på din tid, även på låsskärmen', reminderOn: 'Påminn mig', reminderTime: 'Tid',
@@ -97,7 +97,7 @@ const sv = {
   awradPopupTitle: 'Dags för Daily Awrad', awradPopupBody: 'Ta en stund för shahāda, istighfār, Koranen, ṣalawāt och dhikr innan dagen tar slut.',
   ihdaShaykh: 'Din levande shaykh i tillägnans sista rad:', ihdaNone: 'Ingen',
   awradOpen: 'Öppna Daily Awrad', awradLater: 'Senare',
-  awradSource: 'Ordning och antal enligt naqshbandi.org och Shaykh Nāẓims häfte. Översättningarna av Koranen hämtas från den valda översättningen.',
+  awradSource: 'Ordning, antal och förklaringar enligt häftet "Daily Awrad (Practice) of Naqshbandi Tariqa" (nurmuhammad.com, 15 sept 2021). Översättningarna av Koranen hämtas från den valda översättningen.',
   loadingQuran: 'Koranens text laddas…',
   errUnreadable: 'Texten kunde inte läsas säkert på telefonen. Kalligrafi, dekorerad skrift och snett fotograferad text klarar läsningen på telefonen inte – därför översattes inget.',
   unreadTitle: 'Kunde inte läsa texten', unreadTry: 'Det här kan du göra:',
@@ -215,8 +215,8 @@ const en: Base = {
   // Daily Awrad
   awrad: 'Daily Awrad', awradSub: 'The daily awrād of the Naqshbandi ṭarīqa',
   awradIntro: 'Recited once every 24 hours, preferably in the evening. Tap a row to count. Follow the counts your shaykh gives you.',
-  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Murīd',
-  levelHelp: 'Level: beginner (mubtadiʾ), prepared (mustaʿidd) or murīd.',
+  levelMubtadi: 'Mubtadiʾ', levelMustaid: 'Mustaʿidd', levelMurid: 'Ahl al-ʿAzm',
+  levelHelp: 'Level: beginner (mubtadiʾ), prepared (mustaʿidd) or the people of determination (ahl al-ʿazm).',
   awradProgress: 'Today', awradDone: "Today's awrād are complete. Allāhumma taqabbal.", awradReset: 'Start today over', awradResetConfirm: "Today's count is reset.",
   tapToCount: 'Tap to count', countDone: 'Done', optional: 'Optional', mtfNote: 'Monday, Thursday and Friday: more ṣalawāt.',
   reminder: 'Reminder', reminderSub: 'Every day at your time, also on the lock screen', reminderOn: 'Remind me', reminderTime: 'Time',
@@ -226,7 +226,7 @@ const en: Base = {
   awradPopupTitle: 'Time for the Daily Awrad', awradPopupBody: 'Take a moment for shahāda, istighfār, the Qurʾān, ṣalawāt and dhikr before the day ends.',
   ihdaShaykh: 'Your living shaykh in the last line of the dedication:', ihdaNone: 'None',
   awradOpen: 'Open Daily Awrad', awradLater: 'Later',
-  awradSource: "Order and counts as in naqshbandi.org and Shaykh Nāẓim's booklet. Qurʾān translations come from the chosen translation.",
+  awradSource: 'Order, counts and explanations as in the booklet "Daily Awrad (Practice) of Naqshbandi Tariqa" (nurmuhammad.com, 15 Sept 2021). Qurʾān translations come from the chosen translation.',
   loadingQuran: 'Loading the Qurʾān text…',
   errUnreadable: 'The text could not be read reliably on the phone. Calligraphy, decorated script and text photographed at an angle are beyond the phone\'s text recognition – so nothing was translated.',
   unreadTitle: 'Could not read the text', unreadTry: 'What you can do:',
@@ -435,6 +435,7 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  awradPart1: 'Del ett', awradPart2: 'Del två – sitt på knä med rābiṭa',
   huroofTitle: 'Ḥurūf', huroofSub: 'De avskilda bokstäverna i surornas början', huroofCard: 'Ḥurūf · de avskilda bokstäverna', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt i 29 suror, med förklaring',
   huroofTree: '29 SUROR ÖPPNAS MED BOKSTÄVER', huroofLetters: 'DE 14 BOKSTÄVERNA · NYCKLAR TILL GUDS NAMN', huroofOpeners: 'DE 14 ÖPPNINGARNA', huroofHadith: 'HADITHEN OM ABJAD-RÄKNINGEN', huroofMissing: 'AL-YĀFIʿĪ: DE SJU BOKSTÄVER SOM SAKNAS I AL-FĀTIḤA',
   abjadCalc: 'Räkna abjad', abjadPlaceholder: 'Skriv arabiska…', readLetters: 'Läs sidan om bokstäver och tal',
@@ -491,6 +492,7 @@ const sv4 = {
   volumeCount: 'Räkna dhikr med volymknapparna', volumeCountSub: 'När det är på räknar både volym upp och volym ner ett steg i dhikr-räknaren – med en kort vibration – så du kan räkna utan att titta på skärmen, t.ex. med telefonen i fickan eller handen. Det gäller bara medan Dhikr-sidan är öppen och skärmen är tänd; på alla andra sidor och i andra appar ändrar knapparna volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  awradPart1: 'Part one', awradPart2: 'Part two – sit on the knees with rābiṭa',
   huroofTitle: 'Ḥurūf', huroofSub: 'The disjoined letters at the start of the sūras', huroofCard: 'Ḥurūf · the disjoined letters', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt in 29 sūras, explained',
   huroofTree: '29 SŪRAS OPEN WITH LETTERS', huroofLetters: 'THE 14 LETTERS · KEYS TO ALLAH’S NAMES', huroofOpeners: 'THE 14 OPENINGS', huroofHadith: 'THE ḤADĪTH OF THE ABJAD COUNT', huroofMissing: 'AL-YĀFIʿĪ: THE SEVEN LETTERS NOT IN AL-FĀTIḤA',
   abjadCalc: 'Count abjad', abjadPlaceholder: 'Write Arabic…', readLetters: 'Read the page on letters and numbers',

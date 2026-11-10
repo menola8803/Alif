@@ -5,7 +5,9 @@ let fail = 0;
 const ok = (c: boolean, m: string) => { if (!c) { fail++; console.log('FAIL', m); } };
 const tue = new Date(2026, 9, 27), fri = new Date(2026, 9, 30);
 const sal = AWRAD.find(s => s.id === 'salawat')!;
-ok(countFor(sal, 'mubtadi', tue) === 300 && countFor(sal, 'mubtadi', fri) === 500 && countFor(sal, 'murid', fri) === 2000, 'salawat counts');
+ok(countFor(sal, 'mubtadi', tue) === 100 && countFor(sal, 'mubtadi', fri) === 300 && countFor(sal, 'mustaid', tue) === 300 && countFor(sal, 'mustaid', fri) === 500 && countFor(sal, 'murid', tue) === 1000 && countFor(sal, 'murid', fri) === 2000, 'salawat counts (booklet)');
+ok(AWRAD[0].id === 'shahada' && AWRAD.find(s => s.id === 'tahlil')!.count === 9 && AWRAD.find(s => s.id === 'tahlil1')!.count === 1 && !AWRAD.some(s => s.id === 'opening' || s.id === 'tahlil2'), 'booklet order');
+ok(AWRAD.findIndex(s => s.id === 'rabita') === AWRAD.findIndex(s => s.part === 2), 'rābiṭa opens part two');
 ok(countFor(AWRAD.find(s => s.id === 'istighfar')!, 'murid') === 70, 'istighfar 70');
 ok(isMTF(fri) && !isMTF(tue), 'Mon/Thu/Fri');
 ok(formatTime(21, 0, false) === '21:00' && formatTime(21, 0, true) === '9:00 PM' && formatTime(0, 5, true) === '12:05 AM', 'formatTime');
@@ -22,16 +24,15 @@ ok(tr('istighfar') === 'astaghfiru llāh', 'istighfar translit: ' + tr('istighfa
 ok(tr('tahlil') === 'lā ilāha illa llāh', 'tahlil translit: ' + tr('tahlil'));
 ok(tr('haqq') === 'allāhu llāhu llāhu ḥaqq', 'haqq translit: ' + tr('haqq'));
 import('../src/core/awrad').then(({ ihdaArabic, ihdaMeaning }) => {
-  const ar = ihdaArabic('none');
-  ok(isVocalized(ar) && ar.startsWith('اللَّهُمَّ بَلِّغْ') && !ar.includes('هِشَامٍ') && ihdaArabic('hisham').includes('هِشَامٍ') && ihdaArabic('adil').includes('عَادِلٍ'), 'ihda arabic');
+  const ar = ihdaArabic();
+  ok(isVocalized(ar) && ar.startsWith('اللَّهُمَّ بَلِّغْ') && ar.includes('هِشَامٍ') && ar.includes('عَادِلٍ') && ar.includes('عَدْنَانَ') && ar.includes('ٱلْمَهْدِيِّ'), 'ihda arabic (booklet)');
   const tl = transliterate(ar);
   ok(tl.startsWith('allāhumma balligh thawāba mā qaraʾnāhu') && tl.includes('ﷺ') && tl.endsWith('al-fātiḥah.'), 'ihda translit: ' + tl.slice(0, 80) + ' … ' + tl.slice(-30));
   ok(transliterate(ar, { mode: 'words' }).endsWith('al-fātiḥah.'), 'ihda words mode');
-  ok(ihdaMeaning('none', 'sv').startsWith('O Gud') && ihdaMeaning('hisham', 'en').includes('Hishām'), 'ihda meaning');
+  ok(ihdaMeaning(undefined, 'sv').startsWith('O Allah') && ihdaMeaning(undefined, 'en').includes('Adnān'), 'ihda meaning');
   if (fail) { console.log(`${fail} awrad test(s) failed`); process.exit(1); }
 });
 console.log('salawat:', tr('salawat10'));
 console.log('shahada:', tr('shahada'));
-console.log('opening:', tr('opening'));
 if (fail) { console.log(`${fail} awrad test(s) failed`); process.exit(1); }
 console.log('awrad: all ok');

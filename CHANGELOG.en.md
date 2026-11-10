@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
+- **Daily Awrad corrected after the nurmuhammad.com booklet:** Part one and Part two with headings; the opening removed; rābiṭa opens part two (sit on the knees); lā ilāha illā llāh 9 + 1 with Muḥammadun rasūlu llāh; ṣalawāt with sayyidinā; shahāda without waḥdahu lā sharīka lah and with the index finger raised; ṣalawāt in part two 100/300/1000 (300/500/2000 Mon/Thu/Fri); the line lā ilāha illā llāh Muḥammadun rasūlu llāh 100–1000 removed; juzʾ and Dalāʾil counted; the third level is called Ahl al-ʿAzm; the Ihdāʾ with the booklet’s full text.
 - **Ḥurūf** (Learn): the article’s nine parts as full summaries with a contents row, "Read the whole article" and "Read the page on letters and numbers" showing the originals inside the app; the abjad table and an abjad calculator; the disjoined letters in 29 sūras explained, the picture of the openings (tap to enlarge), the 14 letters with Allah’s names, the openings with their sūras, كهيعص, the abjad ḥadīth and al-Yāfiʿī’s table of the seven letters not in al-Fātiḥa (day, angel, name). Source: nurmuhammad.com.
 - "Count dhikr with the volume buttons" has moved to Settings, with a clearer explanation.
 - Every button in the app has the same look as the menu at the bottom: a faint gold tint, a thin gold border and gold text – no more solid yellow buttons (the play button, the microphone, the back button in the top left and the gear too).

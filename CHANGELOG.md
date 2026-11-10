@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.5
+- **Daily Awrad rättad efter häftet från nurmuhammad.com:** Del ett och Del två med rubriker; inledningen borttagen; rābiṭa inleder del två (sitt på knä); lā ilāha illā llāh 9 + 1 med Muḥammadun rasūlu llāh; ṣalawāt med sayyidinā; shahāda utan waḥdahu lā sharīka lah och med pekfingret lyft; ṣalawāt i del två 100/300/1000 (300/500/2000 mån/tors/fre); raden lā ilāha illā llāh Muḥammadun rasūlu llāh 100–1000 borttagen; juzʾ och Dalāʾil räknas med; tredje nivån heter Ahl al-ʿAzm; Ihdāʾ med häftets fulla text.
 - **Ḥurūf** (Lär dig): artikelns nio delar som utförliga sammanfattningar med innehållsrad, "Läs hela artikeln" och "Läs sidan om bokstäver och tal" som visar originalen i appen; abjad-tabellen och en abjad-räknare; de avskilda bokstäverna i 29 suror med förklaring, bilden över öppningarna (tryck för att förstora), de 14 bokstäverna med Guds namn, öppningarna med suror, كهيعص, abjad-hadithen och al-Yāfiʿīs tabell över de sju bokstäverna som saknas i al-Fātiḥa (dag, ängel, namn). Källa: nurmuhammad.com.
 - "Räkna dhikr med volymknapparna" har flyttat till Inställningar, med en tydligare förklaring.
 - Alla knappar i appen har samma stil som menyn nertill: svag guldton, tunn guldkant och guldtext – inga helgula knappar längre (även spela-knappen, mikrofonen, tillbaka-knappen uppe till vänster och kugghjulet).
