@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
+- The bookmarks on the Qur’an page in gold with a gold bookmark sign.
 - Stopping the recitation or the end of the sūra now removes the media card from the lock screen.
 - The bookmarks on the Qur’an page were cut off behind Daily Awrad – now they show in full.
 

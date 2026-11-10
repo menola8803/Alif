@@ -51,7 +51,12 @@ export default function Quran({ open, openJuz, onAwrad, onGear, glow }: { open: 
       {bookmarks.length ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, alignItems: 'center', paddingVertical: 2 }} style={{ flexGrow: 0, flexShrink: 0 }}>
           {bookmarks.map(b => (
-            <SmallBtn key={`${b.n}:${b.ayah}`} title={`🔖 ${SURAHS[b.n - 1].name} ${b.n}:${b.ayah}`} onPress={() => open(b.n, b.ayah)} />
+            <Pressable key={`${b.n}:${b.ayah}`} accessibilityRole="button" onPress={() => open(b.n, b.ayah)}
+              style={({ pressed }) => ({ minHeight: 40, paddingHorizontal: 12, borderRadius: 12, borderWidth: 1, borderColor: theme.primary, backgroundColor: theme.chip, flexDirection: 'row', alignItems: 'center', gap: 7, opacity: pressed ? 0.8 : 1 })}>
+              {/* gold bookmark */}
+              <Svg width={11} height={14} viewBox="0 0 11 14"><Path d="M1 1h9v12l-4.5-3.2L1 13z" fill={theme.primary} /></Svg>
+              <Text style={{ color: theme.primary, fontWeight: '600', fontSize: 14 }}>{`${SURAHS[b.n - 1].name} ${b.n}:${b.ayah}`}</Text>
+            </Pressable>
           ))}
         </ScrollView>
       ) : null}
