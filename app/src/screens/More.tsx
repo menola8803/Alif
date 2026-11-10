@@ -10,6 +10,7 @@ import { RECITERS } from '../core/recite';
 import { LETTERS } from '../core/learn';
 import { Arabic, Body, Btn, Card, Choice, Header, Label, Screen, Segmented, Text, Toggle } from '../ui';
 import { usePrayer } from '../prayer';
+import { askPermission } from '../reminder';
 import { PRAYER_TR, SALAH, hhmm } from '../core/prayer';
 
 /** Settings › Recitation: reciter, downloads only on wifi, what is downloaded, remove downloads. */
@@ -173,7 +174,7 @@ export function MicSettingsScreen({ onBack }: { onBack: () => void }) {
 
 /** Settings › Widget and screen saver: the look of the widget, with a preview in the same colours. */
 export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (r: Route) => void }) {
-  const { t, theme, widgetStyle, setPrefs } = useApp();
+  const { t, theme, widgetStyle, setPrefs, lockPrayer } = useApp();
   const { today, next } = usePrayer();
   const gold = theme.dark ? '#E8B04A' : '#9C6B22';
   const box = { backgroundColor: theme.dark ? '#172629' : '#FAF8F4', borderColor: theme.dark ? 'rgba(232,176,74,0.7)' : 'rgba(156,107,34,0.7)', borderWidth: 1, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12 } as const;
@@ -181,6 +182,10 @@ export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (
     <Screen>
       <Header title={t.widgetTitle} sub={t.widgetSub} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }}>
+        <Card style={{ paddingVertical: 8 }}>
+          <Toggle title={t.lockPrayer} on={lockPrayer} onChange={async v => { if (v && !(await askPermission())) return; setPrefs({ lockPrayer: v }); }} />
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.lockPrayerSub}</Text>
+        </Card>
         <Segmented<'full' | 'times'> options={[['full', t.widgetFull], ['times', t.widgetTimes]]} value={widgetStyle} onChange={v => setPrefs({ widgetStyle: v })} />
         <Text style={{ fontSize: 12.5, color: theme.muted }}>{widgetStyle === 'times' ? t.widgetTimesSub : t.widgetFullSub}</Text>
         {/* preview */}

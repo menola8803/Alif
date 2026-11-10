@@ -7,6 +7,16 @@
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/alif_widget_info" />
     </receiver>
+    <!-- Prayer times on the lock screen: renewed after each prayer, after a restart and on a new time zone -->
+    <receiver android:name="se.sncab.alifnative.AlifLockReceiver" android:exported="false">
+      <intent-filter>
+        <action android:name="se.sncab.alifnative.LOCK_UPDATE" />
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+        <action android:name="android.intent.action.TIME_SET" />
+      </intent-filter>
+    </receiver>
     <!-- Screen saver: clock and prayer times -->
     <service android:name="se.sncab.alifnative.AlifDream" android:exported="true" android:label="Alif"
         android:permission="android.permission.BIND_DREAM_SERVICE">

@@ -42,6 +42,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Widget', items: [
       'Håll fingret på hemskärmen › Widgetar › Alif. Widgeten visar nästa bön och tid, hijri-datum, ort och dagens fem tider. Den uppdateras när du öppnar Alif och efter varje bön.',
+      'Bönetider på låsskärmen (Inställningar › Widget och skärmsläckare, eller Bönetider): en tyst avisering som ligger kvar och syns när du tänder skärmen, under t.ex. WhatsApp-meddelanden. Den visar nästa bön med nedräkning, dagens fem tider, hijri-datum och ort, och förnyas efter varje bön och när telefonen startats om. Inget ljud, ingen vibration. Av från början.',
       'Under Inställningar › Widget och skärmsläckare väljer du Allt eller Bara bönetider (de fem bönerna med namn och tid, nästa i fetstil). Widgeten är guld på temats färg med tunn guldkant och följer Alifs ljusa eller mörka tema.',
       'Nattklocka: Inställningar › Widget och skärmsläckare › Öppna nattklockan visar klocka och dagens bönetider på hela skärmen, tänd och dämpad (extra dämpad i ljust tema). Tryck på skärmen för Stäng. Fungerar på alla telefoner.',
       'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare och ställ in När den ska visas på Vid laddning (med bara "dockad" visas den bara i en dockningsstation). Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
@@ -137,6 +138,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Widget', items: [
       'Hold your finger on the home screen › Widgets › Alif. The widget shows the next prayer and its time, the Hijri date, the place and today’s five times. It is updated when you open Alif and after every prayer.',
+      'Prayer times on the lock screen (Settings › Widget and screen saver, or Prayer times): a quiet notification that stays and shows when you turn the screen on, under e.g. WhatsApp messages. It shows the next prayer with a countdown, today’s five times, the Hijri date and the place, and is renewed after every prayer and when the phone has restarted. No sound, no vibration. Off by default.',
       'Under Settings › Widget and screen saver you choose Everything or Prayer times only (the five prayers with name and time, the next in bold). The widget is gold on the theme’s colour with a thin gold border and follows Alif’s light or dark theme.',
       'Night clock: Settings › Widget and screen saver › Open the night clock shows a clock and today’s prayer times on the whole screen, kept on and dimmed (extra dimmed in the light theme). Tap the screen for Close. Works on every phone.',
       'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver and set When to start to While charging (with only "docked" it only shows in a dock). A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',

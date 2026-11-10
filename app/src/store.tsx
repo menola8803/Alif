@@ -69,7 +69,8 @@ type Saved = {
   fajrAdhan: boolean;                  // the Fajr adhan at Fajr when an adhan is chosen
   prayerAlarm: boolean;                // play at alarm volume
   quranView: 'surah' | 'juz';         // the Qur'an tab lists the sūras or the 30 parts
-  widgetStyle: 'full' | 'times';      // home screen widget: everything, or only the five prayers with their times
+  widgetStyle: 'full' | 'times';
+  lockPrayer: boolean;                 // the prayer times as a quiet notification that stays on the lock screen      // home screen widget: everything, or only the five prayers with their times
   myMosques: Mosque[];                 // mosques the person has added on the map
   hiddenMosques: string[];             // built-in mosques the person has removed (mosqueKey)
 };
@@ -93,7 +94,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', quranView: 'surah', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false,
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

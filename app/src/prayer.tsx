@@ -43,7 +43,7 @@ export async function locate(): Promise<{ lat: number; lng: number; name: string
 }
 
 export function PrayerProvider({ children }: { children: React.ReactNode }) {
-  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle, prayerSound, fajrAdhan, prayerAlarm } = useApp();
+  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle, prayerSound, fajrAdhan, prayerAlarm, lockPrayer } = useApp();
   const [days, setDays] = useState<Record<string, PrayerDay>>({});
   const [now, setNow] = useState(() => new Date());
   const placeKey = `${place.lat.toFixed(3)},${place.lng.toFixed(3)}.${school}.${highLat}`;
@@ -163,9 +163,9 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
         return { date: day.date, times };
       });
       const h = toHijri(base, hijriAuto + hijriAdjust);
-      AlifNativeModule.setWidgetData(JSON.stringify({ days: out, names: PRAYER_TR, labelNext: t.nextPrayer.toUpperCase(), hijri: `${h.d} ${MONTHS[h.m - 1].tr} ${h.y}`, place: place.name, dark: theme.dark, style: widgetStyle }));
+      AlifNativeModule.setWidgetData(JSON.stringify({ days: out, names: PRAYER_TR, labelNext: t.nextPrayer.toUpperCase(), hijri: `${h.d} ${MONTHS[h.m - 1].tr} ${h.y}`, place: place.name, dark: theme.dark, style: widgetStyle, lock: lockPrayer }));
     } catch {}
-  }, [ready, days, todayKey, place.name, hijriAuto, hijriAdjust, t.nextPrayer, dayFor, theme.dark, widgetStyle]);
+  }, [ready, days, todayKey, place.name, hijriAuto, hijriAdjust, t.nextPrayer, dayFor, theme.dark, widgetStyle, lockPrayer]);
 
   const value = useMemo<Ctx>(() => ({
     today, tomorrow, source, now, next: nextPrayer(now, today, tomorrow), dayFor, refresh: () => { loading.current = ''; load(); },

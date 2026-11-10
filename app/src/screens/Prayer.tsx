@@ -13,7 +13,7 @@ import { Arabic, Body, Btn, Card, Choice, Header, Label, Row, Screen, Segmented,
 
 /** Settings › Prayer times: place, method, ʿaṣr, the rule for short summer nights and the notifications. */
 export default function PrayerScreen({ onBack, go }: { onBack: () => void; go: (r: Route) => void }) {
-  const { t, theme, place, useLocation, school, highLat, prayerNotify, setPrefs, prayerSound, prayerSoundName } = useApp();
+  const { t, theme, place, useLocation, school, highLat, prayerNotify, setPrefs, prayerSound, prayerSoundName, lockPrayer } = useApp();
   const { today, source, refresh } = usePrayer();
   const soundName = prayerSound === 'default' ? t.soundDefault : prayerSound === 'silent' ? t.soundSilent : isAdhan(prayerSound) ? ADHANS.find(a => a.id === prayerSound)?.name ?? t.adhanTitle : prayerSoundName || t.soundPhone.replace('…', '');
   const [busy, setBusy] = useState(false);
@@ -79,6 +79,7 @@ export default function PrayerScreen({ onBack, go }: { onBack: () => void; go: (
           {SALAH.map(k => <Toggle key={k} title={PRAYER_TR[k]} on={prayerNotify[k]} onChange={v => notify(k, v)} />)}
           <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.prayerNotifsSub}</Text>
           {AlifNativeModule ? <Row title={t.prayerSound} right={soundName} onPress={() => go({ name: 'prayerSound' })} /> : null}
+          {AlifNativeModule ? <Toggle title={t.lockPrayer} on={lockPrayer} onChange={async v => { if (v && !(await askPermission())) return; setPrefs({ lockPrayer: v }); }} /> : null}
         </Card>
         {Platform.OS === 'android' ? (
           <Card>

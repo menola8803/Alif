@@ -109,6 +109,7 @@ class AlifNativeModule : Module() {
     Function("setWidgetData") { json: String ->
       ctx.getSharedPreferences(AlifWidget.PREFS, Context.MODE_PRIVATE).edit().putString("data", json).apply()
       AlifWidget.refresh(ctx)
+      AlifLock.update(ctx)
     }
 
     // ---- Listening (speech to text). Only started from the Listen screen; the microphone is closed by stopListening,

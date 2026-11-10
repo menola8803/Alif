@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
+- **Prayer times on the lock screen:** a quiet notification that stays and shows when you turn the screen on (like WhatsApp messages) – the next prayer with a countdown and today’s times. Turned on under Widget and screen saver or Prayer times.
 - Screen saver and widget: prayer times are saved seven days ahead; without saved times it says "Open Alif once" instead of empty rows.
 - The bookmarks on the Qur’an page in gold with a gold bookmark sign.
 - Stopping the recitation or the end of the sūra now removes the media card from the lock screen.
