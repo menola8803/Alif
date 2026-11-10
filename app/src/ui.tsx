@@ -106,11 +106,12 @@ export function SmallBtn({ title, onPress, tone, disabled }: { title: string; on
 
 export function Header({ title, sub, onBack, right }: { title: string; sub?: string; onBack: () => void; right?: React.ReactNode }) {
   const { theme, t } = useApp();
+  const look = useButtonLook();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <Pressable accessibilityLabel={t.back} accessibilityRole="button" onPress={onBack}
-        style={{ width: 44, height: 44, borderRadius: 14, borderWidth: 1, borderColor: theme.line, backgroundColor: theme.card, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: theme.muted, fontSize: 22 }}>‹</Text>
+        style={({ pressed }) => ({ width: 44, height: 44, borderRadius: 14, borderWidth: 1, borderColor: look.border, backgroundColor: look.bg, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.8 : 1 })}>
+        <Text style={{ color: look.fg, fontSize: 24, marginTop: -2 }}>‹</Text>
       </Pressable>
       <View style={{ flex: 1 }}>
         <H1 size={22}>{title}</H1>
@@ -274,10 +275,11 @@ export function TabBar({ tab, setTab, badges, onLong }: { tab: TabName; setTab: 
 /** Gear in the top right corner that opens Settings; a ring glows around it when a new version is out. */
 export function GearButton({ onPress, glow }: { onPress: () => void; glow?: boolean }) {
   const { theme, t } = useApp();
-  const c = theme.dark ? '#E8B04A' : theme.ink;
+  const look = useButtonLook();
+  const c = look.fg;
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={glow ? `${t.settings} · ${t.newVersion}` : t.settings} onPress={onPress} hitSlop={8}
-      style={({ pressed }) => ({ width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.card, borderWidth: glow ? 2 : 1, borderColor: glow ? '#E8B04A' : theme.line, opacity: pressed ? 0.8 : 1,
+      style={({ pressed }) => ({ width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: look.bg, borderWidth: glow ? 2 : 1, borderColor: glow ? '#E8B04A' : look.border, opacity: pressed ? 0.8 : 1,
         shadowColor: '#E8B04A', shadowOpacity: glow ? 0.9 : 0, shadowRadius: glow ? 10 : 0, elevation: glow ? 10 : 0 })}>
       <Svg width={24} height={24} viewBox="0 0 24 24">
         <Path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z" stroke={c} strokeWidth={1.7} fill="none" />

@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.5.5
-- Alla knappar i appen har samma stil som menyn nertill: svag guldton, tunn guldkant och guldtext – inga helgula knappar längre (även spela-knappen och mikrofonen).
+- Alla knappar i appen har samma stil som menyn nertill: svag guldton, tunn guldkant och guldtext – inga helgula knappar längre (även spela-knappen, mikrofonen, tillbaka-knappen uppe till vänster och kugghjulet).
 - Två kategorier som båda hette "Prayer times" heter nu Bönetider och Bönetider – Fajr (Fajr-adhan har egen kategori).
 - **Ljud för Daily Awrad-påminnelsen:** samma val som för bönerna (telefonens ljud, tyst, adhan, ljud från telefonen, egen fil, som alarm) under Daily Awrad › Påminnelse.
 - Recitationens aviseringskategori heter nu "Koranrecitation" i telefonens inställningar (förut "expo_audio_channel").
