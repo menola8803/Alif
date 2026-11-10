@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.5
+- Två kategorier som båda hette "Prayer times" heter nu Bönetider och Bönetider – Fajr (Fajr-adhan har egen kategori).
 - **Ljud för Daily Awrad-påminnelsen:** samma val som för bönerna (telefonens ljud, tyst, adhan, ljud från telefonen, egen fil, som alarm) under Daily Awrad › Påminnelse.
 - Recitationens aviseringskategori heter nu "Koranrecitation" i telefonens inställningar (förut "expo_audio_channel").
 - **Bönetider på låsskärmen:** en tyst avisering som ligger kvar och syns när du tänder skärmen (som WhatsApp-meddelanden) – nästa bön med nedräkning och dagens tider. Slås på under Widget och skärmsläckare eller Bönetider.

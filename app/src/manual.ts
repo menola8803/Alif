@@ -98,7 +98,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Integritet', items: [
       'Plats och mikrofon är av från början.',
       'Alif ber aldrig om "Visa ovanpå andra appar" (därför är reglaget grått i telefonens inställningar) och behöver det inte – inte heller för skärmsläckaren eller nattklockan.',
-      'Aviseringskategorier i telefonens inställningar för Alif: Bönetider (bön-aviseringar), Daily Awrad (påminnelsen), Koranrecitation (kortet medan recitationen spelar) och Bönetider på låsskärmen. Var och en kan ställas in för sig.',
+      'Aviseringskategorier i telefonens inställningar för Alif: Bönetider (bön-aviseringar; med adhan finns också Bönetider – Fajr för Fajr-adhan), Daily Awrad (påminnelsen), Koranrecitation (kortet medan recitationen spelar) och Bönetider på låsskärmen. Var och en kan ställas in för sig.',
       'Mikrofonen används bara av Lyssna medan du har tryckt på den, och stängs när du trycker Stoppa, byter sida eller lämnar appen. Med "Bara på telefonen" (förval) lämnar ljudet aldrig telefonen.',
       'Kameran och textigenkänningen arbetar på telefonen. Bilder och text skickas bara iväg om du själv väljer Claude, MyMemory eller Google Lens.',
     ] },
@@ -196,7 +196,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     { title: 'Privacy', items: [
       'Location and microphone are off by default.',
       'Alif never asks for "Display over other apps" (that is why the switch is grey in the phone’s settings) and does not need it – not for the screen saver or the night clock either.',
-      'Notification categories in the phone’s settings for Alif: Prayer times (prayer notifications), Daily Awrad (the reminder), Qur’an recitation (the card while the recitation plays) and Prayer times on the lock screen. Each can be set on its own.',
+      'Notification categories in the phone’s settings for Alif: Prayer times (prayer notifications; with an adhan there is also Prayer times – Fajr for the Fajr adhan), Daily Awrad (the reminder), Qur’an recitation (the card while the recitation plays) and Prayer times on the lock screen. Each can be set on its own.',
       'The microphone is only used by Listen while you have pressed it, and is closed when you press Stop, change page or leave the app. With "On the phone only" (default) the audio never leaves the phone.',
       'The camera and text recognition work on the phone. Pictures and text are only sent anywhere if you choose Claude, MyMemory or Google Lens yourself.',
     ] },

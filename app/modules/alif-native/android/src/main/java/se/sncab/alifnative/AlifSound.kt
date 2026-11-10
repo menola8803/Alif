@@ -38,7 +38,10 @@ object AlifSound {
     for (c in nm.notificationChannels) if (c.id.startsWith(prefix) && c.id !in keep) nm.deleteNotificationChannel(c.id)
     for (c in channels) {
       val id = c["id"] as String
-      if (nm.getNotificationChannel(id) != null) continue
+      // An existing channel keeps its sound (Android fixes it), but its name can be changed.
+      if (nm.getNotificationChannel(id) != null) {
+        nm.createNotificationChannel(NotificationChannel(id, c["name"] as? String ?: "Prayer", NotificationManager.IMPORTANCE_HIGH)); continue
+      }
       val alarm = c["alarm"] as? Boolean ?: false
       val ch = NotificationChannel(id, c["name"] as? String ?: "Prayer", NotificationManager.IMPORTANCE_HIGH)
       ch.lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC

@@ -10,7 +10,7 @@ import { useApp } from './store';
 import { PRAYER_TR, PrayerDay, SALAH, calcDay, fetchMonth, hhmm, nextPrayer, ymd } from './core/prayer';
 import { MONTHS, offsetFor, toHijri } from './core/hijri';
 import { AlifNativeModule } from '../modules/alif-native';
-import { channelId, soundFor } from './core/sounds';
+import { FAJR_ADHAN, channelId, soundFor } from './core/sounds';
 
 export type PrayerSource = 'aladhan' | 'phone';
 type Ctx = {
@@ -120,7 +120,7 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
         if (Platform.OS === 'android') {
           if (AlifNativeModule) {
             const sounds = [...new Set(wanted.map(k => soundFor(k, prayerSound, fajrAdhan)))];
-            AlifNativeModule.setPrayerChannels(sounds.map(s => ({ id: channelId(s, prayerAlarm), name: t.prayerChannel, sound: s, alarm: prayerAlarm })));
+            AlifNativeModule.setPrayerChannels(sounds.map(s => ({ id: channelId(s, prayerAlarm), name: s === FAJR_ADHAN.id ? `${t.prayerChannel} – Fajr` : t.prayerChannel, sound: s, alarm: prayerAlarm })));
           } else {
             await Notifications.setNotificationChannelAsync(CHANNEL, {
               name: t.prayerChannel, importance: Notifications.AndroidImportance.HIGH,

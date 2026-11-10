@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
+- Two categories both called "Prayer times" are now Prayer times and Prayer times – Fajr (the Fajr adhan has its own category).
 - **Sound for the Daily Awrad reminder:** the same choices as for the prayers (the phone’s sound, silent, adhan, a sound from the phone, an own file, as an alarm) under Daily Awrad › Reminder.
 - The recitation’s notification category is now called "Qur’an recitation" in the phone’s settings (was "expo_audio_channel").
 - **Prayer times on the lock screen:** a quiet notification that stays and shows when you turn the screen on (like WhatsApp messages) – the next prayer with a countdown and today’s times. Turned on under Widget and screen saver or Prayer times.
