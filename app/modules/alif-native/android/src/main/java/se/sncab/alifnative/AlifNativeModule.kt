@@ -74,6 +74,7 @@ class AlifNativeModule : Module() {
     }
 
     // ---- Sounds for the prayer notifications (adhan, phone sounds, own files) ----
+    Function("setSoundChannels") { prefix: String, channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels, prefix) }
     Function("setPrayerChannels") { channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels) }
     Function("previewSound") { sound: String -> main.post { AlifSound.preview(ctx, sound) } }
     Function("stopSound") { main.post { AlifSound.stop() } }

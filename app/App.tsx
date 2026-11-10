@@ -102,7 +102,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'update': return <UpdateScreen onBack={pop} />;
       case 'about': return <AboutScreen onBack={pop} />;
       case 'awrad': return <Awrad onBack={pop} onReminder={() => push({ name: 'reminder' })} />;
-      case 'reminder': return <ReminderScreen onBack={pop} />;
+      case 'reminder': return <ReminderScreen onBack={pop} go={push} />;
       case 'prayer': return <PrayerScreen onBack={pop} go={push} />;
       case 'city': return <CityScreen onBack={pop} />;
       case 'qibla': return <QiblaScreen onBack={pop} onMosques={() => push({ name: 'mosques' })} />;
@@ -118,7 +118,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'juz': return <JuzScreen key={r.n} n={r.n} onBack={pop} go={push} />;
       case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} go={push} />;
       case 'nightClock': return <NightClockScreen onBack={pop} />;
-      case 'prayerSound': return <PrayerSoundScreen onBack={pop} />;
+      case 'prayerSound': return <PrayerSoundScreen key={r.target ?? 'prayer'} onBack={pop} target={r.target} />;
       default:
         return (
           <Screen bottom={false}>

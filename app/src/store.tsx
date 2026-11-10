@@ -68,6 +68,9 @@ type Saved = {
   prayerSoundName: string;             // the name of a sound from the phone
   fajrAdhan: boolean;                  // the Fajr adhan at Fajr when an adhan is chosen
   prayerAlarm: boolean;                // play at alarm volume
+  awradSound: string;                  // the Daily Awrad reminder's sound (same kinds as prayerSound)
+  awradSoundName: string;
+  awradAlarm: boolean;
   quranView: 'surah' | 'juz';         // the Qur'an tab lists the sūras or the 30 parts
   widgetStyle: 'full' | 'times';
   lockPrayer: boolean;                 // the prayer times as a quiet notification that stays on the lock screen      // home screen widget: everything, or only the five prayers with their times
@@ -94,7 +97,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false,
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false, awradSound: 'default', awradSoundName: '', awradAlarm: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

@@ -139,8 +139,14 @@ export function CityScreen({ onBack }: { onBack: () => void }) {
 }
 
 /** Settings › Prayer times › Sound: the phone's sound, silence, five adhans, a sound from the phone or an own file. */
-export function PrayerSoundScreen({ onBack }: { onBack: () => void }) {
-  const { t, theme, lang, prayerSound, prayerSoundName, fajrAdhan, prayerAlarm, setPrefs } = useApp();
+export function PrayerSoundScreen({ onBack, target = 'prayer' }: { onBack: () => void; target?: 'prayer' | 'awrad' }) {
+  const app = useApp();
+  const { t, theme, lang, fajrAdhan, setPrefs } = app;
+  // The same screen chooses the sound for the prayers and for the Daily Awrad reminder.
+  const aw = target === 'awrad';
+  const prayerSound = aw ? app.awradSound : app.prayerSound;
+  const prayerSoundName = aw ? app.awradSoundName : app.prayerSoundName;
+  const prayerAlarm = aw ? app.awradAlarm : app.prayerAlarm;
   const [playing, setPlaying] = useState('');
   const [msg, setMsg] = useState('');
   const N = AlifNativeModule;
@@ -150,7 +156,7 @@ export function PrayerSoundScreen({ onBack }: { onBack: () => void }) {
     if (playing === s) { N.stopSound(); setPlaying(''); return; }
     N.previewSound(s); setPlaying(s);
   };
-  const choose = (s: string, name = '') => { setMsg(''); setPrefs({ prayerSound: s, prayerSoundName: name }); };
+  const choose = (s: string, name = '') => { setMsg(''); setPrefs(aw ? { awradSound: s, awradSoundName: name } : { prayerSound: s, prayerSoundName: name }); };
   const phone = async () => {
     N?.stopSound(); setPlaying('');
     const r = await N?.pickPhoneSound(prayerSound.startsWith('content://') ? prayerSound : null, t.prayerSound).catch(() => null);
@@ -175,7 +181,7 @@ export function PrayerSoundScreen({ onBack }: { onBack: () => void }) {
   const own = prayerSound.startsWith('content://');
   return (
     <Screen>
-      <Header title={t.prayerSound} onBack={onBack} />
+      <Header title={aw ? t.awradSoundTitle : t.prayerSound} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 16 }}>
         <Choice title={t.soundDefault} on={prayerSound === 'default'} onPress={() => choose('default')} />
         <Choice title={t.soundSilent} on={prayerSound === 'silent'} onPress={() => choose('silent')} />
@@ -186,7 +192,7 @@ export function PrayerSoundScreen({ onBack }: { onBack: () => void }) {
             <PlayBtn s={a.id} />
           </View>
         ))}
-        {isAdhan(prayerSound) ? (
+        {isAdhan(prayerSound) && !aw ? (
           <Card style={{ paddingVertical: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <View style={{ flex: 1 }}><Toggle title={t.fajrAdhan} on={fajrAdhan} onChange={v => setPrefs({ fajrAdhan: v })} /></View>
@@ -200,10 +206,10 @@ export function PrayerSoundScreen({ onBack }: { onBack: () => void }) {
         <Choice title={t.soundFile} sub={t.soundFileSub} on={false} onPress={file} />
         {msg ? <Text style={{ color: theme.danger, fontSize: 13 }}>{msg}</Text> : null}
         <Card style={{ paddingVertical: 8 }}>
-          <Toggle title={t.soundAlarm} on={prayerAlarm} onChange={v => setPrefs({ prayerAlarm: v })} />
+          <Toggle title={t.soundAlarm} on={prayerAlarm} onChange={v => setPrefs(aw ? { awradAlarm: v } : { prayerAlarm: v })} />
           <Text style={{ fontSize: 12.5, color: theme.muted }}>{t.soundAlarmSub}</Text>
         </Card>
-        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.soundNote}</Text>
+        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{aw ? t.awradSoundNote : t.soundNote}</Text>
       </ScrollView>
     </Screen>
   );

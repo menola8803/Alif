@@ -30,12 +30,12 @@ object AlifSound {
     else -> Uri.parse(sound)
   }
 
-  /** Creates the prayer channels the app now uses and removes the earlier prayer channels. */
-  fun setChannels(context: Context, channels: List<Map<String, Any?>>) {
+  /** Creates the channels the app now uses (prayer: "prayer…", Daily Awrad: "awrad-…") and removes earlier ones of that kind. */
+  fun setChannels(context: Context, channels: List<Map<String, Any?>>, prefix: String = "prayer") {
     if (Build.VERSION.SDK_INT < 26) return
     val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val keep = channels.map { it["id"] as String }.toSet()
-    for (c in nm.notificationChannels) if (c.id.startsWith("prayer") && c.id !in keep) nm.deleteNotificationChannel(c.id)
+    for (c in nm.notificationChannels) if (c.id.startsWith(prefix) && c.id !in keep) nm.deleteNotificationChannel(c.id)
     for (c in channels) {
       val id = c["id"] as String
       if (nm.getNotificationChannel(id) != null) continue

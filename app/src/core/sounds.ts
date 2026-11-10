@@ -15,10 +15,10 @@ export const FAJR_ADHAN: Adhan = { id: 'raw:adhan_fajr', name: 'Adhan al-Fajr', 
 export const isAdhan = (s: string) => s.startsWith('raw:adhan_');
 
 /** A short, stable channel id for a sound (and whether it plays as an alarm). */
-export function channelId(sound: string, alarm: boolean): string {
+export function channelId(sound: string, alarm: boolean, prefix = 'prayer-'): string {
   let h = 5381;
   for (const c of `${sound}|${alarm ? 1 : 0}`) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0;
-  return `prayer-${h.toString(36)}`;
+  return `${prefix}${h.toString(36)}`;
 }
 
 /** The sound for each prayer: the Fajr adhan at Fajr when an adhan is chosen and the option is on. */

@@ -1,12 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, Vibration, View } from 'react-native';
 import { useApp } from '../store';
+import { Route } from '../nav';
+import { AlifNativeModule } from '../../modules/alif-native';
+import { ADHANS, isAdhan } from '../core/sounds';
 import { useQuran } from '../library';
 import { AWRAD, AwradStep, IhdaShaykh, Level, SALAWAT_SAYYIDINA, countFor, dayKey, formatTime, ihdaArabic, ihdaMeaning, isMTF } from '../core/awrad';
 import { transliterate } from '../core/translit';
 import { arabicDigits } from '../translate';
 import { askPermission, timeZone, uses12h } from '../reminder';
-import { Arabic, Body, Card, Header, Label, Screen, Segmented, SmallBtn, Text, Toggle } from '../ui';
+import { Arabic, Body, Card, Header, Label, Row, Screen, Segmented, SmallBtn, Text, Toggle } from '../ui';
 
 function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: number; onTap: () => void; onUndo: () => void }) {
   const { t, theme, lang, scheme, mode, showTranslation, ihdaShaykh, setPrefs } = useApp();
@@ -94,8 +97,9 @@ export default function Awrad({ onBack, onReminder }: { onBack: () => void; onRe
   );
 }
 
-export function ReminderScreen({ onBack }: { onBack: () => void }) {
-  const { t, theme, reminderOn, reminderHour, reminderMinute, setPrefs } = useApp();
+export function ReminderScreen({ onBack, go }: { onBack: () => void; go?: (r: Route) => void }) {
+  const { t, theme, reminderOn, reminderHour, reminderMinute, setPrefs, awradSound, awradSoundName } = useApp();
+  const soundName = awradSound === 'default' ? t.soundDefault : awradSound === 'silent' ? t.soundSilent : isAdhan(awradSound) ? ADHANS.find(a => a.id === awradSound)?.name ?? t.adhanTitle : awradSoundName || t.soundPhone.replace('…', '');
   const [denied, setDenied] = useState(false);
   const h12 = uses12h();
   const setTime = (h: number, m: number) => setPrefs({ reminderHour: (h + 24) % 24, reminderMinute: (m + 60) % 60 });
@@ -131,6 +135,7 @@ export function ReminderScreen({ onBack }: { onBack: () => void }) {
           <SmallBtn title={t.reminderDefault} onPress={() => setTime(21, 0)} />
           <Text style={{ fontSize: 12, color: theme.muted }}>{t.reminderZone}{timeZone() ? `: ${timeZone()}` : ''}</Text>
         </Card>
+        {go && AlifNativeModule ? <Card style={{ paddingVertical: 4, opacity: reminderOn ? 1 : 0.5 }}><Row title={t.awradSoundTitle} right={soundName} onPress={() => go({ name: 'prayerSound', target: 'awrad' })} /></Card> : null}
         <Body muted>{t.reminderHelp}</Body>
       </ScrollView>
     </Screen>

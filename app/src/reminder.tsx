@@ -5,6 +5,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AppState, Modal, Platform, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { useApp } from './store';
+import { AlifNativeModule } from '../modules/alif-native';
+import { channelId } from './core/sounds';
 import { AWRAD, countFor, dayKey, formatTime, pastTime } from './core/awrad';
 import { Arabic, Btn, Text } from './ui';
 import { SALAWAT_SAYYIDINA } from './core/awrad';
@@ -29,13 +31,18 @@ export async function askPermission(): Promise<boolean> {
 
 const AWRAD_ID = 'awrad-daily';
 
-async function schedule(on: boolean, hour: number, minute: number, title: string, body: string, firstRun: boolean, done: () => void) {
+async function schedule(on: boolean, hour: number, minute: number, title: string, body: string, firstRun: boolean, done: () => void, sound = 'default', alarm = false) {
   try {
     // Versions before 0.4.0 gave the reminder no name, so everything is cleared once; after that only the reminder itself.
     if (firstRun) { await Notifications.cancelAllScheduledNotificationsAsync(); done(); }
     else await Notifications.cancelScheduledNotificationAsync(AWRAD_ID).catch(() => {});
     if (!on) return;
-    if (Platform.OS === 'android') {
+    // With the native module the reminder's own sound is used (one channel per sound, as for the prayers).
+    let ch = CHANNEL;
+    if (Platform.OS === 'android' && AlifNativeModule) {
+      ch = channelId(sound, alarm, 'awrad-');
+      AlifNativeModule.setSoundChannels('awrad-', [{ id: ch, name: 'Daily Awrad', sound, alarm }]);
+    } else if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync(CHANNEL, {
         name: 'Daily Awrad', importance: Notifications.AndroidImportance.HIGH,
         lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, vibrationPattern: [0, 250, 150, 250], lightColor: '#E8B04A',
@@ -45,22 +52,22 @@ async function schedule(on: boolean, hour: number, minute: number, title: string
     await Notifications.scheduleNotificationAsync({
       identifier: AWRAD_ID,
       content: { title, body, data: { open: 'awrad' } },
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute, channelId: CHANNEL },
+      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute, channelId: ch },
     });
   } catch {}
 }
 
 /** Keeps the scheduled notification in step with the settings, opens the Awrad from a tapped notification and shows the in-app popup. */
 export function ReminderManager({ openAwrad, active }: { openAwrad: () => void; active: boolean }) {
-  const { ready, t, theme, reminderOn, reminderHour, reminderMinute, awradDay, awradCounts, awradLevel, popupDay, setPrefs, lang, notifV2 } = useApp();
+  const { ready, t, theme, reminderOn, reminderHour, reminderMinute, awradDay, awradCounts, awradLevel, popupDay, setPrefs, lang, notifV2, awradSound, awradAlarm } = useApp();
   const open = useRef(openAwrad); open.current = openAwrad;
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
     if (!ready) return;
-    schedule(reminderOn, reminderHour, reminderMinute, t.awradNotifTitle, t.awradNotifBody, !notifV2, () => setPrefs({ notifV2: true }));
+    schedule(reminderOn, reminderHour, reminderMinute, t.awradNotifTitle, t.awradNotifBody, !notifV2, () => setPrefs({ notifV2: true }), awradSound, awradAlarm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, reminderOn, reminderHour, reminderMinute, lang, t.awradNotifTitle, t.awradNotifBody]);
+  }, [ready, reminderOn, reminderHour, reminderMinute, lang, t.awradNotifTitle, t.awradNotifBody, awradSound, awradAlarm]);
 
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener(r => { if (r.notification.request.content.data?.open === 'awrad') open.current(); });

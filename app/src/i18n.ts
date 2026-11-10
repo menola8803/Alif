@@ -435,6 +435,7 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  awradSoundTitle: 'Ljud för påminnelsen', awradSoundNote: 'Ljudet gäller påminnelsen för Daily Awrad. "Spela som alarm" gör att den hörs även när aviseringsljudet är lågt.',
   recitationChannel: 'Koranrecitation',
   lockPrayer: 'Bönetider på låsskärmen', lockPrayerSub: 'En tyst avisering som ligger kvar och syns när du tänder skärmen, under t.ex. WhatsApp: nästa bön med nedräkning och dagens fem tider. Uppdateras efter varje bön.',
   tabPlaying: 'spelar {v} · tryck länge för att stoppa',
@@ -484,6 +485,7 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  awradSoundTitle: 'Sound for the reminder', awradSoundNote: 'The sound is used for the Daily Awrad reminder. "Play as an alarm" makes it heard even when the notification volume is low.',
   recitationChannel: 'Qur’an recitation',
   lockPrayer: 'Prayer times on the lock screen', lockPrayerSub: 'A quiet notification that stays and shows when you turn the screen on, under e.g. WhatsApp: the next prayer with a countdown and today’s five times. Renewed after every prayer.',
   tabPlaying: 'playing {v} · hold to stop',

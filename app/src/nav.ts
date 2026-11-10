@@ -29,5 +29,5 @@ export type Route =
   | { name: 'micSettings' }
   | { name: 'widgetSettings' }
   | { name: 'nightClock' }
-  | { name: 'prayerSound' }
+  | { name: 'prayerSound'; target?: 'prayer' | 'awrad' }
   | { name: 'juz'; n: number; ayah?: { surah: number; n: number } };

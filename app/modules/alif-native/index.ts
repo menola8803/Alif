@@ -12,6 +12,7 @@ type AlifNative = {
   captureVolumeKeys(on: boolean): void;
   setWidgetData(json: string): void;
   setPrayerChannels(channels: { id: string; name: string; sound: string; alarm: boolean }[]): void;
+  setSoundChannels(prefix: string, channels: { id: string; name: string; sound: string; alarm: boolean }[]): void;
   previewSound(sound: string): void;
   stopSound(): void;
   nameAudioChannel(name: string): void;
