@@ -71,11 +71,12 @@ export function Card({ children, style }: { children: React.ReactNode; style?: V
 
 export function Btn({ title, onPress, kind = 'primary', disabled }: { title: string; onPress: () => void; kind?: 'primary' | 'secondary' | 'danger'; disabled?: boolean }) {
   const { theme } = useApp();
-  const bg = kind === 'primary' ? theme.primary : theme.card;
-  const fg = kind === 'primary' ? theme.onPrimary : kind === 'danger' ? theme.danger : theme.ink;
+  // Secondary buttons: gold outline and gold text on the chip colour, so they read as buttons inside a card too.
+  const bg = kind === 'primary' ? theme.primary : theme.chip;
+  const fg = kind === 'primary' ? theme.onPrimary : kind === 'danger' ? theme.danger : theme.primary;
   return (
     <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
-      style={({ pressed }) => ({ minHeight: 52, paddingHorizontal: 16, borderRadius: 16, backgroundColor: bg, opacity: disabled ? 0.5 : pressed ? 0.85 : 1, alignItems: 'center', justifyContent: 'center', borderWidth: kind === 'primary' ? 0 : 1, borderColor: kind === 'danger' ? theme.danger : theme.line })}>
+      style={({ pressed }) => ({ minHeight: 52, paddingHorizontal: 16, borderRadius: 16, backgroundColor: bg, opacity: disabled ? 0.5 : pressed ? 0.85 : 1, alignItems: 'center', justifyContent: 'center', borderWidth: kind === 'primary' ? 0 : 1, borderColor: kind === 'danger' ? theme.danger : theme.primary })}>
       <Text style={{ color: fg, fontSize: 16, fontWeight: '600' }}>{title}</Text>
     </Pressable>
   );

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.5
+- Knappar: "Öppna skärmsläckare i telefonen" är en tydlig guldknapp; övriga sekundära knappar har guldkant och guldtext så de syns som knappar.
 - Två kategorier som båda hette "Prayer times" heter nu Bönetider och Bönetider – Fajr (Fajr-adhan har egen kategori).
 - **Ljud för Daily Awrad-påminnelsen:** samma val som för bönerna (telefonens ljud, tyst, adhan, ljud från telefonen, egen fil, som alarm) under Daily Awrad › Påminnelse.
 - Recitationens aviseringskategori heter nu "Koranrecitation" i telefonens inställningar (förut "expo_audio_channel").

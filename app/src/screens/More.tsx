@@ -215,7 +215,7 @@ export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (
         <Card>
           <Label>{t.dreamTitle}</Label>
           <Body muted>{t.dreamHow}</Body>
-          {Platform.OS === 'android' ? <Btn title={t.dreamOpen} kind="secondary" onPress={() => Linking.sendIntent('android.settings.DREAM_SETTINGS').catch(() => Linking.openSettings().catch(() => {}))} /> : null}
+          {Platform.OS === 'android' ? <Btn title={t.dreamOpen} onPress={() => Linking.sendIntent('android.settings.DREAM_SETTINGS').catch(() => Linking.openSettings().catch(() => {}))} /> : null}
           <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.dreamMissing}</Text>
         </Card>
       </ScrollView>
