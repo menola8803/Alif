@@ -73,7 +73,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Översättningsmotor väljs under Inställningar › Översättning.',
     ] },
     { title: 'Lär dig läsa', items: [
-      'Ḥurūf (kortet med الٓمٓ): de avskilda bokstäverna som öppnar 29 suror, med förklarande text: vad de är, Abū Bakrs ord, bilden över de 29 öppningarna (tryck för att förstora, tryck igen för att stänga), de 14 bokstäverna med namn och de Guds namn de är nycklar till, öppningarna med suror (tryck på en sura för att läsa den), كهيعص, hadithen om abjad-räkningen och al-Yāfiʿīs tabell över de sju bokstäver som saknas i al-Fātiḥa (dag, ängel och namn). Källa: nurmuhammad.com.',
+      'Ḥurūf (kortet med الٓمٓ): de avskilda bokstäverna som öppnar 29 suror. Överst en rad med artikelns nio delar – tryck för att hoppa dit. Varje del är en utförlig sammanfattning (Visa mer för resten) med bokstäverna och Guds namn, al-Yāfiʿīs tabell (dag, ängel, namn), bilden över öppningarna (tryck för att förstora, tryck igen för att stänga), öppningarna med suror (tryck på en sura för att läsa den), كهيعص, abjad-hadithen och fördelningen.',
+      'Läs hela artikeln (längst ner på Ḥurūf-sidan) visar originalartikeln från nurmuhammad.com inuti Alif. Den kräver internet; länkar i artikeln följs inte.',
       'Bokstäverna i samma ordning som boken Iqraʾa! (Samir Muric), med bokens bilder av var bokstaven uttalas och hur den skrivs: ensam, i början, i mitten och i slutet, i fyra rutor två och två, numrerade 1–4 från höger.',
       'Tryck ▶ Lyssna för att höra bokstaven (telefonens talsyntes). "Vokaltecken" visar fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn och långa vokaler.',
       'Frågor slås på och av i menyn ⋮ uppe till höger (av från början).',
@@ -172,7 +173,8 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The translation engine is chosen in Settings › Translation.',
     ] },
     { title: 'Learn to read', items: [
-      'Ḥurūf (the card with الٓمٓ): the disjoined letters that open 29 sūras, with explaining text: what they are, Abū Bakr’s words, the picture of the 29 openings (tap to enlarge, tap again to close), the 14 letters with their names and the names of Allah they are keys to, the openings with their sūras (tap a sūra to read it), كهيعص, the ḥadīth of the abjad count and al-Yāfiʿī’s table of the seven letters not in al-Fātiḥa (day, angel and name). Source: nurmuhammad.com.',
+      'Ḥurūf (the card with الٓمٓ): the disjoined letters that open 29 sūras. At the top a row with the article’s nine parts – tap to jump there. Each part is a full summary (Show more for the rest) with the letters and Allah’s names, al-Yāfiʿī’s table (day, angel, name), the picture of the openings (tap to enlarge, tap again to close), the openings with their sūras (tap a sūra to read it), كهيعص, the abjad ḥadīth and how the openings are spread.',
+      'Read the whole article (at the bottom of the Ḥurūf page) shows the original article from nurmuhammad.com inside Alif. It needs internet; links in the article are not followed.',
       'The letters in the same order as the book Iqraʾa! (Samir Muric), with the book’s pictures of where each letter is pronounced and how it is written: alone, at the start, in the middle and at the end, in four boxes two by two, numbered 1–4 from the right.',
       'Tap ▶ Listen to hear the letter (the phone’s speech). "Vowel signs" shows fatḥa, kasra, ḍamma, sukūn, shadda, tanwīn and the long vowels.',
       'Questions are switched on and off in the ⋮ menu in the top right corner (off by default).',

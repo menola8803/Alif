@@ -437,6 +437,7 @@ const en3: typeof sv3 = {
 const sv4 = {
   huroofTitle: 'Ḥurūf', huroofSub: 'De avskilda bokstäverna i surornas början', huroofCard: 'Ḥurūf · de avskilda bokstäverna', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt i 29 suror, med förklaring',
   huroofTree: '29 SUROR ÖPPNAS MED BOKSTÄVER', huroofLetters: 'DE 14 BOKSTÄVERNA · NYCKLAR TILL GUDS NAMN', huroofOpeners: 'DE 14 ÖPPNINGARNA', huroofHadith: 'HADITHEN OM ABJAD-RÄKNINGEN', huroofMissing: 'AL-YĀFIʿĪ: DE SJU BOKSTÄVER SOM SAKNAS I AL-FĀTIḤA',
+  showMore: 'Visa mer', readArticle: 'Läs hela artikeln', articleTitle: 'Artikeln', articleOffline: 'Artikeln kunde inte laddas. Den kräver internet.', tryAgainShort: 'Försök igen',
   huroofLetter: 'Bokstav', huroofDay: 'Dag', huroofAngel: 'Ängel', huroofName: 'Namn',
   tapToEnlarge: 'Tryck för att förstora', tapToClose: 'Tryck igen för att stänga',
   awradSoundTitle: 'Ljud för påminnelsen', awradSoundNote: 'Ljudet gäller påminnelsen för Daily Awrad. "Spela som alarm" gör att den hörs även när aviseringsljudet är lågt.',
@@ -491,6 +492,7 @@ const sv4 = {
 const en4: typeof sv4 = {
   huroofTitle: 'Ḥurūf', huroofSub: 'The disjoined letters at the start of the sūras', huroofCard: 'Ḥurūf · the disjoined letters', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt in 29 sūras, explained',
   huroofTree: '29 SŪRAS OPEN WITH LETTERS', huroofLetters: 'THE 14 LETTERS · KEYS TO ALLAH’S NAMES', huroofOpeners: 'THE 14 OPENINGS', huroofHadith: 'THE ḤADĪTH OF THE ABJAD COUNT', huroofMissing: 'AL-YĀFIʿĪ: THE SEVEN LETTERS NOT IN AL-FĀTIḤA',
+  showMore: 'Show more', readArticle: 'Read the whole article', articleTitle: 'The article', articleOffline: 'The article could not be loaded. It needs internet.', tryAgainShort: 'Try again',
   huroofLetter: 'Letter', huroofDay: 'Day', huroofAngel: 'Angel', huroofName: 'Name',
   tapToEnlarge: 'Tap to enlarge', tapToClose: 'Tap again to close',
   awradSoundTitle: 'Sound for the reminder', awradSoundNote: 'The sound is used for the Daily Awrad reminder. "Play as an alarm" makes it heard even when the notification volume is low.',

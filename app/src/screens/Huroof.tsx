@@ -1,118 +1,137 @@
-import React, { useState } from 'react';
-import { Image, Linking, Modal, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { ActivityIndicator, Image, Modal, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { useApp } from '../store';
 import { Route } from '../nav';
-import { SURAHS } from '../core/quran';
-import { ABU_BAKR, HADITH_SUMS, HUROOF_SOURCE, H_LETTERS, H_TEXT, MISSING7, OPENERS } from '../core/huroof';
-import { Arabic, Body, Card, Header, Label, Screen, Text } from '../ui';
+import { ABU_BAKR, HADITH_SUMS, HUROOF_SOURCE, H_HUMILITY, H_LETTERS, H_SECTIONS, MISSING7, OPENERS } from '../core/huroof';
+import { Arabic, Body, Btn, Card, Header, Screen, Text, useButtonLook } from '../ui';
 
 const TREE = require('../../assets/huroof/muqattaat-tree.png');
 const TREE_RATIO = 542 / 300;
 
-/** Ḥurūf: the disjoined letters that open 29 sūras, with explaining text, the picture and the letters. */
+/**
+ * Ḥurūf: the disjoined letters that open 29 sūras. The nine parts of the nurmuhammad.com article as summaries (a row of
+ * chips jumps to each), with the picture, the letters and the tables; at the end a button opens the whole article.
+ */
 export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (r: Route) => void }) {
   const { t, theme, lang } = useApp();
+  const look = useButtonLook();
   const { width, height } = useWindowDimensions();
   const [big, setBig] = useState(false);
-  const tx = (k: string) => H_TEXT[k][lang];
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const ys = useRef<Record<string, number>>({});
   const tile = (width - 32 - 16) / 3;
   const imgW = Math.min(width - 66, 300);
   const bigH = Math.min(height - 120, (width - 32) * TREE_RATIO);
-  const Section = ({ label, text, children }: { label: string; text: string; children?: React.ReactNode }) => (
-    <View style={{ gap: 8 }}>
-      <Label>{label}</Label>
-      <Body>{text}</Body>
-      {children}
-    </View>
-  );
-  return (
-    <Screen>
-      <Header title={t.huroofTitle} sub={t.huroofSub} onBack={onBack} right={<Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 42 }}>حُرُوف</Arabic>} />
-      <ScrollView contentContainerStyle={{ gap: 18, paddingBottom: 24 }} showsVerticalScrollIndicator={false}>
-        <Body>{tx('intro')}</Body>
-        <Card>
-          <Arabic size={22}>{ABU_BAKR}</Arabic>
-          <Text style={{ fontSize: 14, lineHeight: 21, color: theme.ink }}>{tx('quote')}</Text>
-          <Text style={{ fontSize: 12.5, color: theme.accent }}>Abū Bakr aṣ-Ṣiddīq (r) · al-Ḥasan al-Baṣrī</Text>
-        </Card>
 
-        <Section label={t.huroofTree} text={tx('tree')}>
+  const extra = (id: string) => {
+    switch (id) {
+      case 'intro': return (
+        <View style={{ gap: 4, paddingTop: 4 }}>
+          <Arabic size={22}>{ABU_BAKR}</Arabic>
+          <Text style={{ fontSize: 12.5, color: theme.accent }}>Abū Bakr aṣ-Ṣiddīq (r)</Text>
+        </View>
+      );
+      case 'keys': return (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {H_LETTERS.map(l => (
+            <View key={l.ar} style={{ width: tile - 10, backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.line, borderRadius: 14, alignItems: 'center', paddingVertical: 8, gap: 1 }}>
+              <Arabic size={30} selectable={false} color={theme.primary} style={{ lineHeight: 48 }}>{l.ar}</Arabic>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: theme.ink }}>{l.tr}</Text>
+              <Arabic size={16} selectable={false} style={{ lineHeight: 28 }}>{l.name}</Arabic>
+              <Text style={{ fontSize: 11, color: theme.muted }}>{`${l.divine} · ${l.value}`}</Text>
+            </View>
+          ))}
+        </View>
+      );
+      case 'yafii': return (
+        <View>
+          <View style={{ flexDirection: 'row', paddingVertical: 6 }}>
+            {[t.huroofLetter, t.huroofDay, t.huroofAngel, t.huroofName].map((h, i) => (
+              <Text key={h} style={{ flex: i === 0 ? 0.7 : 1, fontSize: 11, fontWeight: '700', letterSpacing: 0.8, color: theme.accent }}>{h.toUpperCase()}</Text>
+            ))}
+          </View>
+          {MISSING7.map(m => (
+            <View key={m.ar} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 6, borderTopWidth: 1, borderTopColor: theme.line }}>
+              <View style={{ flex: 0.7 }}><Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 40, textAlign: 'left' }}>{m.ar}</Arabic><Text style={{ fontSize: 11.5, color: theme.muted }}>{m.tr}</Text></View>
+              <Text style={{ flex: 1, fontSize: 13.5, color: m.day ? theme.ink : theme.muted }}>{m.day ? m.day[lang] : '–'}</Text>
+              <Text style={{ flex: 1, fontSize: 13.5, color: theme.ink }}>{m.angel}</Text>
+              <View style={{ flex: 1 }}><Text style={{ fontSize: 13.5, fontWeight: '600', color: theme.ink }}>{m.divine}</Text><Arabic size={16} selectable={false} style={{ lineHeight: 28, textAlign: 'left' }}>{m.divineAr}</Arabic></View>
+            </View>
+          ))}
+        </View>
+      );
+      case 'openers': return (
+        <View style={{ gap: 10 }}>
           {/* The picture: white, rounded, a thin gold border; tap to enlarge, tap again to close. */}
           <Pressable accessibilityRole="imagebutton" accessibilityLabel={t.tapToEnlarge} onPress={() => setBig(true)} style={{ alignSelf: 'center', alignItems: 'center', gap: 6 }}>
             <View style={{ backgroundColor: '#fff', borderRadius: 16, borderWidth: 1, borderColor: '#C9A05A', padding: 8, overflow: 'hidden' }}>
-              <Image source={TREE} style={{ width: imgW, height: imgW * TREE_RATIO }} resizeMode="contain" />
+              <Image source={TREE} style={{ width: imgW - 20, height: (imgW - 20) * TREE_RATIO }} resizeMode="contain" />
             </View>
             <Text style={{ fontSize: 12, color: theme.muted }}>{t.tapToEnlarge}</Text>
           </Pressable>
-        </Section>
-
-        <Section label={t.huroofLetters} text={tx('letters')}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {H_LETTERS.map(l => (
-              <View key={l.ar} style={{ width: tile, backgroundColor: theme.card, borderWidth: 1, borderColor: theme.line, borderRadius: 14, alignItems: 'center', paddingVertical: 8, gap: 1 }}>
-                <Arabic size={32} selectable={false} color={theme.primary} style={{ lineHeight: 50 }}>{l.ar}</Arabic>
-                <Text style={{ fontSize: 13, fontWeight: '700', color: theme.ink }}>{l.tr}</Text>
-                <Arabic size={16} selectable={false} style={{ lineHeight: 28 }}>{l.name}</Arabic>
-                <Text style={{ fontSize: 11, color: theme.muted }}>{`${l.divine} · ${l.value}`}</Text>
-              </View>
-            ))}
-          </View>
-        </Section>
-
-        <Section label={t.huroofOpeners} text={tx('openers')}>
-          <Card style={{ paddingVertical: 4, gap: 0 }}>
-            {OPENERS.map((o, i) => (
-              <View key={o.ar} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8, borderTopWidth: i ? 1 : 0, borderTopColor: theme.line }}>
-                <Arabic size={24} selectable={false} color={theme.primary} style={{ width: 100, textAlign: 'right', lineHeight: 42 }}>{o.ar}</Arabic>
-                <View style={{ flex: 1, gap: 4 }}>
-                  <Text style={{ fontSize: 14, fontWeight: '600', color: theme.ink }}>{o.tr}</Text>
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-                    {o.surahs.map(n => (
-                      <Text key={n} onPress={() => go({ name: 'surah', n })} accessibilityRole="link" accessibilityLabel={`${n}. ${SURAHS[n - 1].name}`}
-                        style={{ fontSize: 12.5, color: theme.primary, borderWidth: 1, borderColor: theme.line, borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 }}>{n}</Text>
-                    ))}
-                  </View>
+          {OPENERS.map((o, i) => (
+            <View key={o.ar} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: theme.line }}>
+              <Arabic size={24} selectable={false} color={theme.primary} style={{ width: 96, textAlign: 'right', lineHeight: 42 }}>{o.ar}</Arabic>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: theme.ink }}>{o.tr}</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+                  {o.surahs.map(n => (
+                    <Pressable key={n} accessibilityRole="button" onPress={() => go({ name: 'surah', n })}
+                      style={{ borderWidth: 1, borderColor: look.border, backgroundColor: look.bg, borderRadius: 8, paddingHorizontal: 7, paddingVertical: 2 }}>
+                      <Text style={{ fontSize: 12.5, color: look.fg }}>{n}</Text>
+                    </Pressable>
+                  ))}
                 </View>
               </View>
-            ))}
-          </Card>
-        </Section>
-
-        <Section label="كٓهيعٓصٓ" text={tx('kaf')} />
-
-        <Section label={t.huroofHadith} text={tx('hadith')}>
-          <Card style={{ paddingVertical: 4, gap: 0 }}>
-            {HADITH_SUMS.map((h, i) => (
-              <View key={h.ar} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: theme.line }}>
-                <Arabic size={22} selectable={false} color={theme.primary} style={{ width: 90, textAlign: 'right', lineHeight: 38 }}>{h.ar}</Arabic>
-                <Text style={{ flex: 1, fontSize: 14, color: theme.ink }}>{h.tr}</Text>
-                <Text style={{ fontSize: 16, fontWeight: '700', color: theme.primary }}>{h.value}</Text>
-              </View>
-            ))}
-          </Card>
-        </Section>
-
-        <Section label={t.huroofMissing} text={tx('missing')}>
-          {/* al-Yāfiʿī's table: letter · day · angel · name */}
-          <Card style={{ paddingVertical: 4, gap: 0 }}>
-            <View style={{ flexDirection: 'row', paddingVertical: 6 }}>
-              {[t.huroofLetter, t.huroofDay, t.huroofAngel, t.huroofName].map((h, i) => (
-                <Text key={h} style={{ flex: i === 0 ? 0.7 : 1, fontSize: 11, fontWeight: '700', letterSpacing: 0.8, color: theme.accent }}>{h.toUpperCase()}</Text>
-              ))}
             </View>
-            {MISSING7.map(m => (
-              <View key={m.ar} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 6, borderTopWidth: 1, borderTopColor: theme.line }}>
-                <View style={{ flex: 0.7 }}><Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 40, textAlign: 'left' }}>{m.ar}</Arabic><Text style={{ fontSize: 11.5, color: theme.muted }}>{m.tr}</Text></View>
-                <Text style={{ flex: 1, fontSize: 13.5, color: m.day ? theme.ink : theme.muted }}>{m.day ? m.day[lang] : '–'}</Text>
-                <Text style={{ flex: 1, fontSize: 13.5, color: theme.ink }}>{m.angel}</Text>
-                <View style={{ flex: 1 }}><Text style={{ fontSize: 13.5, fontWeight: '600', color: theme.ink }}>{m.divine}</Text><Arabic size={16} selectable={false} style={{ lineHeight: 28, textAlign: 'left' }}>{m.divineAr}</Arabic></View>
-              </View>
-            ))}
-          </Card>
-        </Section>
+          ))}
+        </View>
+      );
+      case 'hadith': return (
+        <View>
+          {HADITH_SUMS.map((h, i) => (
+            <View key={h.ar} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: theme.line }}>
+              <Arabic size={22} selectable={false} color={theme.primary} style={{ width: 90, textAlign: 'right', lineHeight: 38 }}>{h.ar}</Arabic>
+              <Text style={{ flex: 1, fontSize: 14, color: theme.ink }}>{h.tr}</Text>
+              <Text style={{ fontSize: 16, fontWeight: '700', color: theme.primary }}>{h.value}</Text>
+            </View>
+          ))}
+        </View>
+      );
+      default: return null;
+    }
+  };
 
-        <Card><Body muted>{tx('humility')}</Body></Card>
-        <Text style={{ fontSize: 12, color: theme.muted }} onPress={() => Linking.openURL(HUROOF_SOURCE).catch(() => {})}>{`${t.source}: nurmuhammad.com – Secrets of Muqattaʿat in Ahadith of Prophet ﷺ ›`}</Text>
+  return (
+    <Screen>
+      <Header title={t.huroofTitle} sub={t.huroofSub} onBack={onBack} right={<Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 42 }}>حُرُوف</Arabic>} />
+      <ScrollView ref={scroll} contentContainerStyle={{ gap: 12, paddingBottom: 24 }} showsVerticalScrollIndicator={false}>
+        {/* Contents: tap a part to jump to it. */}
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+          {H_SECTIONS.map((sec, i) => (
+            <Pressable key={sec.id} accessibilityRole="button" onPress={() => scroll.current?.scrollTo({ y: Math.max(0, (ys.current[sec.id] ?? 0) - 8), animated: true })}
+              style={{ borderWidth: 1, borderColor: look.border, backgroundColor: look.bg, borderRadius: 10, paddingHorizontal: 9, paddingVertical: 5 }}>
+              <Text style={{ fontSize: 12.5, color: look.fg }}>{`${i + 1} ${sec.title[lang]}`}</Text>
+            </Pressable>
+          ))}
+        </View>
+        {H_SECTIONS.map((sec, i) => (
+          <View key={sec.id} onLayout={e => { ys.current[sec.id] = e.nativeEvent.layout.y; }}>
+            <Card style={{ gap: 8 }}>
+              <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}><Text style={{ color: theme.primary, fontWeight: '800' }}>{`${i + 1}  `}</Text>{sec.title[lang]}</Text>
+              <Body>{sec.text[lang]}</Body>
+              {sec.more ? (open[sec.id]
+                ? <Body>{sec.more[lang]}</Body>
+                : <Text onPress={() => setOpen(o => ({ ...o, [sec.id]: true }))} style={{ fontSize: 13.5, fontWeight: '700', color: theme.primary }}>{`${t.showMore} ⌄`}</Text>) : null}
+              {extra(sec.id)}
+            </Card>
+          </View>
+        ))}
+        <Card><Body muted>{H_HUMILITY[lang]}</Body></Card>
+        <Btn title={t.readArticle} onPress={() => go({ name: 'article' })} />
+        <Text style={{ fontSize: 12, color: theme.muted, textAlign: 'center' }}>{`${t.source}: nurmuhammad.com – Secrets of Muqattaʿat in Ahadith of Prophet ﷺ`}</Text>
       </ScrollView>
 
       <Modal visible={big} transparent animationType="fade" onRequestClose={() => setBig(false)}>
@@ -124,6 +143,33 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
           <Text style={{ fontSize: 12.5, color: '#B7C6C3' }}>{t.tapToClose}</Text>
         </Pressable>
       </Modal>
+    </Screen>
+  );
+}
+
+/** The whole article, shown inside Alif (needs internet). Links inside it are not followed. */
+export function ArticleScreen({ onBack }: { onBack: () => void }) {
+  const { t, theme } = useApp();
+  const [err, setErr] = useState(false);
+  const [key, setKey] = useState(0);
+  return (
+    <Screen>
+      <Header title={t.articleTitle} sub="nurmuhammad.com · Secrets of Muqattaʿat" onBack={onBack} />
+      <View style={{ flex: 1, borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: '#C9A05A', backgroundColor: '#fbfaf7', marginBottom: 8 }}>
+        {err ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 20, backgroundColor: theme.card }}>
+            <Body>{t.articleOffline}</Body>
+            <Btn title={t.tryAgainShort} onPress={() => { setErr(false); setKey(k => k + 1); }} />
+          </View>
+        ) : (
+          <WebView key={key} source={{ uri: HUROOF_SOURCE }} startInLoadingState
+            renderLoading={() => <View style={{ position: 'absolute', inset: 0, alignItems: 'center', justifyContent: 'center' }}><ActivityIndicator color={theme.primary} /></View>}
+            onError={() => setErr(true)} onHttpError={e => { if (e.nativeEvent.statusCode >= 500) setErr(true); }}
+            // Only the article itself: links inside it are not followed.
+            onShouldStartLoadWithRequest={r => r.url.split('#')[0].replace(/\/$/, '') === HUROOF_SOURCE.replace(/\/$/, '') || r.url.startsWith('about:')}
+            setSupportMultipleWindows={false} allowsLinkPreview={false} />
+        )}
+      </View>
     </Screen>
   );
 }
