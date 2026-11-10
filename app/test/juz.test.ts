@@ -23,3 +23,16 @@ import { channelId, soundFor, ADHANS, FAJR_ADHAN } from '../src/core/sounds';
   if (f) process.exit(1);
   console.log('sounds: all ok');
 }
+// ḥurūf
+import { H_LETTERS, OPENERS, MISSING7 } from '../src/core/huroof';
+{
+  let f = 0; const ok3 = (c: boolean, m: string) => { if (!c) { f++; console.log('FAIL', m); } };
+  const surahs = new Set(OPENERS.flatMap(o => o.surahs));
+  ok3(surahs.size === 29, `29 sūras (${surahs.size})`);
+  ok3(H_LETTERS.length === 14 && new Set(H_LETTERS.map(l => l.ar)).size === 14, '14 letters');
+  const used = new Set(OPENERS.flatMap(o => [...o.ar.replace(/[ٓ\s]/g, '').replace('ه', 'ه')]));
+  ok3([...used].every(c => H_LETTERS.some(l => l.ar === c)), `opener letters are the 14 (${[...used].join('')})`);
+  ok3(MISSING7.every(m => !H_LETTERS.some(l => l.ar === m.ar)), 'the seven are not among the 14');
+  if (f) process.exit(1);
+  console.log('huroof: all ok');
+}

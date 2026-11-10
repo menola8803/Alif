@@ -29,6 +29,7 @@ import { EntryScreen } from './src/screens/History';
 import Awrad, { ReminderScreen } from './src/screens/Awrad';
 import PrayerScreen, { CityScreen, PrayerSoundScreen } from './src/screens/Prayer';
 import NightClockScreen from './src/screens/NightClock';
+import HuroofScreen from './src/screens/Huroof';
 import QiblaScreen from './src/screens/Qibla';
 import HijriScreen from './src/screens/Hijri';
 import ManualScreen, { HistoryScreen, PrivacyScreen } from './src/screens/Manual';
@@ -118,6 +119,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'juz': return <JuzScreen key={r.n} n={r.n} onBack={pop} go={push} />;
       case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} go={push} />;
       case 'nightClock': return <NightClockScreen onBack={pop} />;
+      case 'huroof': return <HuroofScreen onBack={pop} go={push} />;
       case 'prayerSound': return <PrayerSoundScreen key={r.target ?? 'prayer'} onBack={pop} target={r.target} />;
       default:
         return (

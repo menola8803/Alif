@@ -81,6 +81,14 @@ export default function Learn({ go, onGear, glow }: { go: (r: Route) => void; on
           <Text style={{ color: theme.muted, fontSize: 18 }}>›</Text>
         </Card>
       </Pressable>
+      <Pressable accessibilityRole="button" onPress={() => go({ name: 'huroof' })}>
+        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderColor: theme.primary }}>
+          <Arabic size={26} selectable={false} color={theme.primary} style={{ width: 54, textAlign: 'center', lineHeight: 46 }}>الٓمٓ</Arabic>
+          <View style={{ flex: 1 }}><Text style={{ fontSize: 15, fontWeight: '700', color: theme.ink }}>{t.huroofCard}</Text><Text style={{ fontSize: 12.5, color: theme.muted }}>{t.huroofCardSub}</Text></View>
+          <Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>حُرُوف</Arabic>
+          <Text style={{ color: theme.muted, fontSize: 18 }}>›</Text>
+        </Card>
+      </Pressable>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {LETTERS.map((l, i) => {
           const done = learnDone.includes(l.id);

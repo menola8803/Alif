@@ -435,6 +435,9 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  huroofTitle: 'Ḥurūf', huroofSub: 'De avskilda bokstäverna i surornas början', huroofCard: 'Ḥurūf · de avskilda bokstäverna', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt i 29 suror, med förklaring',
+  huroofTree: '29 SUROR ÖPPNAS MED BOKSTÄVER', huroofLetters: 'DE 14 BOKSTÄVERNA · NYCKLAR TILL GUDS NAMN', huroofOpeners: 'DE 14 ÖPPNINGARNA', huroofHadith: 'HADITHEN OM ABJAD-RÄKNINGEN', huroofMissing: 'DE SJU BOKSTÄVER SOM SAKNAS I AL-FĀTIḤA',
+  tapToEnlarge: 'Tryck för att förstora', tapToClose: 'Tryck igen för att stänga',
   awradSoundTitle: 'Ljud för påminnelsen', awradSoundNote: 'Ljudet gäller påminnelsen för Daily Awrad. "Spela som alarm" gör att den hörs även när aviseringsljudet är lågt.',
   recitationChannel: 'Koranrecitation',
   lockPrayer: 'Bönetider på låsskärmen', lockPrayerSub: 'En tyst avisering som ligger kvar och syns när du tänder skärmen, under t.ex. WhatsApp: nästa bön med nedräkning och dagens fem tider. Uppdateras efter varje bön.',
@@ -485,6 +488,9 @@ const sv4 = {
   volumeCount: 'Räkna dhikr med volymknapparna', volumeCountSub: 'När det är på räknar både volym upp och volym ner ett steg i dhikr-räknaren – med en kort vibration – så du kan räkna utan att titta på skärmen, t.ex. med telefonen i fickan eller handen. Det gäller bara medan Dhikr-sidan är öppen och skärmen är tänd; på alla andra sidor och i andra appar ändrar knapparna volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  huroofTitle: 'Ḥurūf', huroofSub: 'The disjoined letters at the start of the sūras', huroofCard: 'Ḥurūf · the disjoined letters', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt in 29 sūras, explained',
+  huroofTree: '29 SŪRAS OPEN WITH LETTERS', huroofLetters: 'THE 14 LETTERS · KEYS TO ALLAH’S NAMES', huroofOpeners: 'THE 14 OPENINGS', huroofHadith: 'THE ḤADĪTH OF THE ABJAD COUNT', huroofMissing: 'THE SEVEN LETTERS NOT IN AL-FĀTIḤA',
+  tapToEnlarge: 'Tap to enlarge', tapToClose: 'Tap again to close',
   awradSoundTitle: 'Sound for the reminder', awradSoundNote: 'The sound is used for the Daily Awrad reminder. "Play as an alarm" makes it heard even when the notification volume is low.',
   recitationChannel: 'Qur’an recitation',
   lockPrayer: 'Prayer times on the lock screen', lockPrayerSub: 'A quiet notification that stays and shows when you turn the screen on, under e.g. WhatsApp: the next prayer with a countdown and today’s five times. Renewed after every prayer.',
