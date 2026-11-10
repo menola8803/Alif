@@ -49,7 +49,7 @@ export default function Quran({ open, openJuz, onAwrad, onGear, glow }: { open: 
         </Pressable>
       ) : null}
       {bookmarks.length ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, alignItems: 'center', paddingVertical: 2 }} style={{ flexGrow: 0, flexShrink: 0 }}>
           {bookmarks.map(b => (
             <SmallBtn key={`${b.n}:${b.ayah}`} title={`🔖 ${SURAHS[b.n - 1].name} ${b.n}:${b.ayah}`} onPress={() => open(b.n, b.ayah)} />
           ))}

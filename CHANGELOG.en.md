@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.5
+- The bookmarks on the Qur’an page were cut off behind Daily Awrad – now they show in full.
+
 ## 0.5.4
 - Manual: new section on battery restrictions (notifications, recitation, widget, screen saver).
 - The Qur’an button in the menu shows the sūra:verse being played; hold it to stop.

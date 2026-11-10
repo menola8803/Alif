@@ -40,7 +40,7 @@ export default function Dhikr({ go, onGear, glow, focused = true }: { go: (r: Ro
   return (
     <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false}>
       <PageTitle title={t.tabDhikr} sub={t.dhikrSub} onGear={onGear} glow={glow} />
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0, flexShrink: 0 }}>
         {DHIKR.map(x => (
           <Pressable key={x.id} accessibilityRole="button" accessibilityState={{ selected: x.id === d.id }} onPress={() => setPrefs({ dhikrSel: x.id })}
             style={{ paddingHorizontal: 12, minHeight: 40, justifyContent: 'center', borderRadius: 14, borderWidth: 1, borderColor: x.id === d.id ? theme.primary : theme.line, backgroundColor: x.id === d.id ? theme.chip : theme.card }}>
