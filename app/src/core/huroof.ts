@@ -42,15 +42,18 @@ export const OPENERS: Opener[] = [
   { ar: 'نٓ', tr: 'Nūn', surahs: [68] },
 ];
 
-/** The seven letters that do not occur in al-Fātiḥa, with their names (Dhū n-Nūn, al-Yāfiʿī). */
-export const MISSING7: { ar: string; tr: string; divine: string; divineAr: string }[] = [
-  { ar: 'ث', tr: 'Thā', divine: 'Thābit', divineAr: 'ثَابِت' },
-  { ar: 'ج', tr: 'Jīm', divine: 'Jabbār', divineAr: 'جَبَّار' },
-  { ar: 'خ', tr: 'Khā', divine: 'Khabīr', divineAr: 'خَبِير' },
-  { ar: 'ز', tr: 'Zāy', divine: 'Zakī', divineAr: 'زَكِيّ' },
-  { ar: 'ش', tr: 'Shīn', divine: 'Shākir', divineAr: 'شَاكِر' },
-  { ar: 'ظ', tr: 'Ẓā', divine: 'Ẓāhir', divineAr: 'ظَاهِر' },
-  { ar: 'ف', tr: 'Fā', divine: 'Fāṭir', divineAr: 'فَاطِر' },
+/**
+ * The seven letters that do not occur in al-Fātiḥa, after al-Yāfiʿī (from Dhū n-Nūn): for each the day, the angel who
+ * keeps it and the name. In the order of the source; the source gives no day for Khā.
+ */
+export const MISSING7: { ar: string; tr: string; day: T | null; angel: string; divine: string; divineAr: string }[] = [
+  { ar: 'خ', tr: 'Khā', day: null, angel: 'Rūfāʾīl', divine: 'Khabīr', divineAr: 'خَبِير' },
+  { ar: 'ش', tr: 'Shīn', day: { sv: 'måndag', en: 'Monday' }, angel: 'Jibrīl', divine: 'Shākir', divineAr: 'شَاكِر' },
+  { ar: 'ز', tr: 'Zāy', day: { sv: 'tisdag', en: 'Tuesday' }, angel: 'Ṣamṣamāʾīl', divine: 'Zakī', divineAr: 'زَكِيّ' },
+  { ar: 'ظ', tr: 'Ẓā', day: { sv: 'onsdag', en: 'Wednesday' }, angel: 'Mīkāʾīl', divine: 'Ẓāhir', divineAr: 'ظَاهِر' },
+  { ar: 'ث', tr: 'Thā', day: { sv: 'torsdag', en: 'Thursday' }, angel: 'Ṣarfayāʾīl', divine: 'Thābit', divineAr: 'ثَابِت' },
+  { ar: 'ج', tr: 'Jīm', day: { sv: 'fredag', en: 'Friday' }, angel: 'ʿAnyāʾīl', divine: 'Jabbār', divineAr: 'جَبَّار' },
+  { ar: 'ف', tr: 'Fā', day: { sv: 'lördag', en: 'Saturday' }, angel: 'ʿAzrāʾīl', divine: 'Fāṭir', divineAr: 'فَاطِر' },
 ];
 
 /** The abjad sums in the ḥadīth of Jābir ibn ʿAbdullāh. */
@@ -94,8 +97,8 @@ export const H_TEXT: Record<string, T> = {
     en: 'Jābir ibn ʿAbdullāh tells that Abū Yāsir and Ḥuyayy ibn Akhṭab heard the Prophet ﷺ recite the openings and added up their abjad values to guess how long his umma would last. They were confused when more openings came. The account shows how abjad counting was used already then.',
   },
   missing: {
-    sv: 'Al-Fātiḥa innehåller alla bokstäver utom sju. Dhū n-Nūn sade att det största namnet har sju bokstäver, och al-Yāfiʿī knöt de sju bokstäverna till veckans dagar, änglar och dessa namn.',
-    en: 'Al-Fātiḥa contains every letter except seven. Dhū n-Nūn said that the Greatest Name has seven letters, and al-Yāfiʿī linked the seven letters to the days of the week, angels and these names.',
+    sv: 'Al-Fātiḥa innehåller alla bokstäver utom sju: ث ج خ ز ش ظ ف. Dhū n-Nūn sade att det största namnet har sju bokstäver, och al-Yāfiʿī knöt varje bokstav till en veckodag, en ängel som vakar över den och ett av Guds namn, som i tabellen. Källan anger ingen dag för Khā. Shaykh as-Sanūsī åkallade Allah ”bi-ḥaqq” dessa bokstäver (Manbaʿ uṣūl al-ḥikma).',
+    en: 'Al-Fātiḥa contains every letter except seven: ث ج خ ز ش ظ ف. Dhū n-Nūn said that the Greatest Name has seven letters, and al-Yāfiʿī linked each letter to a day of the week, an angel who keeps it and one of Allah’s names, as in the table. The source gives no day for Khā. Shaykh as-Sanūsī called on Allah “bi-ḥaqq” these letters (Manbaʿ uṣūl al-ḥikma).',
   },
   humility: {
     sv: 'Ibn ʿAbbās sade att de lärda inte kan nå deras fulla betydelse, och ash-Shaʿbī att de är Allahs hemlighet. Förklaringarna här är vad lärda och awliyāʾ har sett, var och en efter sin nivå – Allah vet bäst.',

@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.5.5
-- **Ḥurūf** (Lär dig): de avskilda bokstäverna i 29 suror med förklaring, bilden över öppningarna (tryck för att förstora), de 14 bokstäverna med Guds namn, öppningarna med suror, كهيعص, abjad-hadithen och de sju bokstäverna som saknas i al-Fātiḥa. Källa: nurmuhammad.com.
+- **Ḥurūf** (Lär dig): de avskilda bokstäverna i 29 suror med förklaring, bilden över öppningarna (tryck för att förstora), de 14 bokstäverna med Guds namn, öppningarna med suror, كهيعص, abjad-hadithen och al-Yāfiʿīs tabell över de sju bokstäverna som saknas i al-Fātiḥa (dag, ängel, namn). Källa: nurmuhammad.com.
 - "Räkna dhikr med volymknapparna" har flyttat till Inställningar, med en tydligare förklaring.
 - Alla knappar i appen har samma stil som menyn nertill: svag guldton, tunn guldkant och guldtext – inga helgula knappar längre (även spela-knappen, mikrofonen, tillbaka-knappen uppe till vänster och kugghjulet).
 - Två kategorier som båda hette "Prayer times" heter nu Bönetider och Bönetider – Fajr (Fajr-adhan har egen kategori).

@@ -93,15 +93,22 @@ export default function HuroofScreen({ onBack, go }: { onBack: () => void; go: (
         </Section>
 
         <Section label={t.huroofMissing} text={tx('missing')}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {/* al-Yāfiʿī's table: letter · day · angel · name */}
+          <Card style={{ paddingVertical: 4, gap: 0 }}>
+            <View style={{ flexDirection: 'row', paddingVertical: 6 }}>
+              {[t.huroofLetter, t.huroofDay, t.huroofAngel, t.huroofName].map((h, i) => (
+                <Text key={h} style={{ flex: i === 0 ? 0.7 : 1, fontSize: 11, fontWeight: '700', letterSpacing: 0.8, color: theme.accent }}>{h.toUpperCase()}</Text>
+              ))}
+            </View>
             {MISSING7.map(m => (
-              <View key={m.ar} style={{ width: tile, backgroundColor: theme.card, borderWidth: 1, borderColor: theme.line, borderRadius: 14, alignItems: 'center', paddingVertical: 6 }}>
-                <Arabic size={26} selectable={false} color={theme.primary} style={{ lineHeight: 42 }}>{m.ar}</Arabic>
-                <Text style={{ fontSize: 12.5, fontWeight: '700', color: theme.ink }}>{m.tr}</Text>
-                <Text style={{ fontSize: 11, color: theme.muted }}>{m.divine}</Text>
+              <View key={m.ar} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 6, borderTopWidth: 1, borderTopColor: theme.line }}>
+                <View style={{ flex: 0.7 }}><Arabic size={24} selectable={false} color={theme.primary} style={{ lineHeight: 40, textAlign: 'left' }}>{m.ar}</Arabic><Text style={{ fontSize: 11.5, color: theme.muted }}>{m.tr}</Text></View>
+                <Text style={{ flex: 1, fontSize: 13.5, color: m.day ? theme.ink : theme.muted }}>{m.day ? m.day[lang] : '–'}</Text>
+                <Text style={{ flex: 1, fontSize: 13.5, color: theme.ink }}>{m.angel}</Text>
+                <View style={{ flex: 1 }}><Text style={{ fontSize: 13.5, fontWeight: '600', color: theme.ink }}>{m.divine}</Text><Arabic size={16} selectable={false} style={{ lineHeight: 28, textAlign: 'left' }}>{m.divineAr}</Arabic></View>
               </View>
             ))}
-          </View>
+          </Card>
         </Section>
 
         <Card><Body muted>{tx('humility')}</Body></Card>
