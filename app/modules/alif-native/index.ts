@@ -14,6 +14,7 @@ type AlifNative = {
   setPrayerChannels(channels: { id: string; name: string; sound: string; alarm: boolean }[]): void;
   previewSound(sound: string): void;
   stopSound(): void;
+  nameAudioChannel(name: string): void;
   screenAwake(on: boolean, brightness: number): void;
   importSound(path: string, title: string): Promise<string | null>;
   pickPhoneSound(current: string | null, title: string): Promise<{ uri: string; title: string } | null>;

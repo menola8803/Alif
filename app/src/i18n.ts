@@ -435,6 +435,7 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  recitationChannel: 'Koranrecitation',
   lockPrayer: 'Bönetider på låsskärmen', lockPrayerSub: 'En tyst avisering som ligger kvar och syns när du tänder skärmen, under t.ex. WhatsApp: nästa bön med nedräkning och dagens fem tider. Uppdateras efter varje bön.',
   tabPlaying: 'spelar {v} · tryck länge för att stoppa',
   close: 'Stäng', nightClock: 'Nattklocka', nightClockSub: 'Klocka och bönetider på hela skärmen, för natten eller när telefonen laddar. Skärmen hålls tänd och dämpad. Fungerar på alla telefoner, utan att du ändrar något i telefonens inställningar.', nightClockOpen: 'Öppna nattklockan',
@@ -483,6 +484,7 @@ const sv4 = {
   volumeCount: 'Räkna med volymknapparna', volumeCountSub: 'Båda volymknapparna räknar ett steg medan Dhikr-sidan är öppen. Annars ändrar de volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  recitationChannel: 'Qur’an recitation',
   lockPrayer: 'Prayer times on the lock screen', lockPrayerSub: 'A quiet notification that stays and shows when you turn the screen on, under e.g. WhatsApp: the next prayer with a countdown and today’s five times. Renewed after every prayer.',
   tabPlaying: 'playing {v} · hold to stop',
   close: 'Close', nightClock: 'Night clock', nightClockSub: 'A clock and the prayer times on the whole screen, for the night or while the phone charges. The screen is kept on and dimmed. Works on every phone, without changing anything in the phone’s settings.', nightClockOpen: 'Open the night clock',

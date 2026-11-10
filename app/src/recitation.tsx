@@ -6,6 +6,7 @@ import { AudioPlayer, createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import * as Network from 'expo-network';
 import { Directory, File, Paths } from 'expo-file-system';
 import { useApp } from './store';
+import { AlifNativeModule } from '../modules/alif-native';
 import { SURAHS } from './core/quran';
 import { RECITERS, audioUrl } from './core/recite';
 
@@ -31,7 +32,9 @@ const surahDir = (reciter: string, n: number) => new Directory(root(), reciter.r
 const ayahFile = (reciter: string, n: number, a: number) => new File(surahDir(reciter, n), `${a}.mp3`);
 
 export function RecitationProvider({ children }: { children: React.ReactNode }) {
-  const { reciter, wifiOnly, hifz, hifzRepeat } = useApp();
+  const { reciter, wifiOnly, hifz, hifzRepeat, t } = useApp();
+  // The media notification's channel gets a readable name in the phone's settings ("Koranrecitation").
+  useEffect(() => { try { AlifNativeModule?.nameAudioChannel(t.recitationChannel); } catch {} }, [t.recitationChannel]);
   const [now, setNow] = useState<Now>(null);
   const [progress, setProgress] = useState<Progress>({});
   const [version, setVersion] = useState(0);

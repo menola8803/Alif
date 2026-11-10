@@ -64,6 +64,15 @@ class AlifNativeModule : Module() {
       }
     }
 
+    // ---- A readable name for the recitation's media notification (the audio library names its channel
+    // "expo_audio_channel"; it only creates the channel when it is missing, so Alif creates or renames it first) ----
+    Function("nameAudioChannel") { name: String ->
+      if (android.os.Build.VERSION.SDK_INT >= 26) {
+        val nm = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+        nm.createNotificationChannel(android.app.NotificationChannel("expo_audio_channel", name, android.app.NotificationManager.IMPORTANCE_LOW))
+      }
+    }
+
     // ---- Sounds for the prayer notifications (adhan, phone sounds, own files) ----
     Function("setPrayerChannels") { channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels) }
     Function("previewSound") { sound: String -> main.post { AlifSound.preview(ctx, sound) } }

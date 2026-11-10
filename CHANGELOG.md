@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.5
+- Recitationens aviseringskategori heter nu "Koranrecitation" i telefonens inställningar (förut "expo_audio_channel").
 - **Bönetider på låsskärmen:** en tyst avisering som ligger kvar och syns när du tänder skärmen (som WhatsApp-meddelanden) – nästa bön med nedräkning och dagens tider. Slås på under Widget och skärmsläckare eller Bönetider.
 - Skärmsläckare och widget: bönetider sparas sju dagar framåt; utan sparade tider står det "Öppna Alif en gång" i stället för tomma rader.
 - Bokmärkena på Koranen i guld med ett guldbokmärke.
