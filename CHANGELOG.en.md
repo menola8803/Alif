@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.5
+- Stopping the recitation now removes the empty media card from the lock screen.
 - The bookmarks on the Qur’an page were cut off behind Daily Awrad – now they show in full.
 
 ## 0.5.4

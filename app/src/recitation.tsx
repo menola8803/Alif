@@ -86,11 +86,18 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
     if (!c || !p) return;
     if (c.playing) { p.pause(); set({ ...c, playing: false }); } else { p.play(); set({ ...c, playing: true }); }
   }, []);
+  // Stop: the player is released entirely, so the media card on the lock screen and in the notifications goes away
+  // (a new player is made at the next play).
   const stop = useCallback(() => {
-    player.current?.pause();
-    try { if (lockScreen.current) player.current?.setActiveForLockScreen(false); } catch {}
+    const p = player.current;
+    player.current = null;
     lockScreen.current = false;
     set(null);
+    if (!p) return;
+    try { p.pause(); } catch {}
+    try { p.clearLockScreenControls(); } catch {}
+    try { p.setActiveForLockScreen(false); } catch {}
+    try { p.remove(); } catch {}
   }, []);
   const step = useCallback((k: 1 | -1) => {
     const c = cur.current; if (!c) return;
