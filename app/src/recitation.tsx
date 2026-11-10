@@ -62,7 +62,7 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
           if (c.rep < settings.current.repeat) { load(c.surah, c.ayah, c.rep + 1); return; }
           const max = SURAHS[c.surah - 1].ayahs;
           if (c.ayah < max) load(c.surah, c.ayah + 1, 1);
-          else set({ ...c, playing: false, loading: false });
+          else setTimeout(() => stopRef.current(), 0); // the sūra is done: release the player, the lock screen card goes away
           return;
         }
         if (c.loading && st.isLoaded && st.playing) set({ ...c, loading: false });
@@ -88,6 +88,7 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
   }, []);
   // Stop: the player is released entirely, so the media card on the lock screen and in the notifications goes away
   // (a new player is made at the next play).
+  const stopRef = useRef<() => void>(() => {});
   const stop = useCallback(() => {
     const p = player.current;
     player.current = null;
@@ -99,6 +100,7 @@ export function RecitationProvider({ children }: { children: React.ReactNode }) 
     try { p.setActiveForLockScreen(false); } catch {}
     try { p.remove(); } catch {}
   }, []);
+  stopRef.current = stop;
   const step = useCallback((k: 1 | -1) => {
     const c = cur.current; if (!c) return;
     const a = Math.min(SURAHS[c.surah - 1].ayahs, Math.max(1, c.ayah + k));

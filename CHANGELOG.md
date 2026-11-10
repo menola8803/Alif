@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.5.5
-- Stopp av recitationen tar nu bort det tomma mediekortet på låsskärmen.
+- Stopp av recitationen eller slutet på suran tar nu bort mediekortet från låsskärmen.
 - Bokmärkena på Koranen klipptes av bakom Daily Awrad – nu syns de hela.
 
 ## 0.5.4
