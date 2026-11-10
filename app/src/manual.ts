@@ -47,6 +47,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Skärmsläckare: välj Alif under telefonens Inställningar › Skärm › Skärmsläckare och ställ in När den ska visas på Vid laddning (med bara "dockad" visas den bara i en dockningsstation). Klocka och dagens bönetider visas på svart när telefonen laddar; med ljust tema tonas den ner så den inte bländar.',
       'Skärmsläckaren startar bara när skärmen slocknar av sig själv medan telefonen laddar – inte när du trycker på strömknappen. Ögat bredvid Alif i telefonens lista visar den direkt.',
       'Visas den inte (vanligt på OnePlus): tillåt Alif under Inställningar › Appar › Alif › Batteri (Tillåt bakgrundsanvändning, Obegränsad) och slå på Automatisk start om det finns. Always-on display kan också ta över – stäng av den och prova igen. Annars: använd nattklockan.',
+      'Skärmsläckaren och widgeten visar tiderna Alif sparat när appen senast öppnades (sju dagar framåt). Står det "Öppna Alif en gång" – öppna Alif, så fylls tiderna i.',
     ] },
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
@@ -141,6 +142,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Screen saver: choose Alif in the phone’s Settings › Display › Screen saver and set When to start to While charging (with only "docked" it only shows in a dock). A clock and today’s prayer times are shown on black while the phone charges; with the light theme it is toned down so it does not dazzle.',
       'The screen saver only starts when the screen goes off by itself while the phone charges – not when you press the power button. The eye next to Alif in the phone’s list shows it at once.',
       'If it does not show (common on OnePlus): allow Alif under Settings › Apps › Alif › Battery (Allow background usage, Unrestricted) and turn on Auto-launch if it exists. Always-on display can also take over – turn it off and try again. Otherwise: use the night clock.',
+      'The screen saver and the widget show the times Alif saved when the app was last opened (seven days ahead). If it says "Open Alif once", open Alif and the times are filled in.',
     ] },
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',

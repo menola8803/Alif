@@ -150,12 +150,12 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey, prayerSound, fajrAdhan, prayerAlarm]);
 
-  // Home screen widget: the times of today and the next two days, the Hijri date and the place.
+  // Home screen widget and screen saver: the times of the coming seven days, the Hijri date and the place.
   useEffect(() => {
     if (!ready || !AlifNativeModule) return;
     try {
       const base = new Date();
-      const out = [0, 1, 2].map(k => {
+      const out = [0, 1, 2, 3, 4, 5, 6].map(k => {
         const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + k);
         const day = dayFor(d);
         const times: Record<string, number> = {};

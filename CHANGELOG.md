@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.5
+- Skärmsläckare och widget: bönetider sparas sju dagar framåt; utan sparade tider står det "Öppna Alif en gång" i stället för tomma rader.
 - Bokmärkena på Koranen i guld med ett guldbokmärke.
 - Stopp av recitationen eller slutet på suran tar nu bort mediekortet från låsskärmen.
 - Bokmärkena på Koranen klipptes av bakom Daily Awrad – nu syns de hela.

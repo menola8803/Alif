@@ -49,7 +49,10 @@ class AlifDream : DreamService() {
     findViewById<TextClock>(R.id.alif_dream_clock)?.setTextColor(gold)
     findViewById<TextView>(R.id.alif_dream_sub)?.apply {
       setTextColor(AlifTimes.withAlpha(gold, 210))
-      text = d?.let { listOf(it.hijri, it.place).filter { s -> s.isNotEmpty() }.joinToString(" · ") } ?: "Alif"
+      // Without saved times (Alif not opened yet, or more than three days ago) the card says so instead of showing empty rows.
+      val sv = java.util.Locale.getDefault().language == "sv"
+      text = if (d != null && d.times.any { it > 0 }) listOf(d.hijri, d.place).filter { s -> s.isNotEmpty() }.joinToString(" · ")
+        else if (sv) "Öppna Alif en gång så visas bönetiderna här" else "Open Alif once and the prayer times appear here"
     }
     val names = intArrayOf(R.id.alif_d_name0, R.id.alif_d_name1, R.id.alif_d_name2, R.id.alif_d_name3, R.id.alif_d_name4)
     val times = intArrayOf(R.id.alif_d_time0, R.id.alif_d_time1, R.id.alif_d_time2, R.id.alif_d_time3, R.id.alif_d_time4)
