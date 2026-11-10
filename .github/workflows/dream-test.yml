@@ -7,6 +7,9 @@ on:
       tag:
         description: Release tag to test (e.g. v0.5.3)
         required: true
+      api:
+        description: Android API level (34 = Android 14, 36 = Android 16)
+        default: '36'
 jobs:
   dream:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
       - name: Run on the emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: ${{ inputs.api }}
           target: google_apis
           arch: x86_64
           profile: pixel_6
