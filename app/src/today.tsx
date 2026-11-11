@@ -103,8 +103,8 @@ export function TimesRow({ day, next, notify, onToggle }: { day: PrayerDay; next
   );
 }
 
-const SALAWAT_TR = 'Allāhumma ṣalli ʿalā sayyidinā Muḥammad';
-const SALAWAT_AR = 'اللّٰهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّد';
+// Allāhumma ṣalli ʿalā sayyidinā Muḥammad wa ʿalā ālihi wa aṣḥābihi wa sallim – shown in Arabic only.
+const SALAWAT_AR = 'اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَأَصْحَابِهِ وَسَلِّمْ';
 
 /**
  * One of the pictures, with its own colours; only the edges fade into the background on every side.
@@ -146,8 +146,7 @@ export function HomeArt({ index, height }: { index: number; height: number }) {
         <Rect x={0} y={0} width={100} height={100} fill="url(#tb)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 10, alignItems: 'center', paddingHorizontal: 16 }}>
-        <RNText style={{ fontFamily: theme.fonts.bold ?? undefined, fontWeight: theme.fonts.bold ? undefined : '700', fontSize: 15, color: '#F3D9A0', textAlign: 'center', ...shadow }}>{SALAWAT_TR}</RNText>
-        <RNText style={{ fontFamily: theme.fonts.arabicBold, fontSize: 24, lineHeight: 44, color: '#E8B04A', textAlign: 'center', writingDirection: 'rtl', ...shadow }}>{SALAWAT_AR}</RNText>
+        <RNText style={{ fontFamily: theme.fonts.arabicBold, fontSize: 23, lineHeight: 42, color: '#E8B04A', textAlign: 'center', writingDirection: 'rtl', ...shadow }}>{SALAWAT_AR}</RNText>
       </View>
     </View>
   );
