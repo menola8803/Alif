@@ -103,7 +103,8 @@ export function TimesRow({ day, next, notify, onToggle }: { day: PrayerDay; next
   );
 }
 
-// Allāhumma ṣalli ʿalā sayyidinā Muḥammad wa ʿalā ālihi wa aṣḥābihi wa sallim – shown in Arabic only.
+// The ṣalawāt above the picture: Arabic, with the transliteration under it.
+const SALAWAT_TR = 'Allāhumma ṣalli ʿalā sayyidinā Muḥammadin wa ʿalā ālihi wa aṣḥābihi wa sallim';
 const SALAWAT_AR = 'اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَأَصْحَابِهِ وَسَلِّمْ';
 
 /**
@@ -147,6 +148,7 @@ export function HomeArt({ index, height }: { index: number; height: number }) {
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 10, alignItems: 'center', paddingHorizontal: 16 }}>
         <RNText style={{ fontFamily: theme.fonts.arabicBold, fontSize: 23, lineHeight: 42, color: '#E8B04A', textAlign: 'center', writingDirection: 'rtl', ...shadow }}>{SALAWAT_AR}</RNText>
+        <RNText style={{ fontFamily: theme.fonts.bold ?? undefined, fontWeight: theme.fonts.bold ? undefined : '700', fontSize: 13.5, lineHeight: 19, color: '#F3D9A0', textAlign: 'center', marginTop: 2, ...shadow }}>{SALAWAT_TR}</RNText>
       </View>
     </View>
   );
