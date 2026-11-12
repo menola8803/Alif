@@ -72,7 +72,9 @@ type Saved = {
   awradSoundName: string;
   awradAlarm: boolean;
   startImg: string;                    // start screen picture: a PICTURES id, 'own:<file>' or 'animated'
-  todayImg: string;                    // picture at the top of Today: a PICTURES id, 'own:<file>' or 'none'
+  todayImg: string;
+  picFolderMade: boolean;              // Download/Alif/Pictures has been created
+  awradImg: string;                    // picture under the Daily Awrad title: a picture id or 'none'                    // picture at the top of Today: a PICTURES id, 'own:<file>' or 'none'
   quranView: 'surah' | 'juz';         // the Qur'an tab lists the sūras or the 30 parts
   widgetStyle: 'full' | 'times';
   lockPrayer: boolean;                 // the prayer times as a quiet notification that stays on the lock screen      // home screen widget: everything, or only the five prayers with their times
@@ -99,7 +101,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', startImg: 'minaret', todayImg: 'minaret', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false, awradSound: 'default', awradSoundName: '', awradAlarm: false,
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', startImg: 'minaret', todayImg: 'minaret', awradImg: 'none', picFolderMade: false, prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false, awradSound: 'default', awradSoundName: '', awradAlarm: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

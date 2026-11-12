@@ -3,7 +3,9 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.7
-- **More pictures:** put pictures in the phone’s Pictures/Alif and tap Read in pictures under Settings › Pictures – they become extra backgrounds for the start screen and Today. Hold your finger on a picture to remove it.
+- **More pictures:** put pictures (JPG, JPEG, PNG, BMP) in Download/Alif/Pictures and tap Read in pictures under Settings › Pictures. Only the pictures are shown, not the file names.
+- **Choose pictures with labels:** hold your finger on a picture and choose Start, Today or Awrad – the choice shows in the picture’s corner. Tap again and the choice goes away.
+- **Picture in Daily Awrad:** a chosen picture is shown under the Daily Awrad title. All pictures reach the edges with a soft fade at the top and bottom.
 - Today: the picture now reaches the screen’s edges and up behind the status bar, with a softer fade down to the prayer times and a dark shade behind the next prayer so the time reads clearly.
 
 ## 0.5.6

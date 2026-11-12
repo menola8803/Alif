@@ -143,13 +143,46 @@ export function HomeArt({ index, height }: { index: number; height: number }) {
             <Stop offset="1" stopColor={bg} stopOpacity={1} />
           </LinearGradient>
         </Defs>
-        <Rect x={0} y={0} width={100} height={100} fill="url(#edge)" />
         <Rect x={0} y={0} width={100} height={100} fill="url(#tb)" />
       </Svg>
       <View style={{ position: 'absolute', left: 0, right: 0, top: 10, alignItems: 'center', paddingHorizontal: 16 }}>
         <RNText style={{ fontFamily: theme.fonts.arabicBold, fontSize: 23, lineHeight: 42, color: '#E8B04A', textAlign: 'center', writingDirection: 'rtl', ...shadow }}>{SALAWAT_AR}</RNText>
         <RNText style={{ fontFamily: theme.fonts.bold ?? undefined, fontWeight: theme.fonts.bold ? undefined : '700', fontSize: 13.5, lineHeight: 19, color: '#F3D9A0', textAlign: 'center', marginTop: 2, ...shadow }}>{SALAWAT_TR}</RNText>
       </View>
+    </View>
+  );
+}
+
+/**
+ * A picture from edge to edge (the page's ScrollView must reach the screen's edges and pad its content by 16), cropped
+ * around its subject and fading into the page colour at the top and the bottom.
+ */
+export function PictureBand({ src, focus = 0.5, height, children }: { src: import('react-native').ImageSourcePropType; focus?: number; height: number; children?: React.ReactNode }) {
+  const { theme } = useApp();
+  const { width } = useWindowDimensions();
+  const dim = typeof src === 'number' ? Image.resolveAssetSource(src) : null;
+  const ratio = dim?.width && dim?.height ? dim.height / dim.width : 1.6;
+  let w = width, h = width * ratio;
+  if (h < height) { h = height; w = height / ratio; }
+  const top = -(h - height) * focus, left = -(w - width) / 2;
+  const bg = theme.bg;
+  return (
+    <View style={{ height, width, marginHorizontal: -16, overflow: 'hidden' }}>
+      <Image source={src} resizeMode="cover" style={{ position: 'absolute', left, top, width: w, height: h }} />
+      <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
+        <Defs>
+          <LinearGradient id="pb" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={bg} stopOpacity={1} />
+            <Stop offset="0.22" stopColor={bg} stopOpacity={0.45} />
+            <Stop offset="0.45" stopColor={bg} stopOpacity={0} />
+            <Stop offset="0.6" stopColor={bg} stopOpacity={0} />
+            <Stop offset="0.82" stopColor={bg} stopOpacity={0.6} />
+            <Stop offset="1" stopColor={bg} stopOpacity={1} />
+          </LinearGradient>
+        </Defs>
+        <Rect x={0} y={0} width={100} height={100} fill="url(#pb)" />
+      </Svg>
+      {children}
     </View>
   );
 }

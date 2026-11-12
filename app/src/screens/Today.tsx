@@ -59,8 +59,8 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
 
   return (
     // With a picture the page reaches the screen's edges, so the picture can go from edge to edge and up to the top.
-    <ScrollView style={top ? { marginHorizontal: -16, marginTop: -lift } : undefined}
-      contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE, paddingHorizontal: top ? 16 : 0 }} showsVerticalScrollIndicator={false}>
+    <ScrollView style={{ marginHorizontal: -16, marginTop: top ? -lift : 0 }}
+      contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
       {top ? (
         // The chosen picture behind the title and the next prayer, fading into the page colour.
         <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470) + lift, marginBottom: -8 }}>

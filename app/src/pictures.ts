@@ -30,11 +30,12 @@ export function pictureFor(id: string): Pic | null {
   return PICTURES.find(p => p.id === id) ?? null;
 }
 
-// ---- Extra pictures: read in from a folder on the phone (Bilder/Alif), copied into Alif's own folder ----
+// ---- Extra pictures: read in from a folder on the phone (Download/Alif/Pictures), copied into Alif's own folder ----
 
-/** Where the folder picker opens first: Pictures/Alif on the phone's own storage. */
-export const PHONE_FOLDER = 'content://com.android.externalstorage.documents/document/primary%3APictures%2FAlif';
-const IMAGE = /\.(jpe?g|png|webp|heic|heif)$/i;
+/** Where the folder picker opens first: Download/Alif/Pictures on the phone's own storage. */
+export const PHONE_FOLDER = 'content://com.android.externalstorage.documents/document/primary%3ADownload%2FAlif%2FPictures';
+/** The kinds of picture that can be read in. */
+const IMAGE = /\.(jpe?g|png|bmp)$/i;
 export const libDir = () => new Directory(Paths.document, 'pictures');
 
 /** The pictures read in so far, newest first. */
@@ -63,18 +64,7 @@ export async function readInFolder(): Promise<number> {
   let added = 0;
   for (const f of dir.list()) {
     if (!(f instanceof File) || !IMAGE.test(f.name)) continue;
-    const name = `${f.name.replace(/\.[^.]+$/, '').replace(/[^a-z0-9._-]/gi, '_').slice(0, 60)}.jpg`;
-    const dst = new File(lib, name);
-    if (dst.exists) continue;
-    try {
-      const tmp = new File(Paths.cache, `in-${Date.now()}-${f.name.replace(/[^a-z0-9._-]/gi, '_')}`);
-      f.copy(tmp);
-      const ref = await ImageManipulator.manipulate(tmp.uri).resize({ height: 1600 }).renderAsync();
-      const out = await ref.saveAsync({ compress: 0.85, format: SaveFormat.JPEG });
-      new File(out.uri).move(dst);
-      try { tmp.delete(); } catch {}
-      added++;
-    } catch {}
+    if (await importPicture(f.uri, f.name)) added++;
   }
   return added;
 }
@@ -82,4 +72,31 @@ export async function readInFolder(): Promise<number> {
 /** Removes a picture that was read in. */
 export function removeLibraryPicture(id: string) {
   try { const f = new File(libDir(), id.slice(4)); if (f.exists) f.delete(); } catch {}
+}
+
+/** Copies one picture into Alif (made at most 1600 points high, JPEG). Returns its id, or null if it was there already. */
+export async function importPicture(uri: string, fileName: string): Promise<string | null> {
+  const lib = libDir();
+  if (!lib.exists) lib.create({ intermediates: true });
+  const name = `${fileName.replace(/\.[^.]+$/, '').replace(/[^a-z0-9._-]/gi, '_').slice(0, 60)}.jpg`;
+  const dst = new File(lib, name);
+  if (dst.exists) return null;
+  try {
+    const tmp = new File(Paths.cache, `in-${Date.now()}-${name}`);
+    new File(uri).copy(tmp);
+    const ref = await ImageManipulator.manipulate(tmp.uri).resize({ height: 1600 }).renderAsync();
+    const out = await ref.saveAsync({ compress: 0.85, format: SaveFormat.JPEG });
+    new File(out.uri).move(dst);
+    try { tmp.delete(); } catch {}
+    return `lib:${name}`;
+  } catch { return null; }
+}
+
+/** A short name for a picture id. File names of read-in pictures are never shown. */
+export function pictureName(id: string, names: { minaret: string; picture: string; none: string; animated: string }): string {
+  if (id === 'none') return names.none;
+  if (id === 'animated') return names.animated;
+  if (id === 'minaret') return names.minaret;
+  if (id.startsWith('home-')) return `${names.picture} ${id.slice(5)}`;
+  return names.picture;
 }

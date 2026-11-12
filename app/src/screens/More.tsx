@@ -1,16 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Image, Linking, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Alert, Image, Linking, Modal, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
 import { useApp } from '../store';
+import { AlifNativeModule } from '../../modules/alif-native';
 import * as ImagePicker from 'expo-image-picker';
-import { OWN_START, OWN_TODAY, PICTURES, libraryPictures, pictureFor, readInFolder, removeLibraryPicture } from '../pictures';
+import { PICTURES, importPicture, pictureFor, libraryPictures, pictureName, readInFolder, removeLibraryPicture } from '../pictures';
 import { Route } from '../nav';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
 import { LETTERS } from '../core/learn';
-import { Arabic, Body, Btn, Card, Choice, Header, Label, Screen, Segmented, Text, Toggle } from '../ui';
+import { Arabic, Body, Btn, Card, Choice, Header, Label, Screen, Segmented, Text, Toggle , useButtonLook } from '../ui';
 import { usePrayer } from '../prayer';
 import { askPermission } from '../reminder';
 import { PRAYER_TR, SALAH, hhmm } from '../core/prayer';
@@ -225,74 +226,94 @@ export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (
   );
 }
 
-/** Settings › Pictures: the picture of the start screen and of the top of Today (default: the minaret). */
+/**
+ * Settings › Pictures: one grid with all pictures. Hold a picture to choose what it is used for – Start (the start
+ * screen), Today (the top of Today) or Awrad (under the Daily Awrad title); the choices show as labels in the corner.
+ * Tap a picture with labels to take its choices away. Pictures are read in from Download/Alif/Pictures.
+ */
+type Role = 'startImg' | 'todayImg' | 'awradImg';
 export function PicturesScreen({ onBack }: { onBack: () => void }) {
-  const { t, theme, startImg, todayImg, setPrefs } = useApp();
+  const app = useApp();
+  const { t, theme, setPrefs, picFolderMade } = app;
   const { width } = useWindowDimensions();
+  const look = useButtonLook();
   const cell = (width - 32 - 16) / 3;
-  // Pictures read in from the phone's Pictures/Alif folder.
   const [ver, setVer] = useState(0);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const [menu, setMenu] = useState<string | null>(null);
   const lib = useMemo(() => libraryPictures(), [ver]); // eslint-disable-line react-hooks/exhaustive-deps
+  const all = [...PICTURES, ...lib];
+  const ROLES: [Role, string, string][] = [['startImg', t.picRoleStart, 'animated'], ['todayImg', t.picRoleToday, 'none'], ['awradImg', t.picRoleAwrad, 'none']];
+  const rolesOf = (id: string) => ROLES.filter(([k]) => app[k] === id);
+  const toggle = (id: string, k: Role, empty: string) => setPrefs({ [k]: app[k] === id ? empty : id } as never);
+  const clear = (id: string) => setPrefs(Object.fromEntries(rolesOf(id).map(([k, , empty]) => [k, empty])) as never);
+  const names = { minaret: t.picMinaret, picture: t.picPicture, none: t.picNoneShort, animated: t.picAnimated };
+
   const readIn = async () => {
     setBusy(true); setMsg('');
+    if (!picFolderMade && AlifNativeModule) {
+      const ok = await AlifNativeModule.makePictureFolder(t.picFolderNote).catch(() => false);
+      if (ok) setPrefs({ picFolderMade: true });
+    }
     const n = await readInFolder();
     setBusy(false); setVer(v => v + 1);
     setMsg(n < 0 ? '' : n === 0 ? t.picReadNone : t.picReadDone.replace('{n}', String(n)));
   };
-  const remove = (id: string) => Alert.alert(t.picRemove, t.picRemoveQ, [
-    { text: t.cancel, style: 'cancel' },
-    { text: t.picRemove, style: 'destructive', onPress: () => {
-      removeLibraryPicture(id);
-      if (startImg === id) setPrefs({ startImg: 'minaret' });
-      if (todayImg === id) setPrefs({ todayImg: 'minaret' });
-      setVer(v => v + 1);
-    } },
-  ]);
-  const pickOwn = async (file: string, key: 'startImg' | 'todayImg') => {
-    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.85 });
+  const addOne = async () => {
+    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1 });
     const a = r.canceled ? null : r.assets[0];
     if (!a?.uri) return;
-    try {
-      const dst = new File(Paths.document, file);
-      if (dst.exists) dst.delete();
-      new File(a.uri).copy(dst);
-      setPrefs({ [key]: `own:${file}` } as never);
-    } catch {}
+    setBusy(true);
+    const id = await importPicture(a.uri, a.fileName ?? `bild-${Date.now()}.jpg`);
+    setBusy(false); setVer(v => v + 1);
+    if (id) setMenu(id);
   };
-  const Grid = ({ value, none, noneLabel, own, k }: { value: string; none: string; noneLabel: string; own: string; k: 'startImg' | 'todayImg' }) => {
-    const ownPic = pictureFor(`own:${own}`);
-    const Box = ({ on, onPress, onLongPress, children, label }: { on: boolean; onPress: () => void; onLongPress?: () => void; children?: React.ReactNode; label: string }) => (
-      <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={onPress} onLongPress={onLongPress}
-        style={{ width: cell, height: cell * 1.5, borderRadius: 12, overflow: 'hidden', borderWidth: on ? 2 : 1, borderColor: on ? theme.tabActive : theme.line, backgroundColor: theme.card, alignItems: 'center', justifyContent: 'center' }}>
-        {children}
-        {on ? <View style={{ position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: 11, backgroundColor: theme.tabActive, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#1A1A1A', fontSize: 13, fontWeight: '800' }}>✓</Text></View> : null}
-      </Pressable>
-    );
-    return (
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        <Box on={value === none} onPress={() => setPrefs({ [k]: none } as never)} label={noneLabel}><Text style={{ color: theme.muted, fontSize: 12.5, textAlign: 'center', paddingHorizontal: 6 }}>{noneLabel}</Text></Box>
-        {PICTURES.map(p => (
-          <Box key={p.id} on={value === p.id} onPress={() => setPrefs({ [k]: p.id } as never)} label={p.id}>
-            <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
-          </Box>
-        ))}
-        {lib.map(p => (
-          <Box key={p.id} on={value === p.id} onPress={() => setPrefs({ [k]: p.id } as never)} onLongPress={() => remove(p.id)} label={p.id.slice(4)}>
-            <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
-          </Box>
-        ))}
-        <Box on={value === `own:${own}`} onPress={() => (ownPic && value !== `own:${own}` ? setPrefs({ [k]: `own:${own}` } as never) : pickOwn(own, k))} label={t.picOwn}>
-          {ownPic ? <Image source={ownPic.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : <Text style={{ color: theme.tabActive, fontSize: 13, textAlign: 'center', paddingHorizontal: 6 }}>{`＋ ${t.picOwn}`}</Text>}
-        </Box>
-      </View>
-    );
-  };
+  const remove = (id: string) => Alert.alert(t.picRemove, t.picRemoveQ, [
+    { text: t.cancel, style: 'cancel' },
+    { text: t.picRemove, style: 'destructive', onPress: () => { clear(id); removeLibraryPicture(id); setMenu(null); setVer(v => v + 1); } },
+  ]);
+
   return (
     <Screen>
       <Header title={t.picTitle} sub={t.picSub} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
+        <Card style={{ gap: 4 }}>
+          {ROLES.map(([k, label]) => (
+            <View key={k} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 40 }}>
+              <Text style={{ fontSize: 14, color: theme.muted }}>{label}</Text>
+              {pictureFor(app[k])
+                ? <Image source={pictureFor(app[k])!.src} resizeMode="cover" accessibilityLabel={label} style={{ width: 56, height: 36, borderRadius: 6, borderWidth: 1, borderColor: theme.line }} />
+                : <Text style={{ fontSize: 14, fontWeight: '600', color: theme.ink }}>{pictureName(app[k], names)}</Text>}
+            </View>
+          ))}
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18, marginTop: 4 }}>{t.picHowRoles}</Text>
+        </Card>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+          {all.map(p => {
+            const r = rolesOf(p.id);
+            return (
+              <Pressable key={p.id} accessibilityRole="button" accessibilityLabel={`${t.picPicture}${r.length ? ` · ${r.map(x => x[1]).join(', ')}` : ''}`}
+                onPress={() => (r.length ? clear(p.id) : setMenu(p.id))} onLongPress={() => setMenu(p.id)} delayLongPress={400}
+                style={{ width: cell, height: cell * 1.5, borderRadius: 12, overflow: 'hidden', borderWidth: r.length ? 2 : 1, borderColor: r.length ? theme.tabActive : theme.line, backgroundColor: theme.card }}>
+                <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
+                {r.length ? (
+                  <View style={{ position: 'absolute', top: 6, left: 6, gap: 4 }}>
+                    {r.map(([k, label]) => (
+                      <View key={k} style={{ backgroundColor: 'rgba(15,27,29,0.85)', borderWidth: 1, borderColor: theme.tabActive, borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 }}>
+                        <Text style={{ fontSize: 11.5, fontWeight: '700', color: theme.tabActive }}>{label}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : null}
+              </Pressable>
+            );
+          })}
+          <Pressable accessibilityRole="button" onPress={addOne}
+            style={{ width: cell, height: cell * 1.5, borderRadius: 12, borderWidth: 1, borderColor: look.border, backgroundColor: look.bg, alignItems: 'center', justifyContent: 'center', padding: 6 }}>
+            <Text style={{ color: look.fg, fontSize: 13, textAlign: 'center' }}>{`＋ ${t.picOwn}`}</Text>
+          </Pressable>
+        </View>
         <Card style={{ gap: 8 }}>
           <Label>{t.picFolder}</Label>
           <Text style={{ fontSize: 13, color: theme.ink, lineHeight: 19 }}>{t.picFolderHow}</Text>
@@ -300,14 +321,28 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
           {msg ? <Text style={{ fontSize: 13, color: theme.accent }}>{msg}</Text> : null}
           {lib.length ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.picLibCount.replace('{n}', String(lib.length))}</Text> : null}
         </Card>
-        <Label>{t.picStart}</Label>
-        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picStartSub}</Text>
-        <Grid value={startImg} none="animated" noneLabel={t.picAnimated} own={OWN_START} k="startImg" />
-        <Label>{t.picToday}</Label>
-        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picTodaySub}</Text>
-        <Grid value={todayImg} none="none" noneLabel={t.picNone} own={OWN_TODAY} k="todayImg" />
-        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picOwnHelp}</Text>
       </ScrollView>
+
+      {/* What the held picture is used for */}
+      <Modal visible={!!menu} transparent animationType="fade" onRequestClose={() => setMenu(null)}>
+        <Pressable style={{ flex: 1, backgroundColor: 'rgba(5,10,11,0.75)', justifyContent: 'center', padding: 24 }} onPress={() => setMenu(null)}>
+          <Pressable onPress={() => {}} style={{ backgroundColor: theme.card, borderRadius: 20, borderWidth: 1, borderColor: theme.line, padding: 16, gap: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{t.picUseFor}</Text>
+            {menu ? ROLES.map(([k, label, empty]) => {
+              const on = app[k] === menu;
+              return (
+                <Pressable key={k} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => toggle(menu, k, empty)}
+                  style={{ minHeight: 48, borderRadius: 14, borderWidth: 1, borderColor: on ? theme.tabActive : look.border, backgroundColor: look.bg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14 }}>
+                  <Text style={{ fontSize: 15, fontWeight: on ? '700' : '600', color: look.fg }}>{label}</Text>
+                  <Text style={{ fontSize: 15, color: look.fg }}>{on ? '✓' : ''}</Text>
+                </Pressable>
+              );
+            }) : null}
+            {menu?.startsWith('lib:') ? <Btn kind="danger" title={t.picRemove} onPress={() => remove(menu)} /> : null}
+            <Btn kind="secondary" title={t.picDone} onPress={() => setMenu(null)} />
+          </Pressable>
+        </Pressable>
+      </Modal>
     </Screen>
   );
 }

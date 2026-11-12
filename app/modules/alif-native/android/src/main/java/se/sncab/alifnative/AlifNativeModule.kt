@@ -73,6 +73,22 @@ class AlifNativeModule : Module() {
       }
     }
 
+    // ---- Creates Download/Alif/Pictures on the phone (with a short note in it) so the person can put pictures there ----
+    AsyncFunction("makePictureFolder") { note: String ->
+      if (android.os.Build.VERSION.SDK_INT < 29) return@AsyncFunction false
+      try {
+        val values = android.content.ContentValues().apply {
+          put(android.provider.MediaStore.Downloads.DISPLAY_NAME, "Alif.txt")
+          put(android.provider.MediaStore.Downloads.MIME_TYPE, "text/plain")
+          put(android.provider.MediaStore.Downloads.RELATIVE_PATH, "Download/Alif/Pictures")
+        }
+        val r = ctx.contentResolver
+        val uri = r.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values) ?: return@AsyncFunction false
+        r.openOutputStream(uri)?.use { it.write(note.toByteArray()) }
+        true
+      } catch (e: Exception) { false }
+    }
+
     // ---- Sounds for the prayer notifications (adhan, phone sounds, own files) ----
     Function("setSoundChannels") { prefix: String, channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels, prefix) }
     Function("setPrayerChannels") { channels: List<Map<String, Any?>> -> AlifSound.setChannels(ctx, channels) }

@@ -1,7 +1,9 @@
 # Changelog
 
 ## 0.5.7
-- **Fler bilder:** lägg bilder i telefonens Pictures/Alif och tryck Läs in bilder under Inställningar › Bilder – de blir extra bakgrunder för startskärmen och Idag. Håll fingret på en bild för att ta bort den.
+- **Fler bilder:** lägg bilder (JPG, JPEG, PNG, BMP) i Download/Alif/Pictures och tryck Läs in bilder under Inställningar › Bilder. Bara bilderna visas, inte filnamnen.
+- **Välj bilder med etiketter:** håll fingret på en bild och välj Start, Idag eller Awrad – valet syns i bildens hörn. Tryck igen så försvinner valet.
+- **Bild i Daily Awrad:** en vald bild visas under rubriken Daily Awrad. Alla bilder når ut till kanterna med mjuk toning upp och ner.
 - Idag: bilden går nu ända ut till skärmens kanter och upp bakom statusraden, med mjukare toning ner mot bönetiderna och en mörk skugga bakom nästa bön så att tiden syns tydligt.
 
 ## 0.5.6

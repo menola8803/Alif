@@ -435,7 +435,10 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
-  picFolder: 'FLER BILDER FRÅN TELEFONEN', picFolderHow: 'Skapa mappen Alif i telefonens Bilder-mapp (Pictures/Alif) och lägg dina bilder där. Tryck Läs in bilder, välj mappen (den öppnas direkt) och tryck Använd den här mappen. Nya bilder kopieras in i Alif och kan väljas nedan. Håll fingret på en inläst bild för att ta bort den.',
+  picRoleStart: 'Start', picRoleToday: 'Idag', picRoleAwrad: 'Awrad', picUseFor: 'Använd bilden för', picDone: 'Klar', picMinaret: 'Minareten', picPicture: 'Bild', picNoneShort: 'ingen',
+  picHowRoles: 'Håll fingret på en bild för att välja om den ska vara Start (startskärmen), Idag (toppen av Idag) eller Awrad (under rubriken Daily Awrad). Valen syns i bildens hörn. Tryck på en vald bild för att ta bort valen – då visas den animerade startskärmen, bönetidsklockan eller ingen bild.',
+  picFolderNote: 'Lägg bilder i den här mappen (Download/Alif/Pictures) och tryck Läs in bilder i Alif under Inställningar › Bilder.',
+  picFolder: 'FLER BILDER FRÅN TELEFONEN', picFolderHow: 'Lägg dina bilder i mappen Download/Alif/Pictures på telefonen (Alif skapar mappen första gången du trycker Läs in bilder). Tryck Läs in bilder, välj mappen (den öppnas direkt) och tryck Använd den här mappen. Bilder i JPG, JPEG, PNG och BMP kan användas. Nya bilder kopieras in och visas bland bilderna ovan – bara bilderna, inte filnamnen.',
   picReadIn: 'Läs in bilder', picReading: 'Läser in…', picReadDone: '{n} nya bilder inlästa.', picReadNone: 'Inga nya bilder i mappen.', picLibCount: '{n} inlästa bilder',
   picRemove: 'Ta bort', picRemoveQ: 'Ta bort bilden från Alif? Originalet i telefonens mapp ligger kvar.',
   picTitle: 'Bilder', picSub: 'Startskärmen och toppen av Idag', picStart: 'STARTSKÄRMEN', picStartSub: 'Bilden som visas några sekunder när Alif öppnas, med ALIF ovanför och ṣalawāt nedanför.',
@@ -498,7 +501,10 @@ const sv4 = {
   volumeCount: 'Räkna dhikr med volymknapparna', volumeCountSub: 'När det är på räknar både volym upp och volym ner ett steg i dhikr-räknaren – med en kort vibration – så du kan räkna utan att titta på skärmen, t.ex. med telefonen i fickan eller handen. Det gäller bara medan Dhikr-sidan är öppen och skärmen är tänd; på alla andra sidor och i andra appar ändrar knapparna volymen som vanligt.',
 };
 const en4: typeof sv4 = {
-  picFolder: 'MORE PICTURES FROM THE PHONE', picFolderHow: 'Create the folder Alif in the phone’s Pictures folder (Pictures/Alif) and put your pictures there. Tap Read in pictures, choose the folder (it opens straight away) and tap Use this folder. New pictures are copied into Alif and can be chosen below. Hold your finger on a read-in picture to remove it.',
+  picRoleStart: 'Start', picRoleToday: 'Today', picRoleAwrad: 'Awrad', picUseFor: 'Use the picture for', picDone: 'Done', picMinaret: 'The minaret', picPicture: 'Picture', picNoneShort: 'none',
+  picHowRoles: 'Hold your finger on a picture to choose whether it is Start (the start screen), Today (the top of Today) or Awrad (under the Daily Awrad title). The choices show in the picture’s corner. Tap a chosen picture to take its choices away – then the animated start screen, the prayer clock or no picture is shown.',
+  picFolderNote: 'Put pictures in this folder (Download/Alif/Pictures) and tap Read in pictures in Alif under Settings › Pictures.',
+  picFolder: 'MORE PICTURES FROM THE PHONE', picFolderHow: 'Put your pictures in the folder Download/Alif/Pictures on the phone (Alif creates the folder the first time you tap Read in pictures). Tap Read in pictures, choose the folder (it opens straight away) and tap Use this folder. Pictures in JPG, JPEG, PNG and BMP can be used. New pictures are copied in and shown among the pictures above – only the pictures, not the file names.',
   picReadIn: 'Read in pictures', picReading: 'Reading in…', picReadDone: '{n} new pictures read in.', picReadNone: 'No new pictures in the folder.', picLibCount: '{n} pictures read in',
   picRemove: 'Remove', picRemoveQ: 'Remove the picture from Alif? The original in the phone’s folder stays.',
   picTitle: 'Pictures', picSub: 'The start screen and the top of Today', picStart: 'START SCREEN', picStartSub: 'The picture shown for a few seconds when Alif opens, with ALIF above and the ṣalawāt below.',

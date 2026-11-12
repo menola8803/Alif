@@ -15,6 +15,7 @@ type AlifNative = {
   setSoundChannels(prefix: string, channels: { id: string; name: string; sound: string; alarm: boolean }[]): void;
   previewSound(sound: string): void;
   stopSound(): void;
+  makePictureFolder(note: string): Promise<boolean>;
   nameAudioChannel(name: string): void;
   screenAwake(on: boolean, brightness: number): void;
   importSound(path: string, title: string): Promise<string | null>;
