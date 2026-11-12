@@ -98,6 +98,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Inställningar', items: [
       'Bilder: välj bilden för startskärmen (förval: minareten; Animerad ger den gamla stjärnan) och för toppen av Idag (Ingen bild ger klockan). Egen bild hämtas från telefonen och stannar i Alif.',
+      'Fler bilder: skapa mappen Pictures/Alif (Bilder/Alif) på telefonen och lägg bilder där. Under Inställningar › Bilder trycker du Läs in bilder, väljer mappen och trycker Använd den här mappen – nya bilder kopieras in (förminskade) och blir valbara för startskärmen och Idag. Håll fingret på en inläst bild för att ta bort den; originalet ligger kvar.',
       'Språk (svenska/engelska), tema, translitteration, översättning, Koranöversättning, bönetider, Daily Awrad-påminnelse (21:00), hijri ±1 dag, historik, manual, integritet, uppdatering och Om.',
       'Uppdatering: när en ny version finns lyser kugghjulet. Tryck "Ladda ner och installera".',
       'Säkerhetskopia: spara allt (utom API-nyckeln) i en fil och läs in den igen, till exempel på en ny telefon.',
@@ -203,6 +204,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Settings', items: [
       'Pictures: choose the picture for the start screen (default: the minaret; Animated gives the earlier star) and for the top of Today (No picture gives the clock). An own picture is taken from the phone and stays in Alif.',
+      'More pictures: create the folder Pictures/Alif on the phone and put pictures there. Under Settings › Pictures tap Read in pictures, choose the folder and tap Use this folder – new pictures are copied in (made smaller) and can be chosen for the start screen and Today. Hold your finger on a read-in picture to remove it; the original stays.',
       'Language (Swedish/English), theme, transliteration, translation, Qur’an translation, prayer times, Daily Awrad reminder (9:00 PM), Hijri ±1 day, history, manual, privacy, update and About.',
       'Update: when a new version is out the gear glows. Tap "Download and install".',
       'Backup: save everything (except the API key) in a file and restore it, for example on a new phone.',

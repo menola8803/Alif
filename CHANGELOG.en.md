@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.7
+- **More pictures:** put pictures in the phone’s Pictures/Alif and tap Read in pictures under Settings › Pictures – they become extra backgrounds for the start screen and Today. Hold your finger on a picture to remove it.
 - Today: the picture now reaches the screen’s edges and up behind the status bar, with a softer fade down to the prayer times and a dark shade behind the next prayer so the time reads clearly.
 
 ## 0.5.6

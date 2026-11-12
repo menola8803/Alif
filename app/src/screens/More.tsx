@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Image, Linking, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Alert, Image, Linking, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
 import { useApp } from '../store';
 import * as ImagePicker from 'expo-image-picker';
-import { OWN_START, OWN_TODAY, PICTURES, pictureFor } from '../pictures';
+import { OWN_START, OWN_TODAY, PICTURES, libraryPictures, pictureFor, readInFolder, removeLibraryPicture } from '../pictures';
 import { Route } from '../nav';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
@@ -230,6 +230,26 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
   const { t, theme, startImg, todayImg, setPrefs } = useApp();
   const { width } = useWindowDimensions();
   const cell = (width - 32 - 16) / 3;
+  // Pictures read in from the phone's Pictures/Alif folder.
+  const [ver, setVer] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  const lib = useMemo(() => libraryPictures(), [ver]); // eslint-disable-line react-hooks/exhaustive-deps
+  const readIn = async () => {
+    setBusy(true); setMsg('');
+    const n = await readInFolder();
+    setBusy(false); setVer(v => v + 1);
+    setMsg(n < 0 ? '' : n === 0 ? t.picReadNone : t.picReadDone.replace('{n}', String(n)));
+  };
+  const remove = (id: string) => Alert.alert(t.picRemove, t.picRemoveQ, [
+    { text: t.cancel, style: 'cancel' },
+    { text: t.picRemove, style: 'destructive', onPress: () => {
+      removeLibraryPicture(id);
+      if (startImg === id) setPrefs({ startImg: 'minaret' });
+      if (todayImg === id) setPrefs({ todayImg: 'minaret' });
+      setVer(v => v + 1);
+    } },
+  ]);
   const pickOwn = async (file: string, key: 'startImg' | 'todayImg') => {
     const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.85 });
     const a = r.canceled ? null : r.assets[0];
@@ -243,8 +263,8 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
   };
   const Grid = ({ value, none, noneLabel, own, k }: { value: string; none: string; noneLabel: string; own: string; k: 'startImg' | 'todayImg' }) => {
     const ownPic = pictureFor(`own:${own}`);
-    const Box = ({ on, onPress, children, label }: { on: boolean; onPress: () => void; children?: React.ReactNode; label: string }) => (
-      <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={onPress}
+    const Box = ({ on, onPress, onLongPress, children, label }: { on: boolean; onPress: () => void; onLongPress?: () => void; children?: React.ReactNode; label: string }) => (
+      <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={onPress} onLongPress={onLongPress}
         style={{ width: cell, height: cell * 1.5, borderRadius: 12, overflow: 'hidden', borderWidth: on ? 2 : 1, borderColor: on ? theme.tabActive : theme.line, backgroundColor: theme.card, alignItems: 'center', justifyContent: 'center' }}>
         {children}
         {on ? <View style={{ position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: 11, backgroundColor: theme.tabActive, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#1A1A1A', fontSize: 13, fontWeight: '800' }}>✓</Text></View> : null}
@@ -258,6 +278,11 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
             <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
           </Box>
         ))}
+        {lib.map(p => (
+          <Box key={p.id} on={value === p.id} onPress={() => setPrefs({ [k]: p.id } as never)} onLongPress={() => remove(p.id)} label={p.id.slice(4)}>
+            <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
+          </Box>
+        ))}
         <Box on={value === `own:${own}`} onPress={() => (ownPic && value !== `own:${own}` ? setPrefs({ [k]: `own:${own}` } as never) : pickOwn(own, k))} label={t.picOwn}>
           {ownPic ? <Image source={ownPic.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : <Text style={{ color: theme.tabActive, fontSize: 13, textAlign: 'center', paddingHorizontal: 6 }}>{`＋ ${t.picOwn}`}</Text>}
         </Box>
@@ -268,6 +293,13 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
     <Screen>
       <Header title={t.picTitle} sub={t.picSub} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
+        <Card style={{ gap: 8 }}>
+          <Label>{t.picFolder}</Label>
+          <Text style={{ fontSize: 13, color: theme.ink, lineHeight: 19 }}>{t.picFolderHow}</Text>
+          <Btn title={busy ? t.picReading : t.picReadIn} onPress={readIn} disabled={busy} />
+          {msg ? <Text style={{ fontSize: 13, color: theme.accent }}>{msg}</Text> : null}
+          {lib.length ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.picLibCount.replace('{n}', String(lib.length))}</Text> : null}
+        </Card>
         <Label>{t.picStart}</Label>
         <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picStartSub}</Text>
         <Grid value={startImg} none="animated" noneLabel={t.picAnimated} own={OWN_START} k="startImg" />

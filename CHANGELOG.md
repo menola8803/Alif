@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.7
+- **Fler bilder:** lägg bilder i telefonens Pictures/Alif och tryck Läs in bilder under Inställningar › Bilder – de blir extra bakgrunder för startskärmen och Idag. Håll fingret på en bild för att ta bort den.
 - Idag: bilden går nu ända ut till skärmens kanter och upp bakom statusraden, med mjukare toning ner mot bönetiderna och en mörk skugga bakom nästa bön så att tiden syns tydligt.
 
 ## 0.5.6
