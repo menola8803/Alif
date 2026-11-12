@@ -2,6 +2,10 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.8
+- **Read in pictures works:** the pictures in Download/Alif/Pictures did not come into Alif ("No new pictures"). Now the phone reads the folder itself and copies the pictures in. The message says how many were read in, whether they were already there or if any could not be read.
+- **Own pictures:** choose several pictures at once in the phone’s picture chooser.
+
 ## 0.5.7
 - **More pictures:** put pictures (JPG, JPEG, PNG, BMP) in Download/Alif/Pictures and tap Read in pictures under Settings › Pictures. Only the pictures are shown, not the file names.
 - **Choose pictures with labels:** hold your finger on a picture and choose Start, Today or Awrad – the choice shows in the picture’s corner. Tap again and the choice goes away.

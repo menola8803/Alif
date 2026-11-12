@@ -5,6 +5,7 @@ import { Directory, File, Paths } from 'expo-file-system';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { ImageSourcePropType } from 'react-native';
 import { HOME_FOCUS, HOME_IMAGES } from './homeImages';
+import { AlifNativeModule } from '../modules/alif-native';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const MINARET = require('../assets/start/minaret.jpg');
@@ -51,22 +52,24 @@ export function libraryPictures(): Pic[] {
 }
 
 /**
- * Lets the person choose the folder (it opens in Pictures/Alif) and reads in every picture there that is not in Alif
- * yet. Each is made at most 1600 points high and saved as JPEG, so large photos do not slow the app. Returns how many
- * were added, or -1 if no folder was chosen.
+ * Lets the person choose the folder (it opens in Download/Alif/Pictures) and reads in every JPG, JPEG, PNG and BMP
+ * there that is not in Alif yet. The phone's own code copies the files (so nothing is lost on the way); each is then
+ * made at most 1600 points high and saved as JPEG. Returns how many were found and added, or null if no folder was chosen.
  */
-export async function readInFolder(): Promise<number> {
-  let dir: Directory;
-  try { dir = await Directory.pickDirectoryAsync(PHONE_FOLDER); } catch { return -1; }
-  if (!dir) return -1;
-  const lib = libDir();
-  if (!lib.exists) lib.create({ intermediates: true });
-  let added = 0;
-  for (const f of dir.list()) {
-    if (!(f instanceof File) || !IMAGE.test(f.name)) continue;
-    if (await importPicture(f.uri, f.name)) added++;
+export async function readInFolder(): Promise<{ found: number; added: number; failed: number } | null> {
+  if (!AlifNativeModule) return null;
+  const tree = await AlifNativeModule.pickPictureFolder(PHONE_FOLDER).catch(() => null);
+  if (!tree) return null;
+  const tmp = new Directory(Paths.cache, `pictures-in-${Date.now()}`);
+  let files: { path: string; name: string }[] = [];
+  try { files = await AlifNativeModule.copyFolderPictures(tree, tmp.uri); } catch { files = []; }
+  let added = 0, failed = 0;
+  for (const f of files) {
+    const r = await importPicture(f.path, f.name, true);
+    if (r === 'failed') failed++; else if (r) added++;
   }
-  return added;
+  try { if (tmp.exists) tmp.delete(); } catch {}
+  return { found: files.length, added, failed };
 }
 
 /** Removes a picture that was read in. */
@@ -74,22 +77,26 @@ export function removeLibraryPicture(id: string) {
   try { const f = new File(libDir(), id.slice(4)); if (f.exists) f.delete(); } catch {}
 }
 
-/** Copies one picture into Alif (made at most 1600 points high, JPEG). Returns its id, or null if it was there already. */
-export async function importPicture(uri: string, fileName: string): Promise<string | null> {
+/**
+ * Copies one picture into Alif (made at most 1600 points high, JPEG). The stored name comes from the original name
+ * (so the same picture is not read in twice) but is never shown. Returns its id, null if it was there already, or
+ * 'failed' if it could not be read.
+ */
+export async function importPicture(uri: string, fileName: string, local = false): Promise<string | null> {
   const lib = libDir();
   if (!lib.exists) lib.create({ intermediates: true });
-  const name = `${fileName.replace(/\.[^.]+$/, '').replace(/[^a-z0-9._-]/gi, '_').slice(0, 60)}.jpg`;
+  const name = `${fileName.replace(/\.[^.]+$/, '').replace(/[^a-z0-9._-]/gi, '_').slice(-60)}.jpg`;
   const dst = new File(lib, name);
   if (dst.exists) return null;
+  let tmp: File | null = null;
   try {
-    const tmp = new File(Paths.cache, `in-${Date.now()}-${name}`);
-    new File(uri).copy(tmp);
-    const ref = await ImageManipulator.manipulate(tmp.uri).resize({ height: 1600 }).renderAsync();
+    let src = uri;
+    if (!local) { tmp = new File(Paths.cache, `in-${Date.now()}.img`); new File(uri).copy(tmp); src = tmp.uri; }
+    const ref = await ImageManipulator.manipulate(src).resize({ height: 1600 }).renderAsync();
     const out = await ref.saveAsync({ compress: 0.85, format: SaveFormat.JPEG });
     new File(out.uri).move(dst);
-    try { tmp.delete(); } catch {}
     return `lib:${name}`;
-  } catch { return null; }
+  } catch { return 'failed'; } finally { try { tmp?.delete(); } catch {} }
 }
 
 /** A short name for a picture id. File names of read-in pictures are never shown. */

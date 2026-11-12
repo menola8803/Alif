@@ -40,6 +40,8 @@ class AlifNativeModule : Module() {
   private val ctx: Context get() = appContext.reactContext ?: throw Exception("No context")
   private var soundPick: Promise? = null
   private val PICK_SOUND = 7311
+  private val PICK_FOLDER = 7312
+  private var folderPick: Promise? = null
 
   override fun definition() = ModuleDefinition {
     Name("AlifNative")
@@ -108,7 +110,48 @@ class AlifNativeModule : Module() {
       if (current != null && current.startsWith("content://")) i.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(current))
       act.startActivityForResult(i, PICK_SOUND)
     }.runOnQueue(Queues.MAIN)
+
+    // ---- Pictures: choose a folder (opens in Download/Alif/Pictures) and copy its pictures in ----
+    AsyncFunction("pickPictureFolder") { initial: String, promise: Promise ->
+      val act = appContext.currentActivity
+      if (act == null) { promise.resolve(null); return@AsyncFunction }
+      folderPick?.resolve(null)
+      folderPick = promise
+      val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+      if (Build.VERSION.SDK_INT >= 26) i.putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI, Uri.parse(initial))
+      act.startActivityForResult(i, PICK_FOLDER)
+    }.runOnQueue(Queues.MAIN)
+    // Copies every JPG, JPEG, PNG and BMP in the chosen folder to destDir. Returns [{path, name}] for each copy.
+    AsyncFunction("copyFolderPictures") { tree: String, destDir: String ->
+      val out = mutableListOf<Map<String, String>>()
+      val treeUri = Uri.parse(tree)
+      val kids = android.provider.DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, android.provider.DocumentsContract.getTreeDocumentId(treeUri))
+      val dir = File(destDir.removePrefix("file://")).apply { mkdirs() }
+      val cols = arrayOf(android.provider.DocumentsContract.Document.COLUMN_DOCUMENT_ID, android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME)
+      ctx.contentResolver.query(kids, cols, null, null, null)?.use { c ->
+        var n = 0
+        while (c.moveToNext()) {
+          val id = c.getString(0) ?: continue
+          val name = c.getString(1) ?: continue
+          if (!Regex("\\.(jpe?g|png|bmp)$", RegexOption.IGNORE_CASE).containsMatchIn(name)) continue
+          try {
+            val src = android.provider.DocumentsContract.buildDocumentUriUsingTree(treeUri, id)
+            val dst = File(dir, "in-${n++}." + name.substringAfterLast('.').lowercase())
+            ctx.contentResolver.openInputStream(src)?.use { ins -> FileOutputStream(dst).use { ins.copyTo(it) } } ?: continue
+            out.add(mapOf("path" to Uri.fromFile(dst).toString(), "name" to name))
+          } catch (e: Exception) {}
+        }
+      }
+      out
+    }
     OnActivityResult { _, payload ->
+      if (payload.requestCode == PICK_FOLDER) {
+        val p = folderPick ?: return@OnActivityResult
+        folderPick = null
+        val u = if (payload.resultCode == Activity.RESULT_OK) payload.data?.data else null
+        p.resolve(u?.toString())
+        return@OnActivityResult
+      }
       if (payload.requestCode != PICK_SOUND) return@OnActivityResult
       val p = soundPick ?: return@OnActivityResult
       soundPick = null

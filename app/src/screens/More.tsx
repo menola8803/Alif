@@ -256,18 +256,24 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
       const ok = await AlifNativeModule.makePictureFolder(t.picFolderNote).catch(() => false);
       if (ok) setPrefs({ picFolderMade: true });
     }
-    const n = await readInFolder();
+    const r = await readInFolder();
     setBusy(false); setVer(v => v + 1);
-    setMsg(n < 0 ? '' : n === 0 ? t.picReadNone : t.picReadDone.replace('{n}', String(n)));
+    if (!r) return setMsg('');
+    setMsg(r.found === 0 ? t.picReadEmpty : r.added === 0 && r.failed === 0 ? t.picReadNone
+      : t.picReadDone.replace('{n}', String(r.added)) + (r.failed ? ' ' + t.picReadFailed.replace('{n}', String(r.failed)) : ''));
   };
   const addOne = async () => {
-    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1 });
-    const a = r.canceled ? null : r.assets[0];
-    if (!a?.uri) return;
+    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1, allowsMultipleSelection: true, selectionLimit: 0 });
+    if (r.canceled || !r.assets.length) return;
     setBusy(true);
-    const id = await importPicture(a.uri, a.fileName ?? `bild-${Date.now()}.jpg`);
+    const ids: string[] = [];
+    for (const a of r.assets) {
+      const id = await importPicture(a.uri, a.fileName ?? `bild-${Date.now()}-${ids.length}.jpg`);
+      if (id && id !== 'failed') ids.push(id);
+    }
     setBusy(false); setVer(v => v + 1);
-    if (id) setMenu(id);
+    if (ids.length === 1) setMenu(ids[0]);
+    else if (ids.length) setMsg(t.picReadDone.replace('{n}', String(ids.length)));
   };
   const remove = (id: string) => Alert.alert(t.picRemove, t.picRemoveQ, [
     { text: t.cancel, style: 'cancel' },

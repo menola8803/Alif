@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.8
+- **Läs in bilder fungerar:** bilderna i Download/Alif/Pictures kom inte in i Alif ("Inga nya bilder"). Nu läser telefonen själv mappen och kopierar in bilderna. Meddelandet säger hur många som lästes in, om de redan fanns eller om någon inte kunde läsas.
+- **Egna bilder:** välj flera bilder på en gång i telefonens bildväljare.
+
 ## 0.5.7
 - **Fler bilder:** lägg bilder (JPG, JPEG, PNG, BMP) i Download/Alif/Pictures och tryck Läs in bilder under Inställningar › Bilder. Bara bilderna visas, inte filnamnen.
 - **Välj bilder med etiketter:** håll fingret på en bild och välj Start, Idag eller Awrad – valet syns i bildens hörn. Tryck igen så försvinner valet.

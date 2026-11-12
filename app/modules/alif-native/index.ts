@@ -16,6 +16,10 @@ type AlifNative = {
   previewSound(sound: string): void;
   stopSound(): void;
   makePictureFolder(note: string): Promise<boolean>;
+  /** Opens the folder chooser (starting in initialUri). Resolves to the chosen folder, or null. */
+  pickPictureFolder(initialUri: string): Promise<string | null>;
+  /** Copies the JPG/JPEG/PNG/BMP pictures in the chosen folder to destDir. */
+  copyFolderPictures(tree: string, destDir: string): Promise<{ path: string; name: string }[]>;
   nameAudioChannel(name: string): void;
   screenAwake(on: boolean, brightness: number): void;
   importSound(path: string, title: string): Promise<string | null>;
