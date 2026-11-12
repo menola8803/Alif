@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, Vibration, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Vibration, View, useWindowDimensions } from 'react-native';
 import { useApp } from '../store';
 import { pictureFor } from '../pictures';
 import { PictureBand } from '../today';
@@ -46,6 +46,7 @@ function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: nu
 
 export default function Awrad({ onBack, onReminder }: { onBack: () => void; onReminder: () => void }) {
   const { t, theme, awradLevel, awradDay, awradCounts, setPrefs, reminderOn, reminderHour, reminderMinute, awradImg } = useApp();
+  const { width } = useWindowDimensions();
   const awradPic = awradImg === 'none' ? null : pictureFor(awradImg);
   const now = new Date();
   const today = dayKey(now);
@@ -62,7 +63,7 @@ export default function Awrad({ onBack, onReminder }: { onBack: () => void; onRe
     <Screen>
       <Header title={t.awrad} sub={t.awradSub} onBack={onBack} />
       <ScrollView style={{ marginHorizontal: -16 }} contentContainerStyle={{ gap: 12, paddingBottom: 12, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
-        {awradPic ? <PictureBand src={awradPic.src} focus={awradPic.focus} height={220} /> : null}
+        {awradPic ? <PictureBand src={awradPic.src} focus={awradPic.focus} height={Math.min(width * 1.15, 470)} /> : null}
         <Card style={{ alignItems: 'center' }}>
           <Arabic center size={24} color={theme.primary}>{SALAWAT_SAYYIDINA}</Arabic>
           <Text style={{ fontSize: 13, color: theme.muted, textAlign: 'center', lineHeight: 19 }}>{t.awradIntro}</Text>

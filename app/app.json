@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alif",
     "slug": "alif",
-    "version": "0.5.8",
+    "version": "0.5.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -42,7 +42,7 @@
         "android.permission.ACCESS_BACKGROUND_LOCATION",
         "android.permission.FOREGROUND_SERVICE_LOCATION"
       ],
-      "versionCode": 508
+      "versionCode": 509
     },
     "web": {
       "favicon": "./assets/favicon.png"

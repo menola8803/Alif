@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.8';
+export const MANUAL_VERSION = '0.5.9';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -57,7 +57,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Välj Suror eller Juz överst. Juz visar Koranens 30 delar med namn, var de börjar och slutar och hur många sajda de har; en juz läses i ett svep över surorna. I suran visar en guldlinje var en ny juz börjar.',
       'Sajda: vid de 15 verser där man faller ned i sujūd står tecknet ۩ i guld efter versen och "Sajda – här faller man ned" under den, både i suror och juz. (22:77 är märkt som i muṣḥafen men räknas inte som sajda i Ḥanafī-skolan.)',
       '"Fortsätt läsa" tar dig dit du slutade. Tryck "Bokmärke" vid en vers för att spara den; bokmärkena visas i guld överst på Koranen.',
-      'Daily Awrad med Ihdāʾ öppnas från Idag, Koranen eller Dhikr. Tryck på ett kort för att räkna; tryck länge för att nollställa just den räknaren. En bild kan visas under rubriken – välj den under Inställningar › Bilder (håll fingret på en bild och välj Awrad).',
+      'Daily Awrad med Ihdāʾ öppnas från Idag, Koranen eller Dhikr. Tryck på ett kort för att räkna; tryck länge för att nollställa just den räknaren. En bild kan visas under rubriken, lika stor som bilden på Idag – välj den under Inställningar › Bilder (håll fingret på en bild och välj Awrad).',
       'Ordningen följer häftet Daily Awrad (Practice) of Naqshbandi Tariqa (nurmuhammad.com): Del ett – shahāda 3 gånger (med pekfingret lyft), istighfār 70, al-Fātiḥa (Mecka), Āmana r-rasūlu, ash-Sharḥ 7, al-Ikhlāṣ 11, al-Falaq, an-Nās, lā ilāha illā llāh 9, lā ilāha illā llāh Muḥammadun rasūlu llāh 1, ṣalawāt 10, Ihdāʾ och al-Fātiḥa (Medina). Del två – sitt på knä med rābiṭa: Allāhu Allāhu Allāhu Ḥaqq 3, Allāh Allāh med tungan och i hjärtat, ṣalawāt, en juzʾ (eller al-Ikhlāṣ 100) och ett kapitel av Dalāʾil al-Khayrāt (eller ṣalawāt 100).',
       'Nivåer: Mubtadiʾ (nybörjare) 1500 + 1500 Allāh och 100 ṣalawāt (300 mån/tors/fre), Mustaʿidd (förberedd) 2500 + 2500 och 300 (500), Ahl al-ʿAzm (de beslutsamma) 5000 + 5000 och 1000 (2000). Ihdāʾ följer häftets text.',
       'Påminnelsen (Daily Awrad › Påminnelse): välj tid och Ljud för påminnelsen – telefonens ljud, tyst, en av de fem adhan, ett alarm eller en ringsignal från telefonen eller en egen ljudfil, och om den ska spelas som alarm.',
@@ -163,7 +163,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Choose Surahs or Juz at the top. Juz shows the 30 parts of the Qur’an with their names, where they begin and end and how many sajdas they have; a juz is read straight through across the sūras. In a sūra a gold line shows where a new juz begins.',
       'Sajda: at the 15 verses where one prostrates, the sign ۩ is shown in gold after the verse and "Sajda – prostrate here" below it, in both sūras and juz. (22:77 is marked as in the muṣḥaf but is not a sajda in the Ḥanafī school.)',
       '"Continue reading" takes you to where you stopped. Tap "Bookmark" at a verse to save it; bookmarks are shown in gold at the top of the Qur’an page.',
-      'Daily Awrad with the Ihdāʾ opens from Today, the Qur’an or Dhikr. Tap a card to count; hold it to reset that counter. A picture can be shown under the title – choose it under Settings › Pictures (hold your finger on a picture and choose Awrad).',
+      'Daily Awrad with the Ihdāʾ opens from Today, the Qur’an or Dhikr. Tap a card to count; hold it to reset that counter. A picture can be shown under the title, as large as the picture on Today – choose it under Settings › Pictures (hold your finger on a picture and choose Awrad).',
       'The order follows the booklet Daily Awrad (Practice) of Naqshbandi Tariqa (nurmuhammad.com): Part one – shahāda 3 times (with the index finger raised), istighfār 70, al-Fātiḥa (Makkah), Āmana r-rasūlu, ash-Sharḥ 7, al-Ikhlāṣ 11, al-Falaq, an-Nās, lā ilāha illā llāh 9, lā ilāha illā llāh Muḥammadun rasūlu llāh 1, ṣalawāt 10, Ihdāʾ and al-Fātiḥa (Madinah). Part two – sit on the knees with rābiṭa: Allāhu Allāhu Allāhu Ḥaqq 3, Allāh Allāh by tongue and by heart, ṣalawāt, one juzʾ (or al-Ikhlāṣ 100) and one chapter of Dalāʾil al-Khayrāt (or ṣalawāt 100).',
       'Levels: Mubtadiʾ (beginner) 1500 + 1500 Allāh and 100 ṣalawāt (300 Mon/Thu/Fri), Mustaʿidd (prepared) 2500 + 2500 and 300 (500), Ahl al-ʿAzm (people of determination) 5000 + 5000 and 1000 (2000). The Ihdāʾ follows the booklet’s text.',
       'The reminder (Daily Awrad › Reminder): choose the time and Sound for the reminder – the phone’s sound, silent, one of the five adhans, an alarm or ringtone from the phone or an own sound file, and whether it plays as an alarm.',

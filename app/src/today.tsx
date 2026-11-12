@@ -126,7 +126,9 @@ export function HomeArt({ index, height }: { index: number; height: number }) {
   const shadow = { textShadowColor: 'rgba(0,0,0,0.85)', textShadowRadius: 6, textShadowOffset: { width: 0, height: 1 } };
   return (
     <View style={{ height, width, marginHorizontal: -16, overflow: 'hidden' }}>
-      <Image source={src} resizeMode="cover" style={{ position: 'absolute', left, top, width: w, height: h }} />
+      {dim
+        ? <Image source={src} resizeMode="cover" style={{ position: 'absolute', left, top, width: w, height: h }} />
+        : <Image source={src} resizeMode="cover" style={{ position: 'absolute', left: 0, top: 0, width, height }} />}
       <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
         <Defs>
           <RadialGradient id="edge" cx="50%" cy="52%" rx="62%" ry="56%">

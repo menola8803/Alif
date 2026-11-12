@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.9
+- **Awrad-bilden i full storlek:** bilden under rubriken Daily Awrad är nu lika stor som bilden på Idag och klipps inte längre.
+
 ## 0.5.8
 - **Läs in bilder fungerar:** bilderna i Download/Alif/Pictures kom inte in i Alif ("Inga nya bilder"). Nu läser telefonen själv mappen och kopierar in bilderna. Meddelandet säger hur många som lästes in, om de redan fanns eller om någon inte kunde läsas.
 - **Egna bilder:** välj flera bilder på en gång i telefonens bildväljare.
