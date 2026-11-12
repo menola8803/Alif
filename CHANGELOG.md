@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.7
+- Idag: bilden går nu ända ut till skärmens kanter och upp bakom statusraden, med mjukare toning ner mot bönetiderna och en mörk skugga bakom nästa bön så att tiden syns tydligt.
+
 ## 0.5.6
 - **Ny startskärm:** minareten i morgondimma med ALIF ovanför och ṣalawāt (arabiska och translitteration) nedanför.
 - **Idag:** samma bild överst bakom rubriken och nästa bön (namn, tid, tid kvar).

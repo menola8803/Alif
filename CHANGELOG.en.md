@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.7
+- Today: the picture now reaches the screen’s edges and up behind the status bar, with a softer fade down to the prayer times and a dark shade behind the next prayer so the time reads clearly.
+
 ## 0.5.6
 - **New start screen:** the minaret in the morning mist with ALIF above and the ṣalawāt (Arabic and transliteration) below.
 - **Today:** the same picture at the top behind the title and the next prayer (name, time, time left).

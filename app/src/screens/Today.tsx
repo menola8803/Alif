@@ -1,7 +1,8 @@
 import React from 'react';
 import { Image, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { pictureFor } from '../pictures';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../store';
 import { usePrayer } from '../prayer';
 import { Route } from '../nav';
@@ -36,6 +37,8 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const app = useApp();
   const { t, theme, lang, place, school, prayerNotify, setPrefs, awradDay, awradCounts, awradLevel, todayImg } = app;
   const top = todayImg === 'none' ? null : pictureFor(todayImg);
+  const ins = useSafeAreaInsets();
+  const lift = ins.top + 12; // the Screen's top padding: the picture reaches up behind the status bar
   const { today, next, now, source, hijriOffset } = usePrayer();
   const { width } = useWindowDimensions();
   const h = toHijri(now, hijriOffset);
@@ -55,24 +58,34 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const clock = Math.min(width - 32, 360);
 
   return (
-    <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false}>
+    // With a picture the page reaches the screen's edges, so the picture can go from edge to edge and up to the top.
+    <ScrollView style={top ? { marginHorizontal: -16, marginTop: -lift } : undefined}
+      contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE, paddingHorizontal: top ? 16 : 0 }} showsVerticalScrollIndicator={false}>
       {top ? (
         // The chosen picture behind the title and the next prayer, fading into the page colour.
-        <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470), marginBottom: -8 }}>
+        <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470) + lift, marginBottom: -8 }}>
           <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />
           <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
             <Defs>
               <LinearGradient id="tt" x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0" stopColor={theme.bg} stopOpacity={0.7} />
-                <Stop offset="0.22" stopColor={theme.bg} stopOpacity={0.1} />
-                <Stop offset="0.45" stopColor={theme.bg} stopOpacity={0} />
-                <Stop offset="0.75" stopColor={theme.bg} stopOpacity={0.55} />
+                <Stop offset="0" stopColor={theme.bg} stopOpacity={0.75} />
+                <Stop offset="0.2" stopColor={theme.bg} stopOpacity={0.15} />
+                <Stop offset="0.4" stopColor={theme.bg} stopOpacity={0} />
+                <Stop offset="0.62" stopColor={theme.bg} stopOpacity={0.35} />
+                <Stop offset="0.85" stopColor={theme.bg} stopOpacity={0.85} />
                 <Stop offset="1" stopColor={theme.bg} stopOpacity={1} />
               </LinearGradient>
+              {/* a soft shade behind the next prayer, so the time reads well on any picture */}
+              <RadialGradient id="tc" cx="50" cy="78" rx="42" ry="20" gradientUnits="userSpaceOnUse">
+                <Stop offset="0" stopColor={theme.bg} stopOpacity={0.6} />
+                <Stop offset="0.6" stopColor={theme.bg} stopOpacity={0.3} />
+                <Stop offset="1" stopColor={theme.bg} stopOpacity={0} />
+              </RadialGradient>
             </Defs>
             <Rect x={0} y={0} width={100} height={100} fill="url(#tt)" />
+            <Rect x={0} y={0} width={100} height={100} fill="url(#tc)" />
           </Svg>
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingHorizontal: 16, paddingTop: lift }}>
             <PageTitle title={t.tabToday} sub={`${longDate(now, lang)} · ${hijriText(h)}`} onGear={onGear} glow={glow} />
           </View>
           {next ? (
