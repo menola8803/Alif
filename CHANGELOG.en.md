@@ -2,6 +2,11 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.6
+- **New start screen:** the minaret in the morning mist with ALIF above and the ṣalawāt (Arabic and transliteration) below.
+- **Today:** the same picture at the top behind the title and the next prayer (name, time, time left).
+- **Settings › Pictures:** choose the picture for the start screen and the top of Today among the minaret and the 13 pictures, or an own picture from the phone; the animated start screen and the prayer clock remain as choices.
+
 ## 0.5.5
 - Smaller APK: only for 64-bit ARM phones (all newer phones) and without the barcode reader Alif does not use – about 200 MB → 60–70 MB.
 - Today: the ṣalawāt above the picture in full, in Arabic with the transliteration under it – Allāhumma ṣalli ʿalā sayyidinā Muḥammad wa ʿalā ālihi wa aṣḥābihi wa sallim.

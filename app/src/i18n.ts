@@ -435,6 +435,9 @@ const en3: typeof sv3 = {
 
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
+  picTitle: 'Bilder', picSub: 'Startskärmen och toppen av Idag', picStart: 'STARTSKÄRMEN', picStartSub: 'Bilden som visas några sekunder när Alif öppnas, med ALIF ovanför och ṣalawāt nedanför.',
+  picToday: 'TOPPEN AV IDAG', picTodaySub: 'Bilden bakom rubriken och nästa bön på Idag. Utan bild visas bönetidsklockan som förut.',
+  picAnimated: 'Animerad (stjärnan)', picNone: 'Ingen bild (klockan)', picOwn: 'Egen bild', picOwnHelp: 'Egen bild: tryck för att välja en bild från telefonen. Den kopieras in i Alif och lämnar aldrig telefonen. Tryck igen när den är vald för att byta.',
   awradPart1: 'Del ett', awradPart2: 'Del två – sitt på knä med rābiṭa',
   huroofTitle: 'Ḥurūf', huroofSub: 'De avskilda bokstäverna i surornas början', huroofCard: 'Ḥurūf · de avskilda bokstäverna', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt i 29 suror, med förklaring',
   huroofTree: '29 SUROR ÖPPNAS MED BOKSTÄVER', huroofLetters: 'DE 14 BOKSTÄVERNA · NYCKLAR TILL GUDS NAMN', huroofOpeners: 'DE 14 ÖPPNINGARNA', huroofHadith: 'HADITHEN OM ABJAD-RÄKNINGEN', huroofMissing: 'AL-YĀFIʿĪ: DE SJU BOKSTÄVER SOM SAKNAS I AL-FĀTIḤA',
@@ -492,6 +495,9 @@ const sv4 = {
   volumeCount: 'Räkna dhikr med volymknapparna', volumeCountSub: 'När det är på räknar både volym upp och volym ner ett steg i dhikr-räknaren – med en kort vibration – så du kan räkna utan att titta på skärmen, t.ex. med telefonen i fickan eller handen. Det gäller bara medan Dhikr-sidan är öppen och skärmen är tänd; på alla andra sidor och i andra appar ändrar knapparna volymen som vanligt.',
 };
 const en4: typeof sv4 = {
+  picTitle: 'Pictures', picSub: 'The start screen and the top of Today', picStart: 'START SCREEN', picStartSub: 'The picture shown for a few seconds when Alif opens, with ALIF above and the ṣalawāt below.',
+  picToday: 'TOP OF TODAY', picTodaySub: 'The picture behind the title and the next prayer on Today. Without a picture the prayer clock is shown as before.',
+  picAnimated: 'Animated (the star)', picNone: 'No picture (the clock)', picOwn: 'Own picture', picOwnHelp: 'Own picture: tap to choose a picture on the phone. It is copied into Alif and never leaves the phone. Tap again when it is chosen to change it.',
   awradPart1: 'Part one', awradPart2: 'Part two – sit on the knees with rābiṭa',
   huroofTitle: 'Ḥurūf', huroofSub: 'The disjoined letters at the start of the sūras', huroofCard: 'Ḥurūf · the disjoined letters', huroofCardSub: 'Al-ḥurūf al-muqaṭṭaʿāt in 29 sūras, explained',
   huroofTree: '29 SŪRAS OPEN WITH LETTERS', huroofLetters: 'THE 14 LETTERS · KEYS TO ALLAH’S NAMES', huroofOpeners: 'THE 14 OPENINGS', huroofHadith: 'THE ḤADĪTH OF THE ABJAD COUNT', huroofMissing: 'AL-YĀFIʿĪ: THE SEVEN LETTERS NOT IN AL-FĀTIḤA',

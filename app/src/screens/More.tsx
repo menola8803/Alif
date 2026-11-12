@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Linking, Platform, Pressable, ScrollView, View } from 'react-native';
+import { Image, Linking, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
 import { useApp } from '../store';
+import * as ImagePicker from 'expo-image-picker';
+import { OWN_START, OWN_TODAY, PICTURES, pictureFor } from '../pictures';
 import { Route } from '../nav';
 import { useRecitation } from '../recitation';
 import { RECITERS } from '../core/recite';
@@ -218,6 +220,61 @@ export function WidgetSettingsScreen({ onBack, go }: { onBack: () => void; go: (
           {Platform.OS === 'android' ? <Btn title={t.dreamOpen} onPress={() => Linking.sendIntent('android.settings.DREAM_SETTINGS').catch(() => Linking.openSettings().catch(() => {}))} /> : null}
           <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.dreamMissing}</Text>
         </Card>
+      </ScrollView>
+    </Screen>
+  );
+}
+
+/** Settings › Pictures: the picture of the start screen and of the top of Today (default: the minaret). */
+export function PicturesScreen({ onBack }: { onBack: () => void }) {
+  const { t, theme, startImg, todayImg, setPrefs } = useApp();
+  const { width } = useWindowDimensions();
+  const cell = (width - 32 - 16) / 3;
+  const pickOwn = async (file: string, key: 'startImg' | 'todayImg') => {
+    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.85 });
+    const a = r.canceled ? null : r.assets[0];
+    if (!a?.uri) return;
+    try {
+      const dst = new File(Paths.document, file);
+      if (dst.exists) dst.delete();
+      new File(a.uri).copy(dst);
+      setPrefs({ [key]: `own:${file}` } as never);
+    } catch {}
+  };
+  const Grid = ({ value, none, noneLabel, own, k }: { value: string; none: string; noneLabel: string; own: string; k: 'startImg' | 'todayImg' }) => {
+    const ownPic = pictureFor(`own:${own}`);
+    const Box = ({ on, onPress, children, label }: { on: boolean; onPress: () => void; children?: React.ReactNode; label: string }) => (
+      <Pressable accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }} onPress={onPress}
+        style={{ width: cell, height: cell * 1.5, borderRadius: 12, overflow: 'hidden', borderWidth: on ? 2 : 1, borderColor: on ? theme.tabActive : theme.line, backgroundColor: theme.card, alignItems: 'center', justifyContent: 'center' }}>
+        {children}
+        {on ? <View style={{ position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: 11, backgroundColor: theme.tabActive, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#1A1A1A', fontSize: 13, fontWeight: '800' }}>✓</Text></View> : null}
+      </Pressable>
+    );
+    return (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <Box on={value === none} onPress={() => setPrefs({ [k]: none } as never)} label={noneLabel}><Text style={{ color: theme.muted, fontSize: 12.5, textAlign: 'center', paddingHorizontal: 6 }}>{noneLabel}</Text></Box>
+        {PICTURES.map(p => (
+          <Box key={p.id} on={value === p.id} onPress={() => setPrefs({ [k]: p.id } as never)} label={p.id}>
+            <Image source={p.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
+          </Box>
+        ))}
+        <Box on={value === `own:${own}`} onPress={() => (ownPic && value !== `own:${own}` ? setPrefs({ [k]: `own:${own}` } as never) : pickOwn(own, k))} label={t.picOwn}>
+          {ownPic ? <Image source={ownPic.src} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : <Text style={{ color: theme.tabActive, fontSize: 13, textAlign: 'center', paddingHorizontal: 6 }}>{`＋ ${t.picOwn}`}</Text>}
+        </Box>
+      </View>
+    );
+  };
+  return (
+    <Screen>
+      <Header title={t.picTitle} sub={t.picSub} onBack={onBack} />
+      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
+        <Label>{t.picStart}</Label>
+        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picStartSub}</Text>
+        <Grid value={startImg} none="animated" noneLabel={t.picAnimated} own={OWN_START} k="startImg" />
+        <Label>{t.picToday}</Label>
+        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picTodaySub}</Text>
+        <Grid value={todayImg} none="none" noneLabel={t.picNone} own={OWN_TODAY} k="todayImg" />
+        <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.picOwnHelp}</Text>
       </ScrollView>
     </Screen>
   );

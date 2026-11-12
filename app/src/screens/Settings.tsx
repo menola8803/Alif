@@ -56,6 +56,7 @@ export default function Settings({ go, onBack }: { go: (r: Route) => void; onBac
         </Card>
         <Card>
           <Row title={t.historyTitle} sub={t.historySub} right={String(history.length)} onPress={() => go({ name: 'history' })} />
+          <Row title={t.picTitle} sub={t.picSub} onPress={() => go({ name: 'pictures' })} />
           <Row title={t.widgetTitle} sub={t.widgetSub} right={widgetStyle === 'times' ? t.widgetTimes : t.widgetFull} onPress={() => go({ name: 'widgetSettings' })} />
           <Row title={t.micTitle} sub={t.micSub} right={micOn ? t.on : t.off} onPress={() => go({ name: 'micSettings' })} />
           {AlifNativeModule ? <View style={{ paddingVertical: 6, gap: 2 }}>

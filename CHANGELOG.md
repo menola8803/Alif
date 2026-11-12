@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.6
+- **Ny startskärm:** minareten i morgondimma med ALIF ovanför och ṣalawāt (arabiska och translitteration) nedanför.
+- **Idag:** samma bild överst bakom rubriken och nästa bön (namn, tid, tid kvar).
+- **Inställningar › Bilder:** välj bild för startskärmen och toppen av Idag bland minareten och de 13 bilderna, eller en egen bild från telefonen; den animerade startskärmen och bönetidsklockan finns kvar som val.
+
 ## 0.5.5
 - Mindre APK: bara för 64-bitars ARM-telefoner (alla nyare telefoner) och utan streckkodsläsaren som Alif inte använder – ungefär 200 MB → 60–70 MB.
 - Idag: ṣalawāt ovanför bilden i sin helhet, på arabiska med translitteration under – Allāhumma ṣalli ʿalā sayyidinā Muḥammad wa ʿalā ālihi wa aṣḥābihi wa sallim.

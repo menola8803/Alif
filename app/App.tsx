@@ -11,7 +11,7 @@ import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
 import { PrayerProvider } from './src/prayer';
 import { RecitationProvider, useRecitation } from './src/recitation';
-import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen, WidgetSettingsScreen } from './src/screens/More';
+import { BackupScreen, CardsScreen, MicSettingsScreen, RecitationScreen, WidgetSettingsScreen, PicturesScreen } from './src/screens/More';
 import MosquesScreen, { MosqueListScreen } from './src/screens/Mosques';
 import { Route } from './src/nav';
 import { Screen, TabBar, TabName } from './src/ui';
@@ -119,6 +119,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'juz': return <JuzScreen key={r.n} n={r.n} onBack={pop} go={push} />;
       case 'widgetSettings': return <WidgetSettingsScreen onBack={pop} go={push} />;
       case 'nightClock': return <NightClockScreen onBack={pop} />;
+      case 'pictures': return <PicturesScreen onBack={pop} />;
       case 'huroof': return <HuroofScreen onBack={pop} go={push} />;
       case 'article': return <ArticleScreen key={r.url} onBack={pop} url={r.url} title={r.title} />;
       case 'prayerSound': return <PrayerSoundScreen key={r.target ?? 'prayer'} onBack={pop} target={r.target} />;

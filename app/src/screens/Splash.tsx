@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import Svg, { Circle, Defs, G, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
+import { Pic, pictureFor } from '../pictures';
 import { StatusBar } from 'expo-status-bar';
 import { useApp } from '../store';
 import { Spaced } from '../spaced';
@@ -385,7 +386,64 @@ function Salawat({ meaning, reduce }: { meaning: string; reduce: boolean }) {
   );
 }
 
+const SAL_AR = 'اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَأَصْحَابِهِ وَسَلِّمْ';
+const SAL_TR = 'Allāhumma ṣalli ʿalā sayyidinā Muḥammadin wa ʿalā ālihi wa aṣḥābihi wa sallim';
+
+/** The start screen with a picture (chosen in Settings › Pictures): the picture, ALIF above and the ṣalawāt below. */
+function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
+  const { width: W, height: H } = useWindowDimensions();
+  const fade = useRef(new Animated.Value(1)).current;
+  const show = useRef(new Animated.Value(0)).current;
+  const closing = useRef(false);
+  const born = useRef(Date.now());
+  const done = useRef(onDone); done.current = onDone;
+  const finish = useCallback(() => {
+    if (closing.current) return;
+    closing.current = true;
+    Animated.timing(fade, { toValue: 0, duration: FADE_MS, easing: Easing.in(Easing.quad), useNativeDriver: true }).start(() => done.current());
+  }, [fade]);
+  useEffect(() => {
+    Animated.timing(show, { toValue: 1, duration: 1400, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+    const timer = setTimeout(finish, SHOW_MS);
+    return () => clearTimeout(timer);
+  }, [finish, show]);
+  const shadow = { textShadowColor: 'rgba(0,0,0,0.75)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 8 };
+  return (
+    <Animated.View style={[StyleSheet.absoluteFill, { opacity: fade, backgroundColor: C.bg, zIndex: 100, elevation: 100 }]}>
+      <StatusBar style="light" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={() => { if (Date.now() - born.current > MIN_SKIP_MS) finish(); }}>
+        <Animated.Image source={pic.src} resizeMode="cover" style={{ position: 'absolute', width: W, height: H, opacity: show, transform: [{ scale: lerp(show, 1.06, 1) }] }} />
+        <Svg width={W} height={H} style={StyleSheet.absoluteFill}>
+          <Defs>
+            <LinearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor="#0A0E10" stopOpacity={0.6} />
+              <Stop offset="0.3" stopColor="#0A0E10" stopOpacity={0} />
+              <Stop offset="0.6" stopColor="#0A0E10" stopOpacity={0} />
+              <Stop offset="1" stopColor="#0A0E10" stopOpacity={0.88} />
+            </LinearGradient>
+          </Defs>
+          <Rect x={0} y={0} width={W} height={H} fill="url(#sf)" />
+        </Svg>
+        <Animated.View style={{ position: 'absolute', top: H * 0.1, left: 0, right: 0, alignItems: 'center', opacity: show }}>
+          <Text style={{ fontFamily: ARABIC_BOLD, fontSize: 60, lineHeight: 100, color: C.goldPale, ...shadow }}>أَلِف</Text>
+          <Spaced text="ALIF" style={{ fontFamily: DISPLAY, fontSize: 28, color: C.goldPale, ...shadow }} spacing={8} />
+        </Animated.View>
+        <Animated.View style={{ position: 'absolute', bottom: H * 0.07, left: 20, right: 20, alignItems: 'center', opacity: show }}>
+          <Text style={{ fontFamily: ARABIC_BOLD, fontSize: 21, lineHeight: 38, color: C.gold, textAlign: 'center', writingDirection: 'rtl', ...shadow }}>{SAL_AR}</Text>
+          <Text style={{ fontFamily: SANS_REG, fontSize: 12.5, lineHeight: 18, color: C.goldPale, textAlign: 'center', ...shadow }}>{SAL_TR}</Text>
+        </Animated.View>
+      </Pressable>
+    </Animated.View>
+  );
+}
+
 export default function Splash({ onDone }: { onDone: () => void }) {
+  const { startImg } = useApp();
+  const pic = startImg === 'animated' ? null : pictureFor(startImg);
+  return pic ? <PictureSplash pic={pic} onDone={onDone} /> : <AnimatedSplash onDone={onDone} />;
+}
+
+function AnimatedSplash({ onDone }: { onDone: () => void }) {
   const { t, lang } = useApp();
   const { width: W, height: H } = useWindowDimensions();
   const [reduce, setReduce] = useState<boolean | null>(null);

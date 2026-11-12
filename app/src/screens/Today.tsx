@@ -1,5 +1,7 @@
 import React from 'react';
-import { Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import { Image, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { pictureFor } from '../pictures';
 import { useApp } from '../store';
 import { usePrayer } from '../prayer';
 import { Route } from '../nav';
@@ -11,6 +13,8 @@ import { hijriText, longDate, shortDate } from '../dates';
 import { askPermission } from '../reminder';
 import { HomeArt, PrayerClock, TimesRow, untilText } from '../today';
 import { Arabic, Card, PageTitle, TAB_SPACE, Text } from '../ui';
+
+const SHADOW = { textShadowColor: 'rgba(0,0,0,0.7)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 8 };
 
 function Tile({ title, sub, right, onPress, gold, half }: { title: string; sub: string; right?: React.ReactNode; onPress: () => void; gold?: boolean; half?: boolean }) {
   const { theme } = useApp();
@@ -30,7 +34,8 @@ function Tile({ title, sub, right, onPress, gold, half }: { title: string; sub: 
 
 export default function Today({ go, onGear, glow, image }: { go: (r: Route) => void; onGear: () => void; glow: boolean; image: number }) {
   const app = useApp();
-  const { t, theme, lang, place, school, prayerNotify, setPrefs, awradDay, awradCounts, awradLevel } = app;
+  const { t, theme, lang, place, school, prayerNotify, setPrefs, awradDay, awradCounts, awradLevel, todayImg } = app;
+  const top = todayImg === 'none' ? null : pictureFor(todayImg);
   const { today, next, now, source, hijriOffset } = usePrayer();
   const { width } = useWindowDimensions();
   const h = toHijri(now, hijriOffset);
@@ -51,6 +56,38 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
 
   return (
     <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE }} showsVerticalScrollIndicator={false}>
+      {top ? (
+        // The chosen picture behind the title and the next prayer, fading into the page colour.
+        <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470), marginBottom: -8 }}>
+          <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />
+          <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
+            <Defs>
+              <LinearGradient id="tt" x1="0" y1="0" x2="0" y2="1">
+                <Stop offset="0" stopColor={theme.bg} stopOpacity={0.7} />
+                <Stop offset="0.22" stopColor={theme.bg} stopOpacity={0.1} />
+                <Stop offset="0.45" stopColor={theme.bg} stopOpacity={0} />
+                <Stop offset="0.75" stopColor={theme.bg} stopOpacity={0.55} />
+                <Stop offset="1" stopColor={theme.bg} stopOpacity={1} />
+              </LinearGradient>
+            </Defs>
+            <Rect x={0} y={0} width={100} height={100} fill="url(#tt)" />
+          </Svg>
+          <View style={{ paddingHorizontal: 16 }}>
+            <PageTitle title={t.tabToday} sub={`${longDate(now, lang)} · ${hijriText(h)}`} onGear={onGear} glow={glow} />
+          </View>
+          {next ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t.prayerTimes} onPress={() => go({ name: 'prayer' })} style={{ position: 'absolute', left: 0, right: 0, bottom: 36, alignItems: 'center' }}>
+              <Text style={{ fontSize: 11.5, fontWeight: '700', letterSpacing: 1.3, color: '#F3D9A0', ...SHADOW }}>{t.nextPrayer.toUpperCase()}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Text style={{ fontSize: 28, fontWeight: '700', color: '#FFFFFF', ...SHADOW }}>{PRAYER_TR[next.name]}</Text>
+                <Arabic size={22} selectable={false} color="#F3D9A0" style={{ lineHeight: 40, ...SHADOW }}>{PRAYER_AR[next.name]}</Arabic>
+              </View>
+              <Text style={{ fontSize: 44, fontWeight: '800', color: '#E8B04A', lineHeight: 50, ...SHADOW }}>{`${String(next.at.getHours()).padStart(2, '0')}:${String(next.at.getMinutes()).padStart(2, '0')}`}</Text>
+              <Text style={{ fontSize: 13, color: '#F3D9A0', ...SHADOW }}>{untilText(next.minutes, lang)}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : <>
       <PageTitle title={t.tabToday} sub={`${longDate(now, lang)} · ${hijriText(h)}`} onGear={onGear} glow={glow} />
 
       {today ? (
@@ -71,6 +108,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
           </View>
         </Pressable>
       ) : null}
+      </>}
       {today ? <TimesRow day={today} next={next?.name} notify={prayerNotify} onToggle={toggle} /> : null}
       <Text style={{ fontSize: 11.5, color: theme.muted, textAlign: 'center' }} onPress={() => go({ name: 'prayer' })}>
         {`${place.name} · MWL · ʿaṣr ${school === 'hanafi' ? 'Ḥanafī' : t.asrStandard} · ${source === 'aladhan' ? 'Aladhan' : t.calcOnPhone} ›`}

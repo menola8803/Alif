@@ -30,6 +30,7 @@ export type Route =
   | { name: 'widgetSettings' }
   | { name: 'nightClock' }
   | { name: 'huroof' }
+  | { name: 'pictures' }
   | { name: 'article'; url?: string; title?: string }
   | { name: 'prayerSound'; target?: 'prayer' | 'awrad' }
   | { name: 'juz'; n: number; ayah?: { surah: number; n: number } };

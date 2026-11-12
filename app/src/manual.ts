@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.5';
+export const MANUAL_VERSION = '0.5.6';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -16,6 +16,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Bönetidsklockan: en 24-timmarsklocka med midnatt nertill och middag överst. Varje bön är en prick på ringen, solen går runt i realtid och nästa bön lyser i guld med nedräkning i mitten. Tryck på klockan för alla tider och inställningar.',
       'Raden med tider: tryck på en bön för att slå av eller på dess avisering (● på, ○ av).',
       'Ljud vid bön (Inställningar › Bönetider › Ljud vid bön): telefonens ljud, tyst, fem adhan (Makkah, al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, al-Qaṭāmī) med provlyssning, Fajr-adhan vid Fajr, ett alarm eller en ringsignal från telefonen eller en egen ljudfil. "Spela som alarm" använder alarmvolymen.',
+      'Överst på Idag ligger en bild (förval: minareten i morgondimma) med rubriken och nästa bön – namn, tid och hur länge det är kvar. Tryck på den för bönetiderna. Bilden väljs under Inställningar › Bilder; Ingen bild visar bönetidsklockan som förut.',
       'Bilden längst ner byts varje gång du öppnar Idag; ovanför den står ṣalawāt på arabiska med translitterationen under: Allāhumma ṣalli ʿalā sayyidinā Muḥammadin wa ʿalā ālihi wa aṣḥābihi wa sallim.',
       'Korten för Daily Awrad, Qibla och Moskéer öppnar respektive sida. Guldkortet visar hijri-datum, nästa särskilda dag och nästa heliga månad och öppnar hijri-kalendern.',
       'Längst ner en av bilderna från Mecka, Medina och Hagia Sofia med Allāhumma ṣalli ʿalā sayyidinā Muḥammad i guld. En ny bild väljs varje gång du trycker på Idag.',
@@ -96,6 +97,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Alif använder inte batteri i onödan: inget körs i bakgrunden utom aviseringarna, widgetens uppdatering efter varje bön och recitationen medan du lyssnar.',
     ] },
     { title: 'Inställningar', items: [
+      'Bilder: välj bilden för startskärmen (förval: minareten; Animerad ger den gamla stjärnan) och för toppen av Idag (Ingen bild ger klockan). Egen bild hämtas från telefonen och stannar i Alif.',
       'Språk (svenska/engelska), tema, translitteration, översättning, Koranöversättning, bönetider, Daily Awrad-påminnelse (21:00), hijri ±1 dag, historik, manual, integritet, uppdatering och Om.',
       'Uppdatering: när en ny version finns lyser kugghjulet. Tryck "Ladda ner och installera".',
       'Säkerhetskopia: spara allt (utom API-nyckeln) i en fil och läs in den igen, till exempel på en ny telefon.',
@@ -119,6 +121,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'The prayer clock: a 24-hour clock with midnight at the bottom and noon at the top. Each prayer is a dot on the ring, the sun moves round in real time and the next prayer glows in gold with a countdown in the middle. Tap the clock for all times and settings.',
       'The row of times: tap a prayer to turn its notification on or off (● on, ○ off).',
       'Sound at prayer (Settings › Prayer times › Sound at prayer): the phone’s sound, silent, five adhans (Makkah, al-ʿAfāsī, ʿAbd al-Bāsiṭ, al-Minshāwī, al-Qaṭāmī) with a preview, the Fajr adhan at Fajr, an alarm or ringtone from the phone or an own sound file. "Play as an alarm" uses the alarm volume.',
+      'At the top of Today is a picture (default: the minaret in the morning mist) with the title and the next prayer – name, time and how long is left. Tap it for the prayer times. The picture is chosen under Settings › Pictures; No picture shows the prayer clock as before.',
       'The picture at the bottom changes every time you open Today; above it the ṣalawāt is written in Arabic with the transliteration under it: Allāhumma ṣalli ʿalā sayyidinā Muḥammadin wa ʿalā ālihi wa aṣḥābihi wa sallim.',
       'The cards for Daily Awrad, Qibla and Mosques open their pages. The gold card shows the Hijri date, the next special day and the next sacred month and opens the Hijri calendar.',
       'At the bottom one of the pictures of Mecca, Medina and Hagia Sophia with Allāhumma ṣalli ʿalā sayyidinā Muḥammad in gold. A new picture is chosen every time you tap Today.',
@@ -199,6 +202,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Alif does not use battery needlessly: nothing runs in the background except the notifications, the widget update after each prayer and the recitation while you listen.',
     ] },
     { title: 'Settings', items: [
+      'Pictures: choose the picture for the start screen (default: the minaret; Animated gives the earlier star) and for the top of Today (No picture gives the clock). An own picture is taken from the phone and stays in Alif.',
       'Language (Swedish/English), theme, transliteration, translation, Qur’an translation, prayer times, Daily Awrad reminder (9:00 PM), Hijri ±1 day, history, manual, privacy, update and About.',
       'Update: when a new version is out the gear glows. Tap "Download and install".',
       'Backup: save everything (except the API key) in a file and restore it, for example on a new phone.',
