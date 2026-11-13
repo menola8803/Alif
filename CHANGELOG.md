@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.10
+- **Awrad-bilden inte längre hoptryckt:** inlästa bilder under rubriken Daily Awrad visas nu i rätt form och fyller ytan.
+
 ## 0.5.9
 - **Awrad-bilden i full storlek:** bilden under rubriken Daily Awrad är nu lika stor som bilden på Idag och klipps inte längre.
 

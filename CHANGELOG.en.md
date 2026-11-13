@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.10
+- **The Awrad picture no longer squeezed:** read-in pictures under the Daily Awrad title now keep their shape and fill the space.
+
 ## 0.5.9
 - **The Awrad picture in full size:** the picture under the Daily Awrad title is now as large as the picture on Today and is no longer cut off.
 
