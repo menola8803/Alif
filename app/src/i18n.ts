@@ -436,7 +436,7 @@ const en3: typeof sv3 = {
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
   monthTab: 'Månad', ramTab: 'Ramadan', ramTitle: 'Ramadan år för år · {a}–{b}', ramHoursTitle: 'Hur lång blir fastan? · {place}',
-  ramFrom: 'Från år', ramTo: 'Till år', ramRangeHint: 'Tryck ‹ › för ett år i taget, håll för tio. Mellan {a} och {b}. Valet sparas.',
+  ramEra: 'År:', ramGreg: 'Gregorianska', ramHijri: 'Hijri', ramFrom: 'Från år', ramTo: 'Till år', ramRangeHint: 'Tryck ‹ › för ett år i taget, håll för tio. Mellan {a} och {b}. Valet sparas.',
   ramViewRing: 'Ring', ramViewGrid: 'Rutnät', ramViewClock: 'Klocka', ramViewSpiral: 'Spiral', ramViewHours: 'Fastetimmar',
   legToday: 'Idag', legChosen: 'Vald ramadan', legComing: 'Kommande', legPast: 'Tidigare', legTwice: 'Två ramadan samma år',
   ramHelpRing: 'Varje ring är ett år, det äldsta ytterst. Bågarna är ramadan. Månåret är cirka 11 dagar kortare än solåret, så ramadan kommer 11 dagar tidigare varje år och vandrar ett helt varv på ungefär 33 år. Ibland hinner den börja två gånger samma år – då är ringen streckad. Pricken visar var i året vi är idag.',
@@ -516,7 +516,7 @@ const sv4 = {
 };
 const en4: typeof sv4 = {
   monthTab: 'Month', ramTab: 'Ramadan', ramTitle: 'Ramadan year by year · {a}–{b}', ramHoursTitle: 'How long is the fast? · {place}',
-  ramFrom: 'From year', ramTo: 'To year', ramRangeHint: 'Tap ‹ › for one year at a time, hold for ten. Between {a} and {b}. The choice is kept.',
+  ramEra: 'Years:', ramGreg: 'Gregorian', ramHijri: 'Hijri', ramFrom: 'From year', ramTo: 'To year', ramRangeHint: 'Tap ‹ › for one year at a time, hold for ten. Between {a} and {b}. The choice is kept.',
   ramViewRing: 'Ring', ramViewGrid: 'Grid', ramViewClock: 'Clock', ramViewSpiral: 'Spiral', ramViewHours: 'Fasting hours',
   legToday: 'Today', legChosen: 'Chosen Ramadan', legComing: 'Coming', legPast: 'Earlier', legTwice: 'Two Ramadans in one year',
   ramHelpRing: 'Every ring is a year, the oldest outermost. The arcs are Ramadan. The lunar year is about 11 days shorter than the solar year, so Ramadan comes 11 days earlier every year and goes a whole turn in about 33 years. Sometimes it begins twice in one year – then the ring is dashed. The dot shows where in the year we are today.',
