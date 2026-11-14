@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import * as Location from 'expo-location';
 import { useApp } from './store';
-import { PRAYER_TR, PrayerDay, SALAH, calcDay, fetchMonth, hhmm, nextPrayer, ymd } from './core/prayer';
+import { PRAYER_TR, PrayerDay, SALAH, adjustDay, calcDay, fetchMonth, hhmm, nextPrayer, ymd } from './core/prayer';
 import { MONTHS, offsetFor, toHijri } from './core/hijri';
 import { AlifNativeModule } from '../modules/alif-native';
 import { FAJR_ADHAN, channelId, soundFor } from './core/sounds';
@@ -43,7 +43,7 @@ export async function locate(): Promise<{ lat: number; lng: number; name: string
 }
 
 export function PrayerProvider({ children }: { children: React.ReactNode }) {
-  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle, prayerSound, fajrAdhan, prayerAlarm, lockPrayer } = useApp();
+  const { ready, place, school, highLat, prayerNotify, hijriAdjust, hijriAuto, setPrefs, t, notifV2, useLocation, theme, widgetStyle, prayerSound, fajrAdhan, prayerAlarm, lockPrayer, prayerAdjust } = useApp();
   const [days, setDays] = useState<Record<string, PrayerDay>>({});
   const [now, setNow] = useState(() => new Date());
   const placeKey = `${place.lat.toFixed(3)},${place.lng.toFixed(3)}.${school}.${highLat}`;
@@ -91,7 +91,8 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
     return () => { clearInterval(id); s.remove(); };
   }, [load]);
 
-  const dayFor = useCallback((d: Date) => days[ymd(d)] ?? calcDay(d, place, { school, highLat }), [days, place, school, highLat]);
+  // The times for a day, with the person's own minutes per prayer (to follow their mosque) added.
+  const dayFor = useCallback((d: Date) => adjustDay(days[ymd(d)] ?? calcDay(d, place, { school, highLat }), prayerAdjust ?? {}), [days, place, school, highLat, prayerAdjust]);
   const todayKey = ymd(now);
   const today = dayFor(now);
   const tomorrow = dayFor(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
@@ -148,7 +149,7 @@ export function PrayerProvider({ children }: { children: React.ReactNode }) {
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey, prayerSound, fajrAdhan, prayerAlarm]);
+  }, [ready, notifV2, days, place.name, prayerNotify, t.prayerNotifBody, todayKey, prayerSound, fajrAdhan, prayerAlarm, prayerAdjust]);
 
   // Home screen widget and screen saver: the times of the coming seven days, the Hijri date and the place.
   useEffect(() => {

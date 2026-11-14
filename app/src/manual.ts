@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.13';
+export const MANUAL_VERSION = '0.5.14';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -23,6 +23,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Bönetider', items: [
       'Hämtas från Aladhan för vald plats med metoden Muslim World League (Fajr 18°, ʿIshāʾ 17°). En hel månad sparas, så tiderna finns utan nät. Utan nät och utan sparad månad räknar telefonen själv med samma metod.',
+      'Varför skiljer det mot moskén? Alif visar när bönetiden börjar enligt solens läge (samma som islam.se för Stockholm). Moskéer lägger ofta till några säkerhetsminuter – t.ex. Ẓuhr några minuter efter solens högsta punkt, Maghrib några minuter efter solnedgång – och räknar Fajr och ʿIshāʾ på sitt eget sätt långt norrut, där det kan skilja över en timme. Under Inställningar › Bönetider › Justera efter din moské lägger du till eller drar ifrån minuter per bön (− + en minut, håll för tio). Justeringen gäller tiderna, påminnelserna, widgeten och låsskärmen.',
       'Förval: Stockholm, ʿaṣr enligt Ḥanafī och "vinkel" för korta sommarnätter. Allt kan ändras under Inställningar › Bönetider.',
       'Plats: välj en svensk ort i listan, sök en ort i hela världen, eller slå på "Använd min plats" (av från början).',
       'Aviseringar för de fem bönerna läggs in sex dagar framåt och förnyas varje gång appen öppnas. Om de kommer sent: tillåt "Alarm och påminnelser" och undanta Alif från batterisparläget (knappar finns på sidan).',
@@ -133,6 +134,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Prayer times', items: [
       'Fetched from Aladhan for the chosen place with the Muslim World League method (Fajr 18°, ʿIshāʾ 17°). A whole month is saved, so the times are there without internet. Without internet and nothing saved, the phone calculates them with the same method.',
+      'Why does it differ from the mosque? Alif shows when the prayer time begins by the sun’s position (the same as islam.se for Stockholm). Mosques often add a few minutes for safety – e.g. Ẓuhr a few minutes after the sun’s highest point, Maghrib a few minutes after sunset – and calculate Fajr and ʿIshāʾ their own way far north, where it can differ by more than an hour. Under Settings › Prayer times › Adjust to your mosque you add or take away minutes per prayer (− + one minute, hold for ten). The adjustment applies to the times, the reminders, the widget and the lock screen.',
       'Defaults: Stockholm, ʿaṣr Ḥanafī and "angle" for short summer nights. All of it can be changed in Settings › Prayer times.',
       'Place: pick a Swedish town from the list, look up a place anywhere in the world, or turn on "Use my location" (off by default).',
       'Notifications for the five prayers are set six days ahead and renewed every time the app is opened. If they come late: allow "Alarms & reminders" and exempt Alif from battery saving (buttons on the page).',

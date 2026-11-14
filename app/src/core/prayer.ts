@@ -21,6 +21,15 @@ export type PrayerOpts = { school: School; highLat: HighLat };
 export type PrayerDay = { date: string; times: Record<PrayerName, number>; hijri?: HDate };
 
 export const MWL = { fajr: 18, isha: 17 };
+
+/** The person's own minutes per prayer (to follow a mosque's timetable), e.g. { dhuhr: 4, isha: 72 }. */
+export type PrayerAdjust = Partial<Record<PrayerName, number>>;
+export function adjustDay(day: PrayerDay, adj: PrayerAdjust): PrayerDay {
+  if (!Object.values(adj).some(v => v)) return day;
+  const times = { ...day.times };
+  for (const k of Object.keys(times) as PrayerName[]) times[k] = times[k] + (adj[k] ?? 0);
+  return { ...day, times };
+}
 const pad = (n: number) => String(n).padStart(2, '0');
 export const ymd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 export const hhmm = (min: number) => { const m = ((Math.round(min) % 1440) + 1440) % 1440; return `${pad(Math.floor(m / 60))}:${pad(m % 60)}`; };

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.14
+- **Justera bönetiderna efter din moské:** under Inställningar › Bönetider lägger du till eller drar ifrån minuter per bön, så att Alif visar samma tider som moskén. Gäller tiderna, påminnelserna, widgeten och låsskärmen. Manualen förklarar varför moskéns tider kan skilja.
+
 ## 0.5.13
 - **Rättat:** Hijri › Ramadan kunde krascha när man tryckte i bilden. Nu räknar Alif själv ut vilket år du tryckte på, och pilen i Klocka ritas på ett säkrare sätt. Alla år går att trycka fram i alla fem bilderna.
 

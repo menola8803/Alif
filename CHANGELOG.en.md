@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.14
+- **Adjust the prayer times to your mosque:** under Settings › Prayer times you add or take away minutes per prayer, so that Alif shows the same times as the mosque. Applies to the times, the reminders, the widget and the lock screen. The manual explains why the mosque’s times can differ.
+
 ## 0.5.13
 - **Fixed:** Hijri › Ramadan could crash when tapping in the picture. Now Alif works out itself which year you tapped, and the arrow in Clock is drawn in a safer way. Every year can be tapped in all five pictures.
 

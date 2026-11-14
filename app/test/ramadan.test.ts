@@ -27,3 +27,12 @@ for (const pl of [{ lat: 67.86, lng: 20.23 }, { lat: 69.65, lng: 18.96 }, { lat:
   }
 }
 console.log('ramadan: all ok');
+// Own minutes per prayer
+import { adjustDay } from '../src/core/prayer';
+{
+  const d = { date: '2026-11-14', times: { fajr: 313, sunrise: 459, dhuhr: 692, asr: 782, maghrib: 924, isha: 1062 } };
+  const a = adjustDay(d, { dhuhr: 4, asr: 2, maghrib: 9, isha: 72 });
+  ok(a.times.dhuhr === 696 && a.times.asr === 784 && a.times.maghrib === 933 && a.times.isha === 1134 && a.times.fajr === 313, 'adjustDay adds minutes');
+  ok(adjustDay(d, {}) === d && d.times.dhuhr === 692, 'no adjustment leaves the day as it is');
+  console.log('adjust: ok');
+}

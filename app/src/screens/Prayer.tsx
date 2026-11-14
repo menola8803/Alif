@@ -13,7 +13,7 @@ import { Arabic, Body, Btn, Card, Choice, Header, Label, Row, Screen, Segmented,
 
 /** Settings › Prayer times: place, method, ʿaṣr, the rule for short summer nights and the notifications. */
 export default function PrayerScreen({ onBack, go }: { onBack: () => void; go: (r: Route) => void }) {
-  const { t, theme, place, useLocation, school, highLat, prayerNotify, setPrefs, prayerSound, prayerSoundName, lockPrayer } = useApp();
+  const { t, theme, place, useLocation, school, highLat, prayerNotify, setPrefs, prayerSound, prayerSoundName, lockPrayer, prayerAdjust } = useApp();
   const { today, source, refresh } = usePrayer();
   const soundName = prayerSound === 'default' ? t.soundDefault : prayerSound === 'silent' ? t.soundSilent : isAdhan(prayerSound) ? ADHANS.find(a => a.id === prayerSound)?.name ?? t.adhanTitle : prayerSoundName || t.soundPhone.replace('…', '');
   const [busy, setBusy] = useState(false);
@@ -46,7 +46,7 @@ export default function PrayerScreen({ onBack, go }: { onBack: () => void; go: (
             <View key={k} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Text style={{ width: 80, fontSize: 15, fontWeight: '600', color: theme.ink }}>{PRAYER_TR[k]}</Text>
               <Arabic size={18} selectable={false} style={{ flex: 1, textAlign: 'left', lineHeight: 32 }}>{PRAYER_AR[k]}</Arabic>
-              <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{hhmm(today.times[k])}</Text>
+              <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{today ? hhmm(today.times[k]) : ""}</Text>
             </View>
           )) : <ActivityIndicator color={theme.primary} />}
           <Text style={{ fontSize: 12, color: theme.muted }}>{source === 'aladhan' ? t.sourceAladhan : t.sourcePhone}</Text>
@@ -72,6 +72,26 @@ export default function PrayerScreen({ onBack, go }: { onBack: () => void; go: (
           <Text style={{ fontSize: 14, fontWeight: '600', color: theme.ink }}>{t.highLat}</Text>
           <Segmented options={[['angle', t.hlAngle], ['middle', t.hlMiddle], ['seventh', t.hlSeventh]]} value={highLat} onChange={v => setPrefs({ highLat: v })} />
           <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.highLatSub}</Text>
+        </Card>
+
+        {/* Own minutes per prayer – to follow a mosque's timetable exactly */}
+        <Label>{t.adjustTitle}</Label>
+        <Card style={{ gap: 6 }}>
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.adjustSub}</Text>
+          {PRAYERS.map(k => {
+            const v = prayerAdjust?.[k] ?? 0;
+            const set = (n: number) => setPrefs({ prayerAdjust: { ...prayerAdjust, [k]: Math.max(-120, Math.min(120, n)) } });
+            return (
+              <View key={k} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 44 }}>
+                <Text style={{ flex: 1, fontSize: 15, color: theme.ink }}>{PRAYER_TR[k]}</Text>
+                <Text style={{ width: 52, fontSize: 13, color: theme.muted, textAlign: 'right', marginRight: 8 }}>{today ? hhmm(today.times[k]) : ""}</Text>
+                <SmallBtn title="−" onPress={() => set(v - 1)} onLongPress={() => set(v - 10)} />
+                <Text style={{ width: 64, textAlign: 'center', fontSize: 15, fontWeight: '700', color: v ? theme.primary : theme.muted }}>{v > 0 ? `+${v}` : v} {t.minShort}</Text>
+                <SmallBtn title="+" onPress={() => set(v + 1)} onLongPress={() => set(v + 10)} />
+              </View>
+            );
+          })}
+          {Object.values(prayerAdjust ?? {}).some(x => x) ? <Btn kind="secondary" title={t.adjustReset} onPress={() => setPrefs({ prayerAdjust: {} })} /> : null}
         </Card>
 
         <Label>{t.prayerNotifs}</Label>

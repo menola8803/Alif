@@ -92,12 +92,12 @@ export function Btn({ title, onPress, kind = 'primary', disabled }: { title: str
   );
 }
 
-export function SmallBtn({ title, onPress, tone, disabled }: { title: string; onPress: () => void; tone?: 'accent'; disabled?: boolean }) {
+export function SmallBtn({ title, onPress, onLongPress, tone, disabled }: { title: string; onPress: () => void; onLongPress?: () => void; tone?: 'accent'; disabled?: boolean }) {
   const { theme } = useApp();
   const look = useButtonLook();
   // tone 'accent' marks the chosen one: a stronger gold border and bold text.
   return (
-    <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}
+    <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress} onLongPress={onLongPress}
       style={({ pressed }) => ({ minHeight: 40, paddingHorizontal: 14, borderRadius: 12, backgroundColor: tone === 'accent' ? look.bg : theme.chip, borderWidth: 1, borderColor: tone === 'accent' ? theme.tabActive : look.border, alignItems: 'center', justifyContent: 'center', opacity: disabled ? 0.5 : pressed ? 0.8 : 1 })}>
       <Text style={{ color: look.fg, fontWeight: tone === 'accent' ? '700' : '600', fontSize: 14 }}>{title}</Text>
     </Pressable>
