@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Pressable, View, useWindowDimensions } from 'react-native';
+import { Pressable, Vibration, View, useWindowDimensions } from 'react-native';
 import Svg, { Circle, Defs, G, Line, Marker, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { useApp } from '../store';
 import { usePrayer } from '../prayer';
-import { shortDate } from '../dates';
+import { shortDate, weekday } from '../dates';
 import { arabicDigits } from '../translate';
 import { fromHijri } from '../core/hijri';
 import { Arabic, Card, Label, Text, useButtonLook } from '../ui';
@@ -55,6 +55,8 @@ export function RamadanYears() {
   const sel = all.find(r => r.hy === selHy) ?? next;
   const pick = (r: Ramadan) => setSelHy(r.hy === sel?.hy ? null : r.hy);
   const view: RamadanView = RAMADAN_VIEWS.includes(ramadanView) ? ramadanView : 'ring';
+  /** Hold the picture to change to the next one (kept for next time) – no buttons needed. */
+  const cycle = () => { Vibration.vibrate(15); setPrefs({ ramadanView: RAMADAN_VIEWS[(RAMADAN_VIEWS.indexOf(view) + 1) % RAMADAN_VIEWS.length] }); };
   const opts = { school, highLat };
 
   const gold = theme.tabActive, teal = theme.accent;
@@ -87,12 +89,28 @@ export function RamadanYears() {
     return <SvgText key={`m${i}`} x={x} y={y + 4} textAnchor="middle" fill={theme.muted} fontSize={10.5} fontFamily={font}>{mon(i)}</SvgText>;
   });
   const todayDay = dayOfYear(now);
+  const wd = (d: Date) => `${weekday(d, lang).slice(0, 3)} ${shortDate(d, lang)}`;
+  /** ▶ start and ■ end marks on the chosen Ramadan (same signs as in the middle and the card). */
+  const startMark = (x: number, y: number) => (
+    <G><Circle cx={x} cy={y} r={8} fill={gold} stroke={theme.card} strokeWidth={2} /><Path d={`M${x - 2.5} ${y - 3.5}L${x + 3.5} ${y}L${x - 2.5} ${y + 3.5}Z`} fill={theme.card} /></G>
+  );
+  const endMark = (x: number, y: number) => (
+    <G><Circle cx={x} cy={y} r={8} fill={theme.card} stroke={gold} strokeWidth={2} /><Rect x={x - 3} y={y - 3} width={6} height={6} fill={gold} /></G>
+  );
+  const ends = (x0: number, y0: number, x1: number, y1: number) => <G>{startMark(x0, y0)}{endMark(x1, y1)}</G>;
   const centre = sel ? (
     <G>
-      <SvgText x={0} y={-22} textAnchor="middle" fill={gold} fontSize={22} fontFamily={theme.fonts.arabic}>{`رَمَضَان ${arabicDigits(sel.hy)}`}</SvgText>
-      <SvgText x={0} y={2} textAnchor="middle" fill={theme.ink} fontSize={13.5} fontFamily={bold}>{`Ramadan ${sel.hy}`}</SvgText>
-      <SvgText x={0} y={20} textAnchor="middle" fill={theme.muted} fontSize={11.5} fontFamily={font}>{full(sel.start)}</SvgText>
-      <SvgText x={0} y={38} textAnchor="middle" fill={gold} fontSize={12.5} fontFamily={bold}>{when(sel)}</SvgText>
+      <SvgText x={0} y={-46} textAnchor="middle" fill={gold} fontSize={21} fontFamily={theme.fonts.arabic}>{`رَمَضَان ${arabicDigits(sel.hy)}`}</SvgText>
+      <SvgText x={0} y={-22} textAnchor="middle" fill={theme.ink} fontSize={13} fontFamily={bold}>{`Ramadan ${sel.hy}`}</SvgText>
+      {([[2, true, t.ramStart, sel.start], [24, false, t.ramEnd, sel.end]] as const).map(([y, start, label, d]) => (
+        <G key={label}>
+          {start ? startMark(-62, y - 4) : endMark(-62, y - 4)}
+          <SvgText x={-49} y={y} fill={theme.muted} fontSize={10.5} fontFamily={font}>{label}</SvgText>
+          <SvgText x={68} y={y} textAnchor="end" fill={theme.ink} fontSize={11.5} fontFamily={bold}>{wd(d)}</SvgText>
+        </G>
+      ))}
+      <SvgText x={0} y={48} textAnchor="middle" fill={theme.muted} fontSize={10.5} fontFamily={font}>{`${sel.start.getFullYear()}${sel.end.getFullYear() !== sel.start.getFullYear() ? `–${sel.end.getFullYear()}` : ''} · ${sel.days} ${t.ramDaysWord}`}</SvgText>
+      <SvgText x={0} y={66} textAnchor="middle" fill={gold} fontSize={12.5} fontFamily={bold}>{when(sel)}</SvgText>
     </G>
   ) : null;
 
@@ -108,12 +126,13 @@ export function RamadanYears() {
           const p = partIn(r, y); if (!p) return null;
           const d = arc(rOf(y), ang(p.from, yearLength(y)), ang(p.to + 1, yearLength(y)));
           return (
-            <G key={`${r.hy}-${y}`} onPress={() => pick(r)}>
+            <G key={`${r.hy}-${y}`} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
               {r === sel ? <Path d={d} stroke={gold} strokeOpacity={0.3} strokeWidth={12} strokeLinecap="round" fill="none" /> : null}
               <Path d={d} stroke={colorOf(r)} strokeOpacity={opacityOf(r)} strokeWidth={r === sel ? thin + 2 : thin} strokeLinecap="round" fill="none" />
             </G>
           );
         }))}
+        {sel ? (() => { const a = partIn(sel, sel.start.getFullYear())!, b = partIn(sel, sel.end.getFullYear())!; const [x0, y0] = P(rOf(sel.start.getFullYear()), ang(a.from, yearLength(sel.start.getFullYear()))), [x1, y1] = P(rOf(sel.end.getFullYear()), ang(b.to + 1, yearLength(sel.end.getFullYear()))); return inRange(sel.start.getFullYear()) && inRange(sel.end.getFullYear()) ? ends(x0, y0, x1, y1) : null; })() : null}
         {twice.map(y => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 8, 10)))); return <SvgText key={`t${y}`} x={x} y={yy + 4} textAnchor="middle" fill={gold} fontSize={10} fontFamily={bold}>{`2× ${y}`}</SvgText>; })}
         {[Y0, Y1].map((y, k) => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 7, 1)))); return <SvgText key={`y${y}`} x={x} y={yy + 3.5} textAnchor="middle" fill={theme.muted} fontSize={9.5} fontFamily={font}>{hijri && all.length ? (k ? all[all.length - 1].hy : all[0].hy) : y}</SvgText>; })}
         {showToday && (() => { const [x, y] = P(rOf(year), ang(todayDay)); const [lx, ly] = P(rOf(year) + 20, ang(todayDay - 6)); return <G><Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} /><SvgText x={lx} y={ly + 4} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
@@ -142,12 +161,16 @@ export function RamadanYears() {
           const p = partIn(r, y); if (!p) return null;
           const x0 = L + (p.from / yearLength(y)) * GW, x1 = L + ((p.to + 1) / yearLength(y)) * GW;
           return (
-            <G key={`${r.hy}-${y}`} onPress={() => pick(r)}>
+            <G key={`${r.hy}-${y}`} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
               <Rect x={x0} y={top + i * rowH + rowH * 0.22} width={Math.max(3, x1 - x0)} height={rowH * 0.56} rx={4} fill={colorOf(r)} opacity={opacityOf(r)} />
               {hijri && rowH >= 16 && r.start.getFullYear() === y ? <SvgText x={x1 > W - 34 ? x0 - 4 : x1 + 4} y={top + i * rowH + rowH / 2 + 3.5} textAnchor={x1 > W - 34 ? 'end' : 'start'} fill={r === sel ? gold : theme.muted} fontSize={9.5} fontFamily={r === sel ? bold : font}>{r.hy}</SvgText> : null}
             </G>
           );
         }))}
+        {sel && inRange(sel.start.getFullYear()) && inRange(sel.end.getFullYear()) ? (() => {
+          const ys = sel.start.getFullYear(), ye = sel.end.getFullYear(), a = partIn(sel, ys)!, b = partIn(sel, ye)!;
+          return ends(L + (a.from / yearLength(ys)) * GW, top + (ys - Y0) * rowH + rowH / 2, L + ((b.to + 1) / yearLength(ye)) * GW, top + (ye - Y0) * rowH + rowH / 2);
+        })() : null}
         {showToday && (() => { const x = L + (todayDay / yearLength(year)) * GW, y = top + (year - Y0) * rowH; return <G><Line x1={x} x2={x} y1={y + 3} y2={y + rowH - 3} stroke={theme.ink} strokeWidth={2} /><SvgText x={x} y={y + rowH + 1} textAnchor="middle" fill={theme.ink} fontSize={9.5} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
       </Svg>
     );
@@ -163,12 +186,13 @@ export function RamadanYears() {
         {list.map(r => {
           const a = ang(dayOfYear(r.start), yearLength(r.start.getFullYear())); const [x, y] = P(R, a); const [lx, ly] = P(R - 24, a);
           return (
-            <G key={r.hy} onPress={() => pick(r)}>
-              <Circle cx={x} cy={y} r={r === sel ? 8 : 4} fill={colorOf(r)} opacity={opacityOf(r)} stroke={theme.card} strokeWidth={2} />
+            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+              {r === sel ? null : <Circle cx={x} cy={y} r={4} fill={colorOf(r)} opacity={opacityOf(r)} stroke={theme.card} strokeWidth={2} />}
               {r === sel || r === next || yearOf(r) % every === 0 ? <SvgText x={lx} y={ly + 3.5} textAnchor="middle" fill={r === sel ? gold : theme.muted} fontSize={r === sel ? 11.5 : 9.5} fontFamily={r === sel ? bold : font}>{hijri ? String(r.hy) : `’${String(r.start.getFullYear()).slice(2)}`}</SvgText> : null}
             </G>
           );
         })}
+        {sel ? (() => { const a0 = ang(dayOfYear(sel.start), yearLength(sel.start.getFullYear())), d = sel.days; const a1 = a0 + (d / 365.25) * 2 * Math.PI; const [x0, y0] = P(R, a0), [x1, y1] = P(R, a1); return <G><Path d={arc(R, a0, a1)} stroke={gold} strokeWidth={9} strokeLinecap="round" fill="none" strokeOpacity={0.9} />{ends(x0, y0, x1, y1)}</G>; })() : null}
         {showToday && (() => { const [x, y] = P(R, ang(todayDay)); return <Circle cx={x} cy={y} r={4} fill={theme.ink} />; })()}
         {(() => { const r0 = R - 58, a0 = ang(300), a1 = ang(255); const [x0, y0] = P(r0, a0), [x1, y1] = P(r0, a1); return <Path d={`M${x0} ${y0}A${r0} ${r0} 0 0 0 ${x1} ${y1}`} fill="none" stroke={gold} strokeWidth={2} markerEnd="url(#ah)" />; })()}
         {centre}
@@ -189,12 +213,13 @@ export function RamadanYears() {
         {all.map(r => {
           const a = tOf(r.start), b = tOf(r.end) + 1 / 365; if (b < 0 || a > span) return null;
           return (
-            <G key={r.hy} onPress={() => pick(r)}>
+            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
               {r === sel ? <Path d={line(Math.max(0, a), Math.min(span, b))} fill="none" stroke={gold} strokeOpacity={0.3} strokeWidth={12} strokeLinecap="round" /> : null}
               <Path d={line(Math.max(0, a), Math.min(span, b))} fill="none" stroke={colorOf(r)} strokeOpacity={opacityOf(r)} strokeWidth={r === sel ? thin + 2.5 : thin + 0.5} strokeLinecap="round" />
             </G>
           );
         })}
+        {sel ? (() => { const a = tOf(sel.start), b = tOf(sel.end) + 1 / 365; if (a < 0 || b > span) return null; const [x0, y0] = pos(a), [x1, y1] = pos(b); return ends(x0, y0, x1, y1); })() : null}
         {showToday && (() => { const [x, y] = pos(tOf(now)); return <Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} />; })()}
         {centre}
       </Svg>
@@ -213,7 +238,7 @@ export function RamadanYears() {
           const h = (mins[i] / max) * H;
           const first = i === 0 || list[i - 1].start.getFullYear() !== r.start.getFullYear();
           return (
-            <G key={r.hy} onPress={() => pick(r)}>
+            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
               <Rect x={L + i * bw + 1} y={top + H - h} width={Math.max(2, bw - 2)} height={h} rx={2} fill={col(r)} opacity={r === sel ? 1 : r.end < now ? 0.35 : 0.7} stroke={r === sel ? theme.ink : 'none'} strokeWidth={1.2} />
               {r === sel ? <SvgText x={L + i * bw + bw / 2} y={top + H - h - 5} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{r.hy}</SvgText> : null}
               {(hijri || first) && yearOf(r) % every === 0 ? <SvgText x={Math.min(L + i * bw + bw / 2, W - 2)} y={top + H + 15} textAnchor={L + i * bw + bw / 2 > W - 14 ? 'end' : 'middle'} fill={theme.muted} fontSize={9.5} fontFamily={font}>{yearOf(r)}</SvgText> : null}
@@ -235,19 +260,6 @@ export function RamadanYears() {
 
   return (
     <View style={{ gap: 12 }}>
-      {/* Choose the picture – the choice is kept for next time */}
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {RAMADAN_VIEWS.map(v => {
-          const on = v === view;
-          return (
-            <Pressable key={v} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => setPrefs({ ramadanView: v })}
-              style={{ paddingHorizontal: 12, paddingVertical: 7, borderRadius: 12, borderWidth: 1, borderColor: on ? look.border : theme.line, backgroundColor: on ? look.bg : 'transparent' }}>
-              <Text style={{ fontSize: 13, fontWeight: '600', color: on ? look.fg : theme.muted }}>{names[v]}</Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
       {/* Gregorian or Hijri years – for the interval and the years written in the pictures and the list */}
       <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
         <Text style={{ fontSize: 12.5, color: theme.muted }}>{t.ramEra}</Text>
@@ -283,7 +295,20 @@ export function RamadanYears() {
 
       <Card style={{ gap: 8, paddingHorizontal: 14 }}>
         <Label>{view === 'hours' ? t.ramHoursTitle.replace('{place}', place.name) : t.ramTitle.replace('{a}', String(lo)).replace('{b}', hijri ? `${hi} AH` : String(hi))}</Label>
-        <View style={{ alignItems: 'center' }}>{picture}</View>
+        {sel && (view === 'grid' || view === 'hours') ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 7, borderRadius: 12, borderWidth: 1, borderColor: look.border, backgroundColor: look.bg }}>
+            <Text style={{ fontSize: 14, fontWeight: '800', color: gold }}>{sel.hy}</Text>
+            <Text style={{ fontSize: 12.5, color: theme.ink }}><Text style={{ color: gold }}>▶ </Text>{wd(sel.start)}</Text>
+            <Text style={{ fontSize: 12.5, color: theme.ink }}><Text style={{ color: gold }}>■ </Text>{`${wd(sel.end)} ${sel.end.getFullYear()}`}</Text>
+          </View>
+        ) : null}
+        <Pressable onLongPress={cycle} delayLongPress={450} accessibilityRole="adjustable" accessibilityLabel={`${names[view]} · ${t.ramHoldHint}`}
+          accessibilityActions={[{ name: 'increment' }]} onAccessibilityAction={cycle} style={{ alignItems: 'center' }}>{picture}</Pressable>
+        {/* Which picture of the five, and how to change */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+          {RAMADAN_VIEWS.map(v => <View key={v} style={{ width: v === view ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: v === view ? gold : theme.line }} />)}
+          <Text style={{ fontSize: 12, color: theme.muted, marginLeft: 6 }}>{`${names[view]} · ${t.ramHoldHint}`}</Text>
+        </View>
         {view === 'hours' ? (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>{dot(theme.danger)}<Text style={{ fontSize: 12, color: theme.muted }}>{t.ramSummer}</Text></View>
@@ -294,6 +319,8 @@ export function RamadanYears() {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, columnGap: 14 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}><View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: theme.ink }} /><Text style={{ fontSize: 12, color: theme.muted }}>{t.legToday}</Text></View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>{dot(gold)}<Text style={{ fontSize: 12, color: theme.muted }}>{t.legChosen}</Text></View>
+            <Text style={{ fontSize: 12, color: theme.muted }}><Text style={{ color: gold }}>▶ </Text>{t.ramFirstDay}</Text>
+            <Text style={{ fontSize: 12, color: theme.muted }}><Text style={{ color: gold }}>■ </Text>{t.ramLastDay}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>{dot(teal, 0.85)}<Text style={{ fontSize: 12, color: theme.muted }}>{t.legComing}</Text></View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>{dot(teal, 0.45)}<Text style={{ fontSize: 12, color: theme.muted }}>{t.legPast}</Text></View>
             {view !== 'clock' ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}><View style={{ width: 16, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: gold }} /><Text style={{ fontSize: 12, color: theme.muted }}>{t.legTwice}</Text></View> : null}
@@ -303,13 +330,22 @@ export function RamadanYears() {
       </Card>
 
       {sel ? (
-        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderColor: gold }}>
-          <Arabic size={28} selectable={false} color={gold}>{arabicDigits(sel.hy)}</Arabic>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 15, fontWeight: '700', color: theme.ink }}>{`Ramadan ${sel.hy} · ${when(sel)}`}</Text>
-            <Text style={{ fontSize: 12.5, color: theme.muted }}>{`${full(sel.start)} – ${full(sel.end)} · ${sel.days} ${t.ramDaysWord}`}</Text>
-            <Text style={{ fontSize: 12.5, color: theme.muted }}>{t.ramFast.replace('{h}', String(Math.round(fastH / 60))).replace('{season}', season).replace('{place}', place.name).replace('{eq}', String(Math.round(fastEq / 60)))}</Text>
+        <Card style={{ gap: 6, borderColor: gold }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <Arabic size={26} selectable={false} color={gold}>{arabicDigits(sel.hy)}</Arabic>
+            <Text style={{ flex: 1, fontSize: 15, fontWeight: '700', color: theme.ink }}>{`Ramadan ${sel.hy} · ${when(sel)}`}</Text>
           </View>
+          {([['▶', t.ramFirstDay, sel.start, true], ['■', t.ramLastDay, sel.end, false], ['☾', t.ramEid, new Date(sel.end.getFullYear(), sel.end.getMonth(), sel.end.getDate() + 1, 12), false]] as const).map(([icon, label, d, filled]) => (
+            <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 30 }}>
+              <View style={{ width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: filled ? gold : 'transparent', borderWidth: 1.5, borderColor: gold }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', color: filled ? theme.bg : gold }}>{icon}</Text>
+              </View>
+              <Text style={{ flex: 1, fontSize: 13.5, color: theme.muted }}>{label}</Text>
+              <Text style={{ fontSize: 13.5, fontWeight: '700', color: theme.ink }}>{`${wd(d)} ${d.getFullYear()}`}</Text>
+            </View>
+          ))}
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{`${sel.days} ${t.ramDaysWord} · ${t.ramTarawih.replace('{d}', shortDate(new Date(sel.start.getFullYear(), sel.start.getMonth(), sel.start.getDate() - 1), lang))}`}</Text>
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.ramFast.replace('{h}', String(Math.round(fastH / 60))).replace('{season}', season).replace('{place}', place.name).replace('{eq}', String(Math.round(fastEq / 60)))}</Text>
         </Card>
       ) : null}
 

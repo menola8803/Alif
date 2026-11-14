@@ -18,7 +18,7 @@ export type Route =
   | { name: 'prayer' }
   | { name: 'city' }
   | { name: 'qibla' }
-  | { name: 'hijri' }
+  | { name: 'hijri'; tab?: 'month' | 'ramadan' }
   | { name: 'letter'; id: string }
   | { name: 'signs' }
   | { name: 'recitation' }

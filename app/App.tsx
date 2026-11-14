@@ -107,7 +107,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'prayer': return <PrayerScreen onBack={pop} go={push} />;
       case 'city': return <CityScreen onBack={pop} />;
       case 'qibla': return <QiblaScreen onBack={pop} onMosques={() => push({ name: 'mosques' })} />;
-      case 'hijri': return <HijriScreen onBack={pop} />;
+      case 'hijri': return <HijriScreen onBack={pop} tab={r.tab} />;
       case 'letter': return <LetterScreen key={r.id} id={r.id} onBack={pop} go={l => setStack(s => [...s.slice(0, -1), l])} />;
       case 'signs': return <SignsScreen onBack={pop} />;
       case 'recitation': return <RecitationScreen onBack={pop} />;

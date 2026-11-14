@@ -8,12 +8,12 @@ import { Arabic, Card, Header, Label, Screen, Text, useButtonLook } from '../ui'
 import { RamadanYears } from './RamadanYears';
 
 /** Hijri calendar: a month with the Swedish/English dates under the Hijri ones, and the twelve months with their names. */
-export default function HijriScreen({ onBack }: { onBack: () => void }) {
+export default function HijriScreen({ onBack, tab: firstTab }: { onBack: () => void; tab?: 'month' | 'ramadan' }) {
   const { t, theme, lang } = useApp();
   const { hijriOffset, now } = usePrayer();
   const today = toHijri(now, hijriOffset);
   const [view, setView] = useState({ y: today.y, m: today.m });
-  const [tab, setTab] = useState<'month' | 'ramadan'>('month');
+  const [tab, setTab] = useState<'month' | 'ramadan'>(firstTab ?? 'month');
   const look = useButtonLook();
   const month = MONTHS[view.m - 1];
   const len = monthLength(view.y, view.m);

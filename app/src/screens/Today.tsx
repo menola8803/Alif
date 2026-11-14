@@ -8,6 +8,7 @@ import { usePrayer } from '../prayer';
 import { Route } from '../nav';
 import { PRAYER_AR, PRAYER_TR, PrayerName } from '../core/prayer';
 import { MONTHS, nextSacredMonth, nextSpecial, toHijri } from '../core/hijri';
+import { currentOrNext, daysUntil, ramadans } from '../core/ramadan';
 import { qibla, compassPoint } from '../core/qibla';
 import { AWRAD, countFor, dayKey } from '../core/awrad';
 import { hijriText, longDate, shortDate } from '../dates';
@@ -45,6 +46,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const month = MONTHS[h.m - 1];
   const sacred = nextSacredMonth(now, hijriOffset);
   const special = nextSpecial(now, hijriOffset);
+  const ram = currentOrNext(ramadans(now.getFullYear(), now.getFullYear() + 1, hijriOffset), now);
   const q = qibla(place.lat, place.lng);
 
   const steps = AWRAD.filter(s => !s.optional);
@@ -140,6 +142,12 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
           sacred.days <= 45 ? `${t.sacredMonth}: ${sacred.month.tr} · ${t.inDays.replace('{n}', String(sacred.days))}` : '',
         ].filter(Boolean).join('\n')}
         onPress={() => go({ name: 'hijri' })} right={<Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>{month.ar}</Arabic>} />
+      {/* The next Ramadan (or the one going on): opens Hijri › Ramadan */}
+      {ram ? (
+        <Tile title={`Ramadan ${ram.hy} · ${daysUntil(ram, now) === 0 ? t.ramNow : t.ramInDays.replace('{n}', String(daysUntil(ram, now)))}`}
+          sub={t.ramTodayCard.replace('{a}', shortDate(ram.start, lang)).replace('{b}', `${shortDate(ram.end, lang)} ${ram.end.getFullYear()}`)}
+          onPress={() => go({ name: 'hijri', tab: 'ramadan' })} right={<Arabic size={22} selectable={false} color={theme.primary} style={{ lineHeight: 36 }}>رَمَضَان</Arabic>} />
+      ) : null}
 
       <HomeArt index={image} height={320} />
     </ScrollView>

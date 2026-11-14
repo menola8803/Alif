@@ -436,6 +436,7 @@ const en3: typeof sv3 = {
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
   monthTab: 'Månad', ramTab: 'Ramadan', ramTitle: 'Ramadan år för år · {a}–{b}', ramHoursTitle: 'Hur lång blir fastan? · {place}',
+  ramHoldHint: 'håll fingret på bilden för att byta', ramStart: 'Start', ramEnd: 'Slut', ramFirstDay: 'Första fastedagen', ramLastDay: 'Sista fastedagen', ramEid: 'Eid al-Fitr', ramTarawih: 'första tarāwīḥ kvällen {d}', ramTodayCard: 'Start {a} · slut {b}',
   ramEra: 'År:', ramGreg: 'Gregorianska', ramHijri: 'Hijri', ramFrom: 'Från år', ramTo: 'Till år', ramRangeHint: 'Tryck ‹ › för ett år i taget, håll för tio. Mellan {a} och {b}. Valet sparas.',
   ramViewRing: 'Ring', ramViewGrid: 'Rutnät', ramViewClock: 'Klocka', ramViewSpiral: 'Spiral', ramViewHours: 'Fastetimmar',
   legToday: 'Idag', legChosen: 'Vald ramadan', legComing: 'Kommande', legPast: 'Tidigare', legTwice: 'Två ramadan samma år',
@@ -516,6 +517,7 @@ const sv4 = {
 };
 const en4: typeof sv4 = {
   monthTab: 'Month', ramTab: 'Ramadan', ramTitle: 'Ramadan year by year · {a}–{b}', ramHoursTitle: 'How long is the fast? · {place}',
+  ramHoldHint: 'hold the picture to change', ramStart: 'Start', ramEnd: 'End', ramFirstDay: 'First day of fasting', ramLastDay: 'Last day of fasting', ramEid: 'Eid al-Fitr', ramTarawih: 'first tarāwīḥ the evening of {d}', ramTodayCard: 'Start {a} · end {b}',
   ramEra: 'Years:', ramGreg: 'Gregorian', ramHijri: 'Hijri', ramFrom: 'From year', ramTo: 'To year', ramRangeHint: 'Tap ‹ › for one year at a time, hold for ten. Between {a} and {b}. The choice is kept.',
   ramViewRing: 'Ring', ramViewGrid: 'Grid', ramViewClock: 'Clock', ramViewSpiral: 'Spiral', ramViewHours: 'Fasting hours',
   legToday: 'Today', legChosen: 'Chosen Ramadan', legComing: 'Coming', legPast: 'Earlier', legTwice: 'Two Ramadans in one year',
