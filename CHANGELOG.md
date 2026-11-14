@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.12
+- **Rättat:** Hijri › Ramadan kraschade när bilden Klocka var vald (pilen i mitten). Nu fungerar alla fem bilderna.
+
 ## 0.5.11
 - **Uppdatera direkt i appen:** kortet "Ny version" på Idag laddar ner och öppnar installationen med ett tryck, med en mätare under nedladdningen. Efter uppdateringen startar Alif igen av sig själv (annars kommer en avisering att trycka på), och Idag bekräftar den nya versionen. Den automatiska kollen kan stängas av under Inställningar › Uppdateringar.
 

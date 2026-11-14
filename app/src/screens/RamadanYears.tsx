@@ -180,7 +180,7 @@ export function RamadanYears() {
     const R = S / 2 - 40, list = all;
     return (
       <Svg width={S} height={S} viewBox={`${-S / 2} ${-S / 2} ${S} ${S}`}>
-        <Defs><Marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><Path d="M0 0L10 5L0 10z" fill={gold} /></Marker></Defs>
+        <Defs><Marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><Path d="M0 0L10 5L0 10z" fill={gold} /></Marker></Defs>
         <Circle r={R} fill="none" stroke={theme.line} strokeWidth={14} />
         {monthLabels(R + 26)}
         {list.map(r => {

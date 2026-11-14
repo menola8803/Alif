@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.12
+- **Fixed:** Hijri › Ramadan crashed when the Clock picture was chosen (the arrow in the middle). All five pictures work now.
+
 ## 0.5.11
 - **Update right in the app:** the card "New version" on Today downloads and opens the installer with one tap, with a progress bar during the download. After the update Alif starts again by itself (otherwise a notification comes to tap), and Today confirms the new version. The automatic check can be turned off under Settings › Updates.
 
