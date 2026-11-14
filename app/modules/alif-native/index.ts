@@ -16,6 +16,8 @@ type AlifNative = {
   previewSound(sound: string): void;
   stopSound(): void;
   makePictureFolder(note: string): Promise<boolean>;
+  /** Remember that Alif started an update: afterwards Alif opens again and shows this notification. */
+  markUpdatePending(title: string, body: string, channel: string): void;
   /** Opens the folder chooser (starting in initialUri). Resolves to the chosen folder, or null. */
   pickPictureFolder(initialUri: string): Promise<string | null>;
   /** Copies the JPG/JPEG/PNG/BMP pictures in the chosen folder to destDir. */

@@ -9,6 +9,7 @@ import { MODELS, askClaude, textBlock } from '../core/engine';
 import { Edition, listEditions, pickEdition } from '../core/quran';
 import { transliterate } from '../core/translit';
 import { isNewer, latestRelease, notesFor, Release } from '../update';
+import { downloadAndInstall } from '../updateInstall';
 import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview, Toggle } from '../ui';
 import { themes, ThemeName } from '../theme';
 import { Pressable } from 'react-native';
@@ -228,39 +229,59 @@ export function AiScreen({ onBack }: { onBack: () => void }) {
   );
 }
 
-export function UpdateScreen({ onBack }: { onBack: () => void }) {
-  const { theme, t, lang } = useApp();
+export function UpdateScreen({ onBack, auto }: { onBack: () => void; auto?: boolean }) {
+  const { theme, t, lang, updateAuto, setPrefs } = useApp();
   const cur = Constants.expoConfig?.version ?? '0.0.0';
   const [msg, setMsg] = useState(''); const [rel, setRel] = useState<Release | null>(null); const [busy, setBusy] = useState(false);
-  const install = async () => {
-    if (!rel?.apk) { Linking.openURL(rel!.page).catch(() => {}); return; }
-    setBusy(true); setMsg(t.downloading);
+  const [part, setPart] = useState<number | null>(null);
+  const install = async (r = rel) => {
+    if (!r) return;
+    if (!r.apk) { Linking.openURL(r.page).catch(() => {}); return; }
+    setBusy(true); setMsg(t.downloading); setPart(0);
     try {
-      const f = await File.downloadFileAsync(rel.apk, new File(Paths.cache, 'alif-update.apk'), { idempotent: true } as any);
-      if (Platform.OS === 'android') {
-        await IntentLauncher.startActivityAsync('android.intent.action.VIEW', { data: f.contentUri, flags: 1, type: 'application/vnd.android.package-archive' });
-        setMsg(t.installAllow);
-      } else Linking.openURL(rel.page).catch(() => {});
+      await downloadAndInstall(r, { title: t.updatedTitle.replace('{v}', r.tag.replace(/^v/, '')), body: t.updatedBody, channel: t.updateChannel }, setPart);
+      setMsg(t.installAllow);
     } catch { setMsg(t.installFail); }
-    setBusy(false);
+    setBusy(false); setPart(null);
   };
-  const check = async () => {
+  const check = async (andInstall = false) => {
     setBusy(true); setRel(null); setMsg(t.checking);
     try {
       const r = await latestRelease();
+      setPrefs({ updateChecked: Date.now(), updateTag: r && isNewer(r.tag, cur) ? r.tag : '' });
       if (!r) setMsg(t.noRelease);
-      else if (isNewer(r.tag, cur)) { setRel(r); setMsg(`${t.newVersion}: ${r.tag}`); }
+      else if (isNewer(r.tag, cur)) { setRel(r); setMsg(`${t.newVersion}: ${r.tag}`); if (andInstall) { setBusy(false); return install(r); } }
       else setMsg(t.upToDate);
     } catch { setMsg(t.updateFail); }
     setBusy(false);
   };
+  // Opened from the card on Today: look and start right away
+  useEffect(() => { if (auto) check(true); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Screen>
       <Header title={t.update} sub={t.updateSub} onBack={onBack} />
-      <Card><Text style={{ color: theme.ink }}>{t.version} {cur}</Text>{msg ? <Text style={{ color: theme.muted }}>{msg}</Text> : null}{rel && notesFor(rel.notes, lang) ? <Text style={{ color: theme.muted, fontSize: 13, lineHeight: 19 }}>{notesFor(rel.notes, lang)}</Text> : null}</Card>
-      <Btn title={busy ? t.checking : t.checkUpdate} onPress={check} disabled={busy} />
-      {rel ? <Btn title={t.installUpdate} onPress={install} disabled={busy} /> : null}
-      {rel ? <Btn title={t.download} kind="secondary" onPress={() => Linking.openURL(rel.page).catch(() => {})} /> : null}
+      <ScrollView contentContainerStyle={{ gap: 12 }}>
+        <Card style={{ gap: 6 }}>
+          <Text style={{ color: theme.ink }}>{t.version} {cur}</Text>
+          {msg ? <Text style={{ color: theme.muted }}>{msg}</Text> : null}
+          {part != null ? (
+            <View style={{ gap: 4 }}>
+              <View style={{ height: 8, borderRadius: 4, backgroundColor: theme.line, overflow: 'hidden' }}>
+                <View style={{ width: `${Math.round(part * 100)}%`, height: 8, borderRadius: 4, backgroundColor: theme.tabActive }} />
+              </View>
+              <Text style={{ fontSize: 12, color: theme.muted }}>{`${Math.round(part * 100)} %`}</Text>
+            </View>
+          ) : null}
+          {rel && notesFor(rel.notes, lang) ? <Text style={{ color: theme.muted, fontSize: 13, lineHeight: 19 }}>{notesFor(rel.notes, lang)}</Text> : null}
+        </Card>
+        <Btn title={busy && part == null ? t.checking : t.checkUpdate} onPress={() => check()} disabled={busy} />
+        {rel ? <Btn title={t.installUpdate} onPress={() => install()} disabled={busy} /> : null}
+        {rel ? <Btn title={t.download} kind="secondary" onPress={() => Linking.openURL(rel.page).catch(() => {})} /> : null}
+        <Card style={{ gap: 6 }}>
+          <Toggle title={t.updateAutoLabel} on={updateAuto} onChange={v => setPrefs({ updateAuto: v })} />
+          <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.updateHow}</Text>
+        </Card>
+      </ScrollView>
     </Screen>
   );
 }

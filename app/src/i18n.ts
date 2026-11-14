@@ -436,6 +436,10 @@ const en3: typeof sv3 = {
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
   monthTab: 'Månad', ramTab: 'Ramadan', ramTitle: 'Ramadan år för år · {a}–{b}', ramHoursTitle: 'Hur lång blir fastan? · {place}',
+  updatedTitle: 'Alif är uppdaterad till {v}', updatedBody: 'Tryck för att öppna Alif.', updateChannel: 'Uppdatering av Alif',
+  updateAutoLabel: 'Sök efter ny version automatiskt',
+  updateHow: 'Alif kollar högst var sjätte timme när appen öppnas. Finns en ny version lyser kugghjulet och ett kort visas på Idag. Tryck på kortet så laddas den nya versionen ner och Androids installationsruta öppnas – tryck Uppdatera där (det sista trycket kräver Android). Allt ditt finns kvar, och Alif startar igen av sig själv efteråt; stoppar Android det kommer i stället en avisering att trycka på.',
+  updateCard: 'Ny version {v}', updateCardSub: 'Tryck för att uppdatera – Alif startar om av sig själv', updatedCard: 'Alif är uppdaterad till {v}', updatedCardSub: 'Allt ditt finns kvar · tryck för att stänga',
   ramHoldHint: 'håll fingret på bilden för att byta', ramStart: 'Start', ramEnd: 'Slut', ramFirstDay: 'Första fastedagen', ramLastDay: 'Sista fastedagen', ramEid: 'Eid al-Fitr', ramTarawih: 'första tarāwīḥ kvällen {d}', ramTodayCard: 'Start {a} · slut {b}',
   ramEra: 'År:', ramGreg: 'Gregorianska', ramHijri: 'Hijri', ramFrom: 'Från år', ramTo: 'Till år', ramRangeHint: 'Tryck ‹ › för ett år i taget, håll för tio. Mellan {a} och {b}. Valet sparas.',
   ramViewRing: 'Ring', ramViewGrid: 'Rutnät', ramViewClock: 'Klocka', ramViewSpiral: 'Spiral', ramViewHours: 'Fastetimmar',
@@ -517,6 +521,10 @@ const sv4 = {
 };
 const en4: typeof sv4 = {
   monthTab: 'Month', ramTab: 'Ramadan', ramTitle: 'Ramadan year by year · {a}–{b}', ramHoursTitle: 'How long is the fast? · {place}',
+  updatedTitle: 'Alif is updated to {v}', updatedBody: 'Tap to open Alif.', updateChannel: 'Alif update',
+  updateAutoLabel: 'Look for a new version automatically',
+  updateHow: 'Alif looks at most every six hours when the app is opened. When there is a new version the gear glows and a card is shown on Today. Tap the card and the new version is downloaded and Android’s installer opens – tap Update there (Android requires that last tap). Everything of yours stays, and Alif starts again by itself afterwards; if Android stops that, a notification to tap comes instead.',
+  updateCard: 'New version {v}', updateCardSub: 'Tap to update – Alif restarts by itself', updatedCard: 'Alif is updated to {v}', updatedCardSub: 'Everything of yours is still here · tap to close',
   ramHoldHint: 'hold the picture to change', ramStart: 'Start', ramEnd: 'End', ramFirstDay: 'First day of fasting', ramLastDay: 'Last day of fasting', ramEid: 'Eid al-Fitr', ramTarawih: 'first tarāwīḥ the evening of {d}', ramTodayCard: 'Start {a} · end {b}',
   ramEra: 'Years:', ramGreg: 'Gregorian', ramHijri: 'Hijri', ramFrom: 'From year', ramTo: 'To year', ramRangeHint: 'Tap ‹ › for one year at a time, hold for ten. Between {a} and {b}. The choice is kept.',
   ramViewRing: 'Ring', ramViewGrid: 'Grid', ramViewClock: 'Clock', ramViewSpiral: 'Spiral', ramViewHours: 'Fasting hours',

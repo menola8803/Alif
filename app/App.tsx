@@ -39,7 +39,7 @@ import Settings, { AboutScreen, AiScreen, EditionScreen, LanguageScreen, ThemeSc
 const UPDATE_EVERY = 6 * 3600 * 1000;
 
 function Content({ splashDone }: { splashDone: boolean }) {
-  const { ready, updateTag, updateChecked, homeImg, setPrefs, t } = useApp();
+  const { ready, updateTag, updateChecked, updateAuto, homeImg, setPrefs, t } = useApp();
   const rec = useRecitation();
   const [stack, setStack] = useState<Route[]>([{ name: 'tabs' }]);
   const [tab, setTabState] = useState<TabName>('today');
@@ -67,7 +67,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
 
   // Look for a new version now and then; the gear glows when there is one.
   useEffect(() => {
-    if (!ready || Date.now() - updateChecked < UPDATE_EVERY) return;
+    if (!ready || !updateAuto || Date.now() - updateChecked < UPDATE_EVERY) return;
     latestRelease().then(r => setPrefs({ updateTag: r && isNewer(r.tag, version) ? r.tag : '', updateChecked: Date.now() })).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
@@ -100,7 +100,7 @@ function Content({ splashDone }: { splashDone: boolean }) {
       case 'translit': return <TranslitScreen onBack={pop} />;
       case 'edition': return <EditionScreen onBack={pop} />;
       case 'ai': return <AiScreen onBack={pop} />;
-      case 'update': return <UpdateScreen onBack={pop} />;
+      case 'update': return <UpdateScreen onBack={pop} auto={r.auto} />;
       case 'about': return <AboutScreen onBack={pop} />;
       case 'awrad': return <Awrad onBack={pop} onReminder={() => push({ name: 'reminder' })} />;
       case 'reminder': return <ReminderScreen onBack={pop} go={push} />;

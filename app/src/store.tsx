@@ -74,6 +74,8 @@ type Saved = {
   startImg: string;                    // start screen picture: a PICTURES id, 'own:<file>' or 'animated'
   todayImg: string;
   picFolderMade: boolean;
+  updateAuto: boolean;                 // look for a new version once a day (Today shows a card)
+  lastRunVersion: string;               // the version that ran last (Today says when Alif has been updated)
   ramadanView: import('./core/ramadan').RamadanView;
   ramFrom: number; ramTo: number; ramFromH: number; ramToH: number; ramEra: 'greg' | 'hijri'; // …and in Hijri years      // Hijri › Ramadan: the years shown (0 = from 2026) // Hijri › Ramadan: the picture chosen last              // Download/Alif/Pictures has been created
   awradImg: string;                    // picture under the Daily Awrad title: a picture id or 'none'                    // picture at the top of Today: a PICTURES id, 'own:<file>' or 'none'
@@ -103,7 +105,7 @@ const empty = (): Saved => ({
   dhikrSel: 'subhan', dhikrCounts: {}, dhikrTargets: {},
   updateTag: '', updateChecked: 0, homeImg: -1, notifV2: false,
   reciter: 'ar.husary', wifiOnly: true, tajweed: false, wbw: false, hifz: false, hifzRepeat: 1, learnCards: {},
-  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', startImg: 'minaret', todayImg: 'minaret', awradImg: 'none', picFolderMade: false, ramadanView: 'ring', ramFrom: 0, ramTo: 2050, ramFromH: 0, ramToH: 0, ramEra: 'greg', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false, awradSound: 'default', awradSoundName: '', awradAlarm: false,
+  micOn: false, micOnlyPhone: true, listenTranslit: true, dhikrVolume: false, myMosques: [], hiddenMosques: [], widgetStyle: 'full', lockPrayer: false, quranView: 'surah', startImg: 'minaret', todayImg: 'minaret', awradImg: 'none', picFolderMade: false, updateAuto: true, lastRunVersion: '', ramadanView: 'ring', ramFrom: 0, ramTo: 2050, ramFromH: 0, ramToH: 0, ramEra: 'greg', prayerSound: 'default', prayerSoundName: '', fajrAdhan: true, prayerAlarm: false, awradSound: 'default', awradSoundName: '', awradAlarm: false,
 });
 
 type Prefs = Omit<Saved, 'history'>;

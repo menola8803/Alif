@@ -111,6 +111,9 @@ class AlifNativeModule : Module() {
       act.startActivityForResult(i, PICK_SOUND)
     }.runOnQueue(Queues.MAIN)
 
+    // ---- Update: open Alif again after an update started from Alif ----
+    Function("markUpdatePending") { title: String, body: String, channel: String -> AlifUpdate.markPending(ctx, title, body, channel) }
+
     // ---- Pictures: choose a folder (opens in Download/Alif/Pictures) and copy its pictures in ----
     AsyncFunction("pickPictureFolder") { initial: String, promise: Promise ->
       val act = appContext.currentActivity

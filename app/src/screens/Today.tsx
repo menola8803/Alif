@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Constants from 'expo-constants';
+import { isNewer } from '../update';
 import { Image, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
 import Svg, { Defs, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { pictureFor } from '../pictures';
@@ -46,6 +48,11 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const month = MONTHS[h.m - 1];
   const sacred = nextSacredMonth(now, hijriOffset);
   const special = nextSpecial(now, hijriOffset);
+  // A new version found (App looks at most once a day) → a card; after an update → a card saying so, once.
+  const cur = Constants.expoConfig?.version ?? '0.0.0';
+  const { ready, updateTag, lastRunVersion } = app;
+  useEffect(() => { if (ready && !lastRunVersion) setPrefs({ lastRunVersion: cur }); }, [ready]); // eslint-disable-line react-hooks/exhaustive-deps
+  const showUpdated = !!lastRunVersion && lastRunVersion !== cur;
   const ram = currentOrNext(ramadans(now.getFullYear(), now.getFullYear() + 1, hijriOffset), now);
   const q = qibla(place.lat, place.lng);
 
@@ -131,6 +138,14 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
 
       <Tile title={t.awrad} sub={`${doneSteps} / ${steps.length} ${t.awradStepsDone}`} onPress={() => go({ name: 'awrad' })}
         right={<Arabic size={18} selectable={false} style={{ lineHeight: 32 }}>أَوْرَاد</Arabic>} />
+      {updateTag && isNewer(updateTag, cur) ? (
+        <Tile gold title={t.updateCard.replace('{v}', updateTag.replace(/^v/, ''))} sub={t.updateCardSub}
+          onPress={() => go({ name: 'update', auto: true })} right={<Text style={{ fontSize: 22, color: theme.primary }}>↓</Text>} />
+      ) : null}
+      {showUpdated ? (
+        <Tile title={t.updatedCard.replace('{v}', cur)} sub={t.updatedCardSub}
+          onPress={() => setPrefs({ lastRunVersion: cur })} right={<Text style={{ fontSize: 20, color: theme.accent }}>✓</Text>} />
+      ) : null}
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <Tile half title={t.qibla} sub={`${Math.round(q)}° ${compassPoint(q, lang)}`} onPress={() => go({ name: 'qibla' })} />
         <Tile half title={t.mosques} sub={t.mosquesNear} onPress={() => go({ name: 'mosques' })} />

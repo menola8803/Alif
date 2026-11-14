@@ -79,6 +79,7 @@ object AlifLock {
 /** Renews the lock screen times (and the widget) after a prayer, a restart of the phone or a change of time zone. */
 class AlifLockReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
+    if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) AlifUpdate.afterReplaced(context)
     AlifLock.update(context)
     AlifWidget.refresh(context)
   }

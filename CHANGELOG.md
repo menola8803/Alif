@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.11
+- **Uppdatera direkt i appen:** kortet "Ny version" på Idag laddar ner och öppnar installationen med ett tryck, med en mätare under nedladdningen. Efter uppdateringen startar Alif igen av sig själv (annars kommer en avisering att trycka på), och Idag bekräftar den nya versionen. Den automatiska kollen kan stängas av under Inställningar › Uppdateringar.
+
 ## 0.5.10
 - **Ramadan år för år (Hijri › Ramadan):** hur ramadan vandrar genom året, cirka 11 dagar tidigare varje år, från 2026 till 2050 – eller exakt det intervall du väljer inom de åren (Från år–Till år), som sparas. Välj gregorianska år eller hijri-år. Fem bilder – Ring, Rutnät, Klocka, Spiral och Fastetimmar. Håll fingret på bilden för att byta; den du valde sist visas nästa gång. Start ▶ och slut ■ märks ut, och datumen står i mitten. Två ramadan samma år (t.ex. 2030) märks ut. Tryck på ett år så lyser det upp i bilden.
 - **Ramadan på Idag:** ett kort med nästa ramadan, start och slut och nedräkning, som öppnar Hijri › Ramadan.

@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.11
+- **Update right in the app:** the card "New version" on Today downloads and opens the installer with one tap, with a progress bar during the download. After the update Alif starts again by itself (otherwise a notification comes to tap), and Today confirms the new version. The automatic check can be turned off under Settings › Updates.
+
 ## 0.5.10
 - **Ramadan year by year (Hijri › Ramadan):** how Ramadan moves through the year, about 11 days earlier every year, from 2026 until 2050 – or exactly the interval you choose within those years (From year–To year), which is kept. Choose Gregorian or Hijri years. Five pictures – Ring, Grid, Clock, Spiral and Fasting hours. Hold the picture to change; the one you chose last is shown next time. Start ▶ and end ■ are marked, and the dates are in the middle. Two Ramadans in one year (e.g. 2030) are marked. Tap a year and it lights up in the picture.
 - **Ramadan on Today:** a card with the next Ramadan, start and end and a countdown, which opens Hijri › Ramadan.

@@ -11,7 +11,7 @@ export type Route =
   | { name: 'translit' }
   | { name: 'edition' }
   | { name: 'ai' }
-  | { name: 'update' }
+  | { name: 'update'; auto?: boolean }
   | { name: 'about' }
   | { name: 'awrad' }
   | { name: 'reminder' }

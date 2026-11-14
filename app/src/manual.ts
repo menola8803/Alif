@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.10';
+export const MANUAL_VERSION = '0.5.11';
 
 export type ManualSection = { title: string; items: string[] };
 
@@ -104,7 +104,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Bilder: alla bilder ligger i ett rutnät. Håll fingret på en bild och välj Start (startskärmen), Idag (toppen av Idag) eller Awrad (under rubriken Daily Awrad). Valen syns som guldetiketter i bildens hörn. Tryck på en vald bild så försvinner valen – då visas den animerade startskärmen, bönetidsklockan eller ingen bild. Förval: minareten för start och Idag. ＋ Egna bilder hämtar en eller flera bilder från telefonens bildväljare. Alla bilder når ut till kanterna och tonas mjukt upp och ner.',
       'Fler bilder: lägg bilder (JPG, JPEG, PNG eller BMP) i mappen Download/Alif/Pictures på telefonen – Alif skapar mappen första gången du trycker Läs in bilder. Välj mappen och tryck Använd den här mappen (i mappvalet går bilderna inte att bocka i – det är mappen som väljs); nya bilder kopieras in (förminskade) och visas i rutnätet. Bara bilderna visas, inte filnamnen. En inläst bild tas bort med Ta bort från Alif i menyn; originalet ligger kvar.',
       'Språk (svenska/engelska), tema, translitteration, översättning, Koranöversättning, bönetider, Daily Awrad-påminnelse (21:00), hijri ±1 dag, historik, manual, integritet, uppdatering och Om.',
-      'Uppdatering: när en ny version finns lyser kugghjulet. Tryck "Ladda ner och installera".',
+      'Uppdatering: när en ny version finns lyser kugghjulet och kortet "Ny version" visas på Idag. Tryck på kortet (eller "Ladda ner och installera" under Inställningar › Uppdateringar): den nya versionen laddas ner med en mätare och Androids installationsruta öppnas. Tryck Uppdatera där – det sista trycket kräver Android. Första gången frågar Android om Alif får installera appar; tillåt det en gång. Allt ditt finns kvar, och Alif startar igen av sig själv efteråt; stoppar Android det kommer en avisering "Alif är uppdaterad" att trycka på. Ett kort på Idag bekräftar den nya versionen. Den automatiska kollen kan stängas av under Inställningar › Uppdateringar.',
       'Säkerhetskopia: spara allt (utom API-nyckeln) i en fil och läs in den igen, till exempel på en ny telefon.',
     ] },
     { title: 'Integritet', items: [
@@ -214,7 +214,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Pictures: all pictures are in one grid. Hold your finger on a picture and choose Start (the start screen), Today (the top of Today) or Awrad (under the Daily Awrad title). The choices show as gold labels in the picture’s corner. Tap a chosen picture and the choices go away – then the animated start screen, the prayer clock or no picture is shown. Default: the minaret for start and Today. ＋ Own pictures takes one or more pictures from the phone’s picture chooser. All pictures reach the edges and fade softly at the top and bottom.',
       'More pictures: put pictures (JPG, JPEG, PNG or BMP) in the folder Download/Alif/Pictures on the phone – Alif creates the folder the first time you tap Read in pictures. Choose the folder and tap Use this folder (in the folder chooser the pictures cannot be ticked – it is the folder that is chosen); new pictures are copied in (made smaller) and shown in the grid. Only the pictures are shown, not the file names. A read-in picture is removed with Remove from Alif in the menu; the original stays.',
       'Language (Swedish/English), theme, transliteration, translation, Qur’an translation, prayer times, Daily Awrad reminder (9:00 PM), Hijri ±1 day, history, manual, privacy, update and About.',
-      'Update: when a new version is out the gear glows. Tap "Download and install".',
+      'Update: when a new version is out the gear glows and the card "New version" is shown on Today. Tap the card (or "Download and install" under Settings › Updates): the new version is downloaded with a progress bar and Android’s installer opens. Tap Update there – Android requires that last tap. The first time Android asks whether Alif may install apps; allow it once. Everything of yours stays, and Alif starts again by itself afterwards; if Android stops that, a notification "Alif is updated" comes to tap. A card on Today confirms the new version. The automatic check can be turned off under Settings › Updates.',
       'Backup: save everything (except the API key) in a file and restore it, for example on a new phone.',
     ] },
     { title: 'Privacy', items: [
