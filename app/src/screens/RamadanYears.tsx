@@ -340,7 +340,7 @@ export function RamadanYears() {
           </View>
         ) : null}
         <Pressable onLongPress={cycle} delayLongPress={450} accessibilityRole="adjustable" accessibilityLabel={`${names[view]} · ${t.ramHoldHint}`}
-          onPress={e => { const r = picture.hit(e.nativeEvent.locationX, e.nativeEvent.locationY); if (r) pick(r); }}
+          onPress={e => { const p = e?.nativeEvent; if (p == null || !Number.isFinite(p.locationX) || !Number.isFinite(p.locationY)) return; const r = picture.hit(p.locationX, p.locationY); if (r) pick(r); }}
           accessibilityActions={[{ name: 'increment' }]} onAccessibilityAction={cycle} style={{ width: picture.w, height: picture.h, alignSelf: 'center' }}>
           <View pointerEvents="none">{picture.el}</View>
         </Pressable>
