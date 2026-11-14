@@ -12,8 +12,8 @@ import {
   type Ramadan, type RamadanView,
 } from '../core/ramadan';
 
-/** The years that can be chosen (2026–2100), and the interval shown at first (2026–2050). */
-const MIN_YEAR = 2026, MAX_YEAR = 2100, DEFAULT_TO = 2050;
+/** The years that can be chosen, and shown at first: 2026–2050. */
+const MIN_YEAR = 2026, MAX_YEAR = 2050, DEFAULT_TO = 2050;
 
 /**
  * Hijri › Ramadan: how Ramadan moves through the year, about 11 days earlier every year. Five pictures to choose
