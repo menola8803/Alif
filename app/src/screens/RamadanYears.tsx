@@ -11,8 +11,8 @@ import {
   type Ramadan, type RamadanView,
 } from '../core/ramadan';
 
-/** The pictures and the list reach this far. */
-const LAST_YEAR = 2050;
+/** The years that can be chosen, and the interval shown at first (from three years ago until 2050). */
+const MIN_YEAR = 1950, MAX_YEAR = 2100, DEFAULT_TO = 2050;
 
 /**
  * Hijri › Ramadan: how Ramadan moves through the year, about 11 days earlier every year. Five pictures to choose
@@ -20,14 +20,23 @@ const LAST_YEAR = 2050;
  * picture) to light it up; tap it again to go back to the next Ramadan.
  */
 export function RamadanYears() {
-  const { t, theme, lang, setPrefs, ramadanView, place, school, highLat } = useApp();
+  const { t, theme, lang, setPrefs, ramadanView, ramFrom, ramTo, place, school, highLat } = useApp();
   const { hijriOffset, now } = usePrayer();
   const { width } = useWindowDimensions();
   const look = useButtonLook();
   const W = width - 32 - 28;
   const year = now.getFullYear();
-  const all = useMemo(() => ramadans(year - 11, LAST_YEAR, hijriOffset), [year, hijriOffset]);
-  const next = currentOrNext(all, now);
+  // The interval chosen by the person (kept for next time); 0 = from three years ago.
+  const Y0 = Math.max(MIN_YEAR, Math.min(ramFrom || year - 3, MAX_YEAR)), Y1 = Math.max(Y0, Math.min(ramTo || DEFAULT_TO, MAX_YEAR));
+  const setRange = (from: number, to: number) => {
+    const f = Math.max(MIN_YEAR, Math.min(from, MAX_YEAR)), tt = Math.max(MIN_YEAR, Math.min(to, MAX_YEAR));
+    setPrefs({ ramFrom: Math.min(f, tt), ramTo: Math.max(f, tt) });
+  };
+  const all = useMemo(() => ramadans(Y0, Y1, hijriOffset).filter(r => r.end.getFullYear() >= Y0 && r.start.getFullYear() <= Y1), [Y0, Y1, hijriOffset]);
+  const inRange = (y: number) => y >= Y0 && y <= Y1;
+  const showToday = inRange(year);
+  const every = Y1 - Y0 > 60 ? 20 : Y1 - Y0 > 30 ? 10 : 5; // which years get a label
+  const next = currentOrNext(all, now) ?? all[0];
   const [selHy, setSelHy] = useState<number | null>(null);
   const sel = all.find(r => r.hy === selHy) ?? next;
   const pick = (r: Ramadan) => setSelHy(r.hy === sel?.hy ? null : r.hy);
@@ -41,9 +50,8 @@ export function RamadanYears() {
   const mon = (i: number) => shortDate(new Date(2001, i, 1), lang).split(' ')[1];
   const full = (d: Date) => `${shortDate(d, lang)} ${d.getFullYear()}`;
   const S = Math.min(W, 340);
-  const Y0 = year - 3, Y1 = LAST_YEAR;
-  const step = (S / 2 - 22 - S / 4.6) / (Y1 - Y0); // ring distance
-  const thin = Math.max(2, Math.min(3.4, step * 0.75));
+  const step = (S / 2 - 22 - S / 4.6) / Math.max(1, Y1 - Y0); // ring distance
+  const thin = Math.max(1, Math.min(3.4, step * 0.75));
   const twice = twiceYears(all.filter(r => r.start.getFullYear() >= Y0 && r.start.getFullYear() <= Y1));
 
   const when = (r: Ramadan) => {
@@ -94,14 +102,14 @@ export function RamadanYears() {
         }))}
         {twice.map(y => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 8, 10)))); return <SvgText key={`t${y}`} x={x} y={yy + 4} textAnchor="middle" fill={gold} fontSize={10} fontFamily={bold}>{`2× ${y}`}</SvgText>; })}
         {[Y0, Y1].map(y => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 7, 1)))); return <SvgText key={`y${y}`} x={x} y={yy + 3.5} textAnchor="middle" fill={theme.muted} fontSize={9.5} fontFamily={font}>{y}</SvgText>; })}
-        {(() => { const [x, y] = P(rOf(year), ang(todayDay)); const [lx, ly] = P(rOf(year) + 20, ang(todayDay - 6)); return <G><Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} /><SvgText x={lx} y={ly + 4} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
+        {showToday && (() => { const [x, y] = P(rOf(year), ang(todayDay)); const [lx, ly] = P(rOf(year) + 20, ang(todayDay - 6)); return <G><Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} /><SvgText x={lx} y={ly + 4} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
         {centre}
       </Svg>
     );
   };
 
   const grid = () => {
-    const L = 40, GW = W - L, rowH = 22, top = 18, years = Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i);
+    const L = 40, GW = W - L, rowH = Math.max(12, Math.min(30, 600 / (Y1 - Y0 + 1))), top = 18, years = Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i);
     return (
       <Svg width={W} height={top + years.length * rowH + 16}>
         {Array.from({ length: 12 }, (_, i) => (
@@ -113,21 +121,21 @@ export function RamadanYears() {
         {years.map((y, i) => (
           <G key={`r${y}`}>
             {twice.includes(y) ? <Rect x={2} y={top + i * rowH + 2} width={W - 4} height={rowH - 4} rx={7} fill="none" stroke={gold} strokeDasharray="3 3" /> : null}
-            <SvgText x={L - 6} y={top + i * rowH + rowH / 2 + 4} textAnchor="end" fill={y === year ? theme.ink : theme.muted} fontSize={10.5} fontFamily={y === year ? bold : font}>{y}</SvgText>
+            {rowH >= 16 || y % 5 === 0 || y === year ? <SvgText x={L - 6} y={top + i * rowH + rowH / 2 + 4} textAnchor="end" fill={y === year ? theme.ink : theme.muted} fontSize={10.5} fontFamily={y === year ? bold : font}>{y}</SvgText> : null}
           </G>
         ))}
         {all.flatMap(r => years.map((y, i) => {
           const p = partIn(r, y); if (!p) return null;
           const x0 = L + (p.from / yearLength(y)) * GW, x1 = L + ((p.to + 1) / yearLength(y)) * GW;
-          return <Rect key={`${r.hy}-${y}`} x={x0} y={top + i * rowH + 5} width={Math.max(3, x1 - x0)} height={rowH - 10} rx={4} fill={colorOf(r)} opacity={opacityOf(r)} onPress={() => pick(r)} />;
+          return <Rect key={`${r.hy}-${y}`} x={x0} y={top + i * rowH + rowH * 0.22} width={Math.max(3, x1 - x0)} height={rowH * 0.56} rx={4} fill={colorOf(r)} opacity={opacityOf(r)} onPress={() => pick(r)} />;
         }))}
-        {(() => { const x = L + (todayDay / yearLength(year)) * GW, y = top + (year - Y0) * rowH; return <G><Line x1={x} x2={x} y1={y + 3} y2={y + rowH - 3} stroke={theme.ink} strokeWidth={2} /><SvgText x={x} y={y + rowH + 1} textAnchor="middle" fill={theme.ink} fontSize={9.5} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
+        {showToday && (() => { const x = L + (todayDay / yearLength(year)) * GW, y = top + (year - Y0) * rowH; return <G><Line x1={x} x2={x} y1={y + 3} y2={y + rowH - 3} stroke={theme.ink} strokeWidth={2} /><SvgText x={x} y={y + rowH + 1} textAnchor="middle" fill={theme.ink} fontSize={9.5} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
       </Svg>
     );
   };
 
   const clock = () => {
-    const R = S / 2 - 40, list = all.filter(r => r.start.getFullYear() >= year - 4 && r.start.getFullYear() <= LAST_YEAR);
+    const R = S / 2 - 40, list = all.filter(r => inRange(r.start.getFullYear()));
     return (
       <Svg width={S} height={S} viewBox={`${-S / 2} ${-S / 2} ${S} ${S}`}>
         <Defs><Marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><Path d="M0 0L10 5L0 10z" fill={gold} /></Marker></Defs>
@@ -138,11 +146,11 @@ export function RamadanYears() {
           return (
             <G key={r.hy} onPress={() => pick(r)}>
               <Circle cx={x} cy={y} r={r === sel ? 8 : 4} fill={colorOf(r)} opacity={opacityOf(r)} stroke={theme.card} strokeWidth={2} />
-              {r === sel || r === next || r.start.getFullYear() % 5 === 0 ? <SvgText x={lx} y={ly + 3.5} textAnchor="middle" fill={r === sel ? gold : theme.muted} fontSize={r === sel ? 11.5 : 9.5} fontFamily={r === sel ? bold : font}>{`’${String(r.start.getFullYear()).slice(2)}`}</SvgText> : null}
+              {r === sel || r === next || r.start.getFullYear() % every === 0 ? <SvgText x={lx} y={ly + 3.5} textAnchor="middle" fill={r === sel ? gold : theme.muted} fontSize={r === sel ? 11.5 : 9.5} fontFamily={r === sel ? bold : font}>{`’${String(r.start.getFullYear()).slice(2)}`}</SvgText> : null}
             </G>
           );
         })}
-        {(() => { const [x, y] = P(R, ang(todayDay)); return <Circle cx={x} cy={y} r={4} fill={theme.ink} />; })()}
+        {showToday && (() => { const [x, y] = P(R, ang(todayDay)); return <Circle cx={x} cy={y} r={4} fill={theme.ink} />; })()}
         {(() => { const r0 = R - 58, a0 = ang(300), a1 = ang(255); const [x0, y0] = P(r0, a0), [x1, y1] = P(r0, a1); return <Path d={`M${x0} ${y0}A${r0} ${r0} 0 0 0 ${x1} ${y1}`} fill="none" stroke={gold} strokeWidth={2} markerEnd="url(#ah)" />; })()}
         {centre}
       </Svg>
@@ -168,14 +176,14 @@ export function RamadanYears() {
             </G>
           );
         })}
-        {(() => { const [x, y] = pos(tOf(now)); return <Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} />; })()}
+        {showToday && (() => { const [x, y] = pos(tOf(now)); return <Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} />; })()}
         {centre}
       </Svg>
     );
   };
 
   const hours = () => {
-    const list = all.filter(r => r.start.getFullYear() >= year - 10 && r.start.getFullYear() <= LAST_YEAR);
+    const list = all.filter(r => inRange(r.start.getFullYear()));
     const mins = list.map(r => fastMinutes(r, place, opts));
     const L = 30, GW = W - L, H = 200, top = 16, bw = GW / list.length, max = 22 * 60;
     const col = (r: Ramadan) => { const s = seasonOf(r, place.lat); return s === 'summer' ? theme.danger : s === 'winter' ? '#7FB8E8' : gold; };
@@ -189,7 +197,7 @@ export function RamadanYears() {
             <G key={r.hy} onPress={() => pick(r)}>
               <Rect x={L + i * bw + 1} y={top + H - h} width={Math.max(2, bw - 2)} height={h} rx={2} fill={col(r)} opacity={r === sel ? 1 : r.end < now ? 0.35 : 0.7} stroke={r === sel ? theme.ink : 'none'} strokeWidth={1.2} />
               {r === sel ? <SvgText x={L + i * bw + bw / 2} y={top + H - h - 5} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{r.hy}</SvgText> : null}
-              {first && r.start.getFullYear() % 5 === 0 ? <SvgText x={Math.min(L + i * bw + bw / 2, W - 2)} y={top + H + 15} textAnchor={L + i * bw + bw / 2 > W - 14 ? 'end' : 'middle'} fill={theme.muted} fontSize={9.5} fontFamily={font}>{r.start.getFullYear()}</SvgText> : null}
+              {first && r.start.getFullYear() % every === 0 ? <SvgText x={Math.min(L + i * bw + bw / 2, W - 2)} y={top + H + 15} textAnchor={L + i * bw + bw / 2 > W - 14 ? 'end' : 'middle'} fill={theme.muted} fontSize={9.5} fontFamily={font}>{r.start.getFullYear()}</SvgText> : null}
             </G>
           );
         })}
@@ -203,7 +211,7 @@ export function RamadanYears() {
   const fastH = sel ? fastMinutes(sel, place, opts) : 0;
   const fastEq = sel ? fastMinutes(sel, { ...place, lat: 0 }, opts) : 0;
   const season = sel ? { summer: t.ramSummer, winter: t.ramWinter, mid: t.ramSpringAutumn }[seasonOf(sel, place.lat)] : '';
-  const listRows = all.filter(r => r.start.getFullYear() >= year - 1 && r.start.getFullYear() <= LAST_YEAR);
+  const listRows = all.filter(r => inRange(r.start.getFullYear()));
   const dot = (c: string, o = 1) => <View style={{ width: 16, height: 4, borderRadius: 2, backgroundColor: c, opacity: o }} />;
 
   return (
@@ -221,8 +229,27 @@ export function RamadanYears() {
         })}
       </View>
 
+      {/* The interval: from year – to year, kept for next time. Tap ‹ › for one year, hold for ten. */}
+      <Card style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 8 }}>
+        {([['from', Y0], ['to', Y1]] as const).map(([k, v]) => (
+          <View key={k} style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 11, fontWeight: '700', color: theme.muted }}>{k === 'from' ? t.ramFrom : t.ramTo}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {[-1, 1].map(d => (
+                <Pressable key={d} accessibilityRole="button" accessibilityLabel={`${k === 'from' ? t.ramFrom : t.ramTo} ${d < 0 ? '−' : '+'}`} hitSlop={6}
+                  onPress={() => (k === 'from' ? setRange(Y0 + d, Y1) : setRange(Y0, Y1 + d))} onLongPress={() => (k === 'from' ? setRange(Y0 + 10 * d, Y1) : setRange(Y0, Y1 + 10 * d))}
+                  style={{ width: 40, height: 40, borderRadius: 12, borderWidth: 1, borderColor: look.border, backgroundColor: look.bg, alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontSize: 18, color: look.fg }}>{d < 0 ? '‹' : '›'}</Text>
+                </Pressable>
+              )).flatMap((b, i) => (i === 0 ? [b, <Text key="v" style={{ width: 58, textAlign: 'center', fontSize: 17, fontWeight: '800', color: theme.ink }}>{v}</Text>] : [b]))}
+            </View>
+          </View>
+        ))}
+      </Card>
+      <Text style={{ fontSize: 12, color: theme.muted, marginTop: -4 }}>{t.ramRangeHint.replace('{a}', String(MIN_YEAR)).replace('{b}', String(MAX_YEAR))}</Text>
+
       <Card style={{ gap: 8, paddingHorizontal: 14 }}>
-        <Label>{view === 'hours' ? t.ramHoursTitle.replace('{place}', place.name) : t.ramTitle}</Label>
+        <Label>{view === 'hours' ? t.ramHoursTitle.replace('{place}', place.name) : t.ramTitle.replace('{a}', String(Y0)).replace('{b}', String(Y1))}</Label>
         <View style={{ alignItems: 'center' }}>{picture}</View>
         {view === 'hours' ? (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
