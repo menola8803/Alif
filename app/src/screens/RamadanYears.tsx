@@ -12,8 +12,8 @@ import {
   type Ramadan, type RamadanView,
 } from '../core/ramadan';
 
-/** The years that can be chosen, and the interval shown at first (from three years ago until 2050). */
-const MIN_YEAR = 1950, MAX_YEAR = 2100, DEFAULT_TO = 2050;
+/** The years that can be chosen (2026–2100), and the interval shown at first (2026–2050). */
+const MIN_YEAR = 2026, MAX_YEAR = 2100, DEFAULT_TO = 2050;
 
 /**
  * Hijri › Ramadan: how Ramadan moves through the year, about 11 days earlier every year. Five pictures to choose
@@ -31,8 +31,8 @@ export function RamadanYears() {
   const hijri = ramEra === 'hijri';
   const hyIn = (gy: number) => ramadans(gy, gy, hijriOffset).find(r => r.start.getFullYear() === gy)?.hy ?? 0;
   const HMIN = hyIn(MIN_YEAR), HMAX = hyIn(MAX_YEAR);
-  const G0 = Math.max(MIN_YEAR, Math.min(ramFrom || year - 3, MAX_YEAR)), G1 = Math.max(G0, Math.min(ramTo || DEFAULT_TO, MAX_YEAR));
-  const H0 = Math.max(HMIN, Math.min(ramFromH || hyIn(year - 3), HMAX)), H1 = Math.max(H0, Math.min(ramToH || hyIn(DEFAULT_TO), HMAX));
+  const G0 = Math.max(MIN_YEAR, Math.min(ramFrom || MIN_YEAR, MAX_YEAR)), G1 = Math.max(G0, Math.min(ramTo || DEFAULT_TO, MAX_YEAR));
+  const H0 = Math.max(HMIN, Math.min(ramFromH || HMIN, HMAX)), H1 = Math.max(H0, Math.min(ramToH || hyIn(DEFAULT_TO), HMAX));
   const all = useMemo(() => {
     if (!hijri) return ramadans(G0, G1, hijriOffset).filter(r => r.start.getFullYear() >= G0 && r.start.getFullYear() <= G1);
     const a = fromHijri({ y: H0, m: 9, d: 1 }, hijriOffset).getFullYear(), b = fromHijri({ y: H1, m: 9, d: 30 }, hijriOffset).getFullYear();

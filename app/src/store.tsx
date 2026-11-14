@@ -75,7 +75,7 @@ type Saved = {
   todayImg: string;
   picFolderMade: boolean;
   ramadanView: import('./core/ramadan').RamadanView;
-  ramFrom: number; ramTo: number; ramFromH: number; ramToH: number; ramEra: 'greg' | 'hijri'; // …and in Hijri years      // Hijri › Ramadan: the years shown (0 = from three years ago) // Hijri › Ramadan: the picture chosen last              // Download/Alif/Pictures has been created
+  ramFrom: number; ramTo: number; ramFromH: number; ramToH: number; ramEra: 'greg' | 'hijri'; // …and in Hijri years      // Hijri › Ramadan: the years shown (0 = from 2026) // Hijri › Ramadan: the picture chosen last              // Download/Alif/Pictures has been created
   awradImg: string;                    // picture under the Daily Awrad title: a picture id or 'none'                    // picture at the top of Today: a PICTURES id, 'own:<file>' or 'none'
   quranView: 'surah' | 'juz';         // the Qur'an tab lists the sūras or the 30 parts
   widgetStyle: 'full' | 'times';
