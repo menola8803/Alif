@@ -19,4 +19,11 @@ const winter = list.find(r => r.hy === 1452)!;
 ok(fastMinutes(summer, sthlm, o) > 18 * 60, `summer fast in Stockholm > 18 h: ${fastMinutes(summer, sthlm, o) / 60}`);
 ok(fastMinutes(winter, sthlm, o) < 10 * 60, `winter fast in Stockholm < 10 h: ${fastMinutes(winter, sthlm, o) / 60}`);
 ok(seasonOf(summer, 59) === 'summer' && seasonOf(summer, -33) === 'winter', 'seasons turn south of the equator');
+// Fasting hours must be a real number everywhere – far north (midnight sun), at the equator and in the south.
+for (const pl of [{ lat: 67.86, lng: 20.23 }, { lat: 69.65, lng: 18.96 }, { lat: -0.18, lng: -78.47 }, { lat: -33.87, lng: 151.2 }, { lat: 21.42, lng: 39.83 }]) {
+  for (const r of ramadans(2026, 2050)) {
+    const m = fastMinutes(r, { name: 'x', country: 'x', ...pl }, o);
+    ok(Number.isFinite(m) && m > 0 && m < 24 * 60, `fast hours at ${pl.lat} in ${r.hy}: ${m}`);
+  }
+}
 console.log('ramadan: all ok');

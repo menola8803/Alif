@@ -134,7 +134,7 @@ export function RamadanYears() {
         }))}
         {sel ? (() => { const a = partIn(sel, sel.start.getFullYear())!, b = partIn(sel, sel.end.getFullYear())!; const [x0, y0] = P(rOf(sel.start.getFullYear()), ang(a.from, yearLength(sel.start.getFullYear()))), [x1, y1] = P(rOf(sel.end.getFullYear()), ang(b.to + 1, yearLength(sel.end.getFullYear()))); return inRange(sel.start.getFullYear()) && inRange(sel.end.getFullYear()) ? ends(x0, y0, x1, y1) : null; })() : null}
         {twice.map(y => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 8, 10)))); return <SvgText key={`t${y}`} x={x} y={yy + 4} textAnchor="middle" fill={gold} fontSize={10} fontFamily={bold}>{`2× ${y}`}</SvgText>; })}
-        {[Y0, Y1].map((y, k) => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 7, 1)))); return <SvgText key={`y${y}`} x={x} y={yy + 3.5} textAnchor="middle" fill={theme.muted} fontSize={9.5} fontFamily={font}>{hijri && all.length ? (k ? all[all.length - 1].hy : all[0].hy) : y}</SvgText>; })}
+        {(Y0 === Y1 ? [Y0] : [Y0, Y1]).map((y, k) => { const [x, yy] = P(rOf(y), ang(dayOfYear(new Date(y, 7, 1)))); return <SvgText key={`y${k}`} x={x} y={yy + 3.5} textAnchor="middle" fill={theme.muted} fontSize={9.5} fontFamily={font}>{hijri && all.length ? (k ? all[all.length - 1].hy : all[0].hy) : y}</SvgText>; })}
         {showToday && (() => { const [x, y] = P(rOf(year), ang(todayDay)); const [lx, ly] = P(rOf(year) + 20, ang(todayDay - 6)); return <G><Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} /><SvgText x={lx} y={ly + 4} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
         {centre}
       </Svg>
