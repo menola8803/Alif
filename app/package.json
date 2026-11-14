@@ -46,7 +46,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/ocr.test.ts && tsx test/update.test.ts && tsx test/semver.test.ts && tsx test/prayer.test.ts && tsx test/hijri.test.ts && tsx test/qibla.test.ts && tsx test/docs.test.ts && tsx test/learn.test.ts && tsx test/manual.test.ts && tsx test/recite.test.ts && tsx test/listen.test.ts && tsx test/juz.test.ts",
+    "test": "tsx test/translit.test.ts && tsx test/engine.test.ts && tsx test/awrad.test.ts && tsx test/free.test.ts && tsx test/ocr.test.ts && tsx test/update.test.ts && tsx test/semver.test.ts && tsx test/prayer.test.ts && tsx test/hijri.test.ts && tsx test/qibla.test.ts && tsx test/docs.test.ts && tsx test/learn.test.ts && tsx test/manual.test.ts && tsx test/recite.test.ts && tsx test/listen.test.ts && tsx test/juz.test.ts && tsx test/ramadan.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "private": true

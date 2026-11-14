@@ -4,7 +4,8 @@ import { useApp } from '../store';
 import { usePrayer } from '../prayer';
 import { MONTHS, SPECIAL_DAYS, fromHijri, monthLength, toHijri } from '../core/hijri';
 import { WEEK_SHORT, shortDate } from '../dates';
-import { Arabic, Card, Header, Label, Screen, Text } from '../ui';
+import { Arabic, Card, Header, Label, Screen, Text, useButtonLook } from '../ui';
+import { RamadanYears } from './RamadanYears';
 
 /** Hijri calendar: a month with the Swedish/English dates under the Hijri ones, and the twelve months with their names. */
 export default function HijriScreen({ onBack }: { onBack: () => void }) {
@@ -12,6 +13,8 @@ export default function HijriScreen({ onBack }: { onBack: () => void }) {
   const { hijriOffset, now } = usePrayer();
   const today = toHijri(now, hijriOffset);
   const [view, setView] = useState({ y: today.y, m: today.m });
+  const [tab, setTab] = useState<'month' | 'ramadan'>('month');
+  const look = useButtonLook();
   const month = MONTHS[view.m - 1];
   const len = monthLength(view.y, view.m);
   const first = fromHijri({ y: view.y, m: view.m, d: 1 }, hijriOffset);
@@ -42,6 +45,15 @@ export default function HijriScreen({ onBack }: { onBack: () => void }) {
     <Screen>
       <Header title={t.hijriCalendar} sub={`${today.d} ${MONTHS[today.m - 1].tr} ${today.y}`} onBack={onBack} />
       <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 12 }} showsVerticalScrollIndicator={false}>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          {(['month', 'ramadan'] as const).map(k => (
+            <Pressable key={k} accessibilityRole="tab" accessibilityState={{ selected: tab === k }} onPress={() => setTab(k)}
+              style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: tab === k ? look.border : theme.line, backgroundColor: tab === k ? look.bg : 'transparent' }}>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: tab === k ? look.fg : theme.muted }}>{k === 'month' ? t.monthTab : t.ramTab}</Text>
+            </Pressable>
+          ))}
+        </View>
+        {tab === 'ramadan' ? <RamadanYears /> : <>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable accessibilityRole="button" accessibilityLabel={t.prevMonth} onPress={() => step(-1)} hitSlop={10} style={{ padding: 10 }}><Text style={{ fontSize: 24, color: theme.muted }}>‹</Text></Pressable>
           <View style={{ flex: 1, alignItems: 'center' }}>
@@ -75,6 +87,7 @@ export default function HijriScreen({ onBack }: { onBack: () => void }) {
           </Pressable>
         ))}
         <Text style={{ fontSize: 12, color: theme.muted, lineHeight: 18 }}>{t.hijriSource}</Text>
+        </>}
       </ScrollView>
     </Screen>
   );

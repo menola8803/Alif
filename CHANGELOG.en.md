@@ -3,6 +3,8 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.10
+- **Ramadan year by year (Hijri › Ramadan):** how Ramadan moves through the year, about 11 days earlier every year, until 2050. Five pictures to choose from – Ring, Grid, Clock, Spiral and Fasting hours – and the one you chose last is shown next time. Two Ramadans in one year (e.g. 2030) are marked. Tap a year and it lights up in the picture.
+- **Fasting hours:** how long the fast is in the middle of the month where you are, with the season and a comparison with the equator.
 - **The Awrad picture no longer squeezed:** read-in pictures under the Daily Awrad title now keep their shape and fill the space.
 
 ## 0.5.9

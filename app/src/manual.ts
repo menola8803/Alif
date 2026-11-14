@@ -31,6 +31,10 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
       'Visar månaden med hijri-datum stort och svenskt datum litet under. Prickar = måndag och torsdag (sunnafasta); guldkant = särskild dag.',
       'De tolv månaderna med arabiskt namn, translitteration och förklaring. De fyra heliga månaderna är märkta.',
       'Datumet följer Umm al-Qurā (från Aladhan). Följer din moské månskådning kan du flytta det ±1 dag i Inställningar.',
+      'Fliken Ramadan visar ramadan år för år fram till 2050. Månåret är cirka 11 dagar kortare än solåret, så ramadan kommer ungefär 11 dagar tidigare varje år och vandrar ett helt varv genom året på cirka 33 år. Ibland börjar den två gånger samma år (t.ex. 2030) – det märks med streckad linje och etiketten 2×.',
+      'Välj bild med knapparna överst: Ring (en ring per år), Rutnät (en rad per år, januari–december), Klocka (en prick för varje års startdag), Spiral (en tråd som går ett varv per år) eller Fastetimmar. Bilden du valde sist visas nästa gång. Under bilden finns en förklaring av tecknen (idag, vald, kommande, tidigare) och en hjälptext för just den bilden.',
+      'Fastetimmar: hur länge fastan varar mitt i månaden, från fajr till maghrib, för platsen du valt för bönetiderna. Det beror på hur långt från ekvatorn du är: i Sverige från cirka 20 timmar när ramadan är på sommaren till under 10 på vintern, vid ekvatorn cirka 13 timmar året runt. Söder om ekvatorn är årstiderna omvända.',
+      'Tryck på ett år i datumlistan – eller på en båge, rad, prick eller stapel – så lyser det upp i bilden, och kortet visar datum, antal dagar, nedräkning och fastetimmar (även vid ekvatorn som jämförelse). Tryck igen för att gå tillbaka till nästa ramadan. Datumen följer appens hijri-kalender; den faktiska starten följer månskäran och kan skilja en dag.',
     ] },
     { title: 'Qibla', items: [
       'Riktningen mot Kaʿba räknas ut från vald plats. Håll telefonen plant: appen säger hur många grader du ska vrida, och telefonen vibrerar kort när du står rätt.',
@@ -135,6 +139,10 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Hijri calendar', items: [
       'Shows the month with the Hijri date large and the Gregorian date small under it. Dots = Monday and Thursday (sunna fasts); gold edge = special day.',
+      'The Ramadan tab shows Ramadan year by year until 2050. The lunar year is about 11 days shorter than the solar year, so Ramadan comes about 11 days earlier every year and goes a whole turn through the year in about 33 years. Sometimes it begins twice in one year (e.g. 2030) – this is marked with a dashed line and the label 2×.',
+      'Choose the picture with the buttons at the top: Ring (one ring per year), Grid (one row per year, January–December), Clock (a dot for each year’s first day), Spiral (a thread going one turn per year) or Fasting hours. The picture you chose last is shown next time. Under the picture there is a key to the signs (today, chosen, coming, earlier) and a help text for that picture.',
+      'Fasting hours: how long the fast lasts in the middle of the month, from Fajr to Maghrib, for the place chosen for the prayer times. It depends on how far from the equator you are: in Sweden from about 20 hours when Ramadan is in summer to under 10 in winter, at the equator about 13 hours all year. South of the equator the seasons are turned around.',
+      'Tap a year in the date list – or an arc, row, dot or bar – and it lights up in the picture, and the card shows the dates, number of days, countdown and fasting hours (also at the equator to compare). Tap again to go back to the next Ramadan. The dates follow the app’s Hijri calendar; the real start follows the new moon and can differ by a day.',
       'The twelve months with Arabic name, transliteration and meaning. The four sacred months are marked.',
       'The date follows Umm al-Qurā (from Aladhan). If your mosque follows the moon sighting, move it ±1 day in Settings.',
     ] },

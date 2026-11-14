@@ -1,0 +1,22 @@
+import { currentOrNext, daysUntil, fastMinutes, partIn, ramadans, seasonOf, twiceYears } from '../src/core/ramadan';
+const ok = (c: unknown, m: string) => { if (!c) { console.error('FAIL', m); process.exit(1); } };
+const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const list = ramadans(2020, 2033);
+const r1447 = list.find(r => r.hy === 1447)!;
+// Umm al-Qurā: 1 Ramadan 1447 = 18 Feb 2026 – the arithmetic calendar may be a day off
+ok(Math.abs(new Date(iso(r1447.start)).getTime() - new Date('2026-02-18').getTime()) <= 86400000, `1447 starts ${iso(r1447.start)}`);
+ok(list.every(r => r.days === 29 || r.days === 30), 'Ramadan is 29 or 30 days');
+ok(twiceYears(list).includes(2030), `two in 2030: ${twiceYears(list)}`);
+const n = currentOrNext(list, new Date(2026, 10, 14))!;
+ok(n.hy === 1448, `next after 14 Nov 2026 is 1448, got ${n.hy}`);
+ok(Math.abs(daysUntil(n, new Date(2026, 10, 14)) - 86) <= 1, 'about 86 days to 1448');
+const cross = list.find(r => r.start.getFullYear() !== r.end.getFullYear())!;
+ok(partIn(cross, cross.start.getFullYear())!.to >= 364 && partIn(cross, cross.end.getFullYear())!.from === 0, 'a Ramadan over New Year is split');
+const sthlm = { name: 'Stockholm', country: 'SE', lat: 59.33, lng: 18.07 };
+const o = { school: 'hanafi' as const, highLat: 'angle' as const };
+const summer = ramadans(2015, 2015).find(r => r.start.getFullYear() === 2015)!;
+const winter = list.find(r => r.hy === 1452)!;
+ok(fastMinutes(summer, sthlm, o) > 18 * 60, `summer fast in Stockholm > 18 h: ${fastMinutes(summer, sthlm, o) / 60}`);
+ok(fastMinutes(winter, sthlm, o) < 10 * 60, `winter fast in Stockholm < 10 h: ${fastMinutes(winter, sthlm, o) / 60}`);
+ok(seasonOf(summer, 59) === 'summer' && seasonOf(summer, -33) === 'winter', 'seasons turn south of the equator');
+console.log('ramadan: all ok');

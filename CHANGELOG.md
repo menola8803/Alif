@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.5.10
+- **Ramadan år för år (Hijri › Ramadan):** hur ramadan vandrar genom året, cirka 11 dagar tidigare varje år, fram till 2050. Fem bilder att välja mellan – Ring, Rutnät, Klocka, Spiral och Fastetimmar – och den du valde sist visas nästa gång. Två ramadan samma år (t.ex. 2030) märks ut. Tryck på ett år så lyser det upp i bilden.
+- **Fastetimmar:** hur lång fastan blir mitt i månaden där du är, med årstid och jämförelse med ekvatorn.
 - **Awrad-bilden inte längre hoptryckt:** inlästa bilder under rubriken Daily Awrad visas nu i rätt form och fyller ytan.
 
 ## 0.5.9
