@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Pressable, Vibration, View, useWindowDimensions } from 'react-native';
-import Svg, { Circle, Defs, G, Line, Marker, Path, Rect, Text as SvgText } from 'react-native-svg';
+import Svg, { Circle, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { useApp } from '../store';
 import { usePrayer } from '../prayer';
 import { shortDate, weekday } from '../dates';
@@ -114,9 +114,24 @@ export function RamadanYears() {
     </G>
   ) : null;
 
-  const ring = () => {
+  /** The Ramadan nearest to a day in a Gregorian year (within 20 days), for a tap in the picture. */
+  const nearestIn = (y: number, day: number) => {
+    let best: Ramadan | undefined, bd = 20;
+    for (const r of all) { const p = partIn(r, y); if (!p) continue; const d = day < p.from ? p.from - day : day > p.to ? day - p.to : 0; if (d < bd) { bd = d; best = r; } }
+    return best;
+  };
+  /** Angle of a point (centre 0,0) as days into the year, January at the top, clockwise. */
+  const dayAt = (x: number, y: number) => { let a = Math.atan2(y, x) + Math.PI / 2; if (a < 0) a += 2 * Math.PI; return (a / (2 * Math.PI)) * 365.25; };
+  type Pic = { el: React.ReactElement; w: number; h: number; hit: (x: number, y: number) => Ramadan | undefined };
+
+  const ring = (): Pic => {
     const rOf = (y: number) => S / 2 - 22 - (y - Y0) * step;
-    return (
+    const hit = (px: number, py: number) => {
+      const x = px - S / 2, y = py - S / 2, rr = Math.hypot(x, y);
+      const yr = Y0 + Math.round((S / 2 - 22 - rr) / step);
+      return rr < rOf(Y1) - step * 2 || rr > S / 2 - 14 || !inRange(yr) ? undefined : nearestIn(yr, dayAt(x, y));
+    };
+    return { w: S, h: S, hit, el: (
       <Svg width={S} height={S} viewBox={`${-S / 2} ${-S / 2} ${S} ${S}`}>
         {monthLabels(S / 2 - 9)}
         {Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i).map(y => (
@@ -126,7 +141,7 @@ export function RamadanYears() {
           const p = partIn(r, y); if (!p) return null;
           const d = arc(rOf(y), ang(p.from, yearLength(y)), ang(p.to + 1, yearLength(y)));
           return (
-            <G key={`${r.hy}-${y}`} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+            <G key={`${r.hy}-${y}`}>
               {r === sel ? <Path d={d} stroke={gold} strokeOpacity={0.3} strokeWidth={12} strokeLinecap="round" fill="none" /> : null}
               <Path d={d} stroke={colorOf(r)} strokeOpacity={opacityOf(r)} strokeWidth={r === sel ? thin + 2 : thin} strokeLinecap="round" fill="none" />
             </G>
@@ -138,12 +153,16 @@ export function RamadanYears() {
         {showToday && (() => { const [x, y] = P(rOf(year), ang(todayDay)); const [lx, ly] = P(rOf(year) + 20, ang(todayDay - 6)); return <G><Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} /><SvgText x={lx} y={ly + 4} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
         {centre}
       </Svg>
-    );
+    ) };
   };
 
-  const grid = () => {
+  const grid = (): Pic => {
     const L = 40, GW = W - L, rowH = Math.max(12, Math.min(30, 600 / (Y1 - Y0 + 1))), top = 18, years = Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i);
-    return (
+    const hit = (x: number, y: number) => {
+      const yr = Y0 + Math.floor((y - top) / rowH);
+      return x < L || !inRange(yr) ? undefined : nearestIn(yr, ((x - L) / GW) * yearLength(yr));
+    };
+    return { w: W, h: top + years.length * rowH + 16, hit, el: (
       <Svg width={W} height={top + years.length * rowH + 16}>
         {Array.from({ length: 12 }, (_, i) => (
           <G key={`g${i}`}>
@@ -161,7 +180,7 @@ export function RamadanYears() {
           const p = partIn(r, y); if (!p) return null;
           const x0 = L + (p.from / yearLength(y)) * GW, x1 = L + ((p.to + 1) / yearLength(y)) * GW;
           return (
-            <G key={`${r.hy}-${y}`} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+            <G key={`${r.hy}-${y}`}>
               <Rect x={x0} y={top + i * rowH + rowH * 0.22} width={Math.max(3, x1 - x0)} height={rowH * 0.56} rx={4} fill={colorOf(r)} opacity={opacityOf(r)} />
               {hijri && rowH >= 16 && r.start.getFullYear() === y ? <SvgText x={x1 > W - 34 ? x0 - 4 : x1 + 4} y={top + i * rowH + rowH / 2 + 3.5} textAnchor={x1 > W - 34 ? 'end' : 'start'} fill={r === sel ? gold : theme.muted} fontSize={9.5} fontFamily={r === sel ? bold : font}>{r.hy}</SvgText> : null}
             </G>
@@ -173,20 +192,25 @@ export function RamadanYears() {
         })() : null}
         {showToday && (() => { const x = L + (todayDay / yearLength(year)) * GW, y = top + (year - Y0) * rowH; return <G><Line x1={x} x2={x} y1={y + 3} y2={y + rowH - 3} stroke={theme.ink} strokeWidth={2} /><SvgText x={x} y={y + rowH + 1} textAnchor="middle" fill={theme.ink} fontSize={9.5} fontFamily={bold}>{t.legToday.toLowerCase()}</SvgText></G>; })()}
       </Svg>
-    );
+    ) };
   };
 
-  const clock = () => {
+  const clock = (): Pic => {
     const R = S / 2 - 40, list = all;
-    return (
+    const hit = (px: number, py: number) => {
+      const x = px - S / 2, y = py - S / 2; if (Math.abs(Math.hypot(x, y) - R) > 30) return undefined;
+      const day = dayAt(x, y); let best: Ramadan | undefined, bd = 12;
+      for (const r of list) { let d = Math.abs(dayOfYear(r.start) - day); d = Math.min(d, 365.25 - d); if (d < bd) { bd = d; best = r; } }
+      return best;
+    };
+    return { w: S, h: S, hit, el: (
       <Svg width={S} height={S} viewBox={`${-S / 2} ${-S / 2} ${S} ${S}`}>
-        <Defs><Marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><Path d="M0 0L10 5L0 10z" fill={gold} /></Marker></Defs>
         <Circle r={R} fill="none" stroke={theme.line} strokeWidth={14} />
         {monthLabels(R + 26)}
         {list.map(r => {
           const a = ang(dayOfYear(r.start), yearLength(r.start.getFullYear())); const [x, y] = P(R, a); const [lx, ly] = P(R - 24, a);
           return (
-            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+            <G key={r.hy}>
               {r === sel ? null : <Circle cx={x} cy={y} r={4} fill={colorOf(r)} opacity={opacityOf(r)} stroke={theme.card} strokeWidth={2} />}
               {r === sel || r === next || yearOf(r) % every === 0 ? <SvgText x={lx} y={ly + 3.5} textAnchor="middle" fill={r === sel ? gold : theme.muted} fontSize={r === sel ? 11.5 : 9.5} fontFamily={r === sel ? bold : font}>{hijri ? String(r.hy) : `’${String(r.start.getFullYear()).slice(2)}`}</SvgText> : null}
             </G>
@@ -194,26 +218,38 @@ export function RamadanYears() {
         })}
         {sel ? (() => { const a0 = ang(dayOfYear(sel.start), yearLength(sel.start.getFullYear())), d = sel.days; const a1 = a0 + (d / 365.25) * 2 * Math.PI; const [x0, y0] = P(R, a0), [x1, y1] = P(R, a1); return <G><Path d={arc(R, a0, a1)} stroke={gold} strokeWidth={9} strokeLinecap="round" fill="none" strokeOpacity={0.9} />{ends(x0, y0, x1, y1)}</G>; })() : null}
         {showToday && (() => { const [x, y] = P(R, ang(todayDay)); return <Circle cx={x} cy={y} r={4} fill={theme.ink} />; })()}
-        {(() => { const r0 = R - 58, a0 = ang(300), a1 = ang(255); const [x0, y0] = P(r0, a0), [x1, y1] = P(r0, a1); return <Path d={`M${x0} ${y0}A${r0} ${r0} 0 0 0 ${x1} ${y1}`} fill="none" stroke={gold} strokeWidth={2} markerEnd="url(#ah)" />; })()}
+        {(() => {
+          // The arrow (backwards through the year): an arc and a head drawn by hand
+          const r0 = R - 58, a0 = ang(300), a1 = ang(255); const [x0, y0] = P(r0, a0), [x1, y1] = P(r0, a1);
+          const tx = Math.sin(a1), ty = -Math.cos(a1); // direction of travel (counter-clockwise) at the end
+          const nx = Math.cos(a1), ny = Math.sin(a1);
+          const head = `M${(x1 - tx * 7).toFixed(1)} ${(y1 - ty * 7).toFixed(1)}L${(x1 + nx * 5).toFixed(1)} ${(y1 + ny * 5).toFixed(1)}L${(x1 - nx * 5).toFixed(1)} ${(y1 - ny * 5).toFixed(1)}Z`;
+          return <G><Path d={`M${x0.toFixed(1)} ${y0.toFixed(1)}A${r0} ${r0} 0 0 0 ${x1.toFixed(1)} ${y1.toFixed(1)}`} fill="none" stroke={gold} strokeWidth={2} /><Path d={head} fill={gold} /></G>;
+        })()}
         {centre}
       </Svg>
-    );
+    ) };
   };
 
-  const spiral = () => {
+  const spiral = (): Pic => {
     const R0 = S / 2 - 22, R1 = S / 4.6, span = Y1 + 1 - Y0;
     const rad = (tt: number) => R0 - ((R0 - R1) * tt) / span;
     const pos = (tt: number) => P(rad(tt), (tt % 1) * 2 * Math.PI - Math.PI / 2);
     const tOf = (d: Date) => d.getFullYear() - Y0 + dayOfYear(d) / yearLength(d.getFullYear());
     const line = (a: number, b: number) => { let d = ''; for (let tt = a; tt <= b; tt += 0.004) { const [x, y] = pos(tt); d += `${d ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`; } return d; };
-    return (
+    const hit = (px: number, py: number) => {
+      const x = px - S / 2, y = py - S / 2, f = dayAt(x, y) / 365.25;
+      const k = Math.round(((R0 - Math.hypot(x, y)) / (R0 - R1)) * span - f), yr = Y0 + k;
+      return inRange(yr) ? nearestIn(yr, f * yearLength(yr)) : undefined;
+    };
+    return { w: S, h: S, hit, el: (
       <Svg width={S} height={S} viewBox={`${-S / 2} ${-S / 2} ${S} ${S}`}>
         {monthLabels(S / 2 - 9)}
         <Path d={line(0, span)} fill="none" stroke={theme.line} strokeWidth={1} />
         {all.map(r => {
           const a = tOf(r.start), b = tOf(r.end) + 1 / 365; if (b < 0 || a > span) return null;
           return (
-            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+            <G key={r.hy}>
               {r === sel ? <Path d={line(Math.max(0, a), Math.min(span, b))} fill="none" stroke={gold} strokeOpacity={0.3} strokeWidth={12} strokeLinecap="round" /> : null}
               <Path d={line(Math.max(0, a), Math.min(span, b))} fill="none" stroke={colorOf(r)} strokeOpacity={opacityOf(r)} strokeWidth={r === sel ? thin + 2.5 : thin + 0.5} strokeLinecap="round" />
             </G>
@@ -223,22 +259,23 @@ export function RamadanYears() {
         {showToday && (() => { const [x, y] = pos(tOf(now)); return <Circle cx={x} cy={y} r={4.5} fill={theme.ink} stroke={theme.card} strokeWidth={2} />; })()}
         {centre}
       </Svg>
-    );
+    ) };
   };
 
-  const hours = () => {
+  const hours = (): Pic => {
     const list = all;
     const mins = list.map(r => fastMinutes(r, place, opts));
     const L = 30, GW = W - L, H = 200, top = 16, bw = GW / list.length, max = 22 * 60;
     const col = (r: Ramadan) => { const s = seasonOf(r, place.lat); return s === 'summer' ? theme.danger : s === 'winter' ? '#7FB8E8' : gold; };
-    return (
+    const hit = (x: number) => (x < L ? undefined : list[Math.floor((x - L) / bw)]);
+    return { w: W, h: top + H + 22, hit, el: (
       <Svg width={W} height={top + H + 22}>
         {[8, 12, 16, 20].map(h => { const y = top + H - ((h * 60) / max) * H; return <G key={h}><Line x1={L} x2={W} y1={y} y2={y} stroke={theme.line} /><SvgText x={L - 5} y={y + 4} textAnchor="end" fill={theme.muted} fontSize={9.5} fontFamily={font}>{`${h} h`}</SvgText></G>; })}
         {list.map((r, i) => {
           const h = (mins[i] / max) * H;
           const first = i === 0 || list[i - 1].start.getFullYear() !== r.start.getFullYear();
           return (
-            <G key={r.hy} onPress={() => pick(r)} onLongPress={cycle} delayLongPress={450}>
+            <G key={r.hy}>
               <Rect x={L + i * bw + 1} y={top + H - h} width={Math.max(2, bw - 2)} height={h} rx={2} fill={col(r)} opacity={r === sel ? 1 : r.end < now ? 0.35 : 0.7} stroke={r === sel ? theme.ink : 'none'} strokeWidth={1.2} />
               {r === sel ? <SvgText x={L + i * bw + bw / 2} y={top + H - h - 5} textAnchor="middle" fill={theme.ink} fontSize={10} fontFamily={bold}>{r.hy}</SvgText> : null}
               {(hijri || first) && yearOf(r) % every === 0 ? <SvgText x={Math.min(L + i * bw + bw / 2, W - 2)} y={top + H + 15} textAnchor={L + i * bw + bw / 2 > W - 14 ? 'end' : 'middle'} fill={theme.muted} fontSize={9.5} fontFamily={font}>{yearOf(r)}</SvgText> : null}
@@ -246,7 +283,7 @@ export function RamadanYears() {
           );
         })}
       </Svg>
-    );
+    ) };
   };
 
   const picture = { ring, grid, clock, spiral, hours }[view]();
@@ -303,7 +340,10 @@ export function RamadanYears() {
           </View>
         ) : null}
         <Pressable onLongPress={cycle} delayLongPress={450} accessibilityRole="adjustable" accessibilityLabel={`${names[view]} · ${t.ramHoldHint}`}
-          accessibilityActions={[{ name: 'increment' }]} onAccessibilityAction={cycle} style={{ alignItems: 'center' }}>{picture}</Pressable>
+          onPress={e => { const r = picture.hit(e.nativeEvent.locationX, e.nativeEvent.locationY); if (r) pick(r); }}
+          accessibilityActions={[{ name: 'increment' }]} onAccessibilityAction={cycle} style={{ width: picture.w, height: picture.h, alignSelf: 'center' }}>
+          <View pointerEvents="none">{picture.el}</View>
+        </Pressable>
         {/* Which picture of the five, and how to change */}
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
           {RAMADAN_VIEWS.map(v => <View key={v} style={{ width: v === view ? 16 : 6, height: 6, borderRadius: 3, backgroundColor: v === view ? gold : theme.line }} />)}

@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.13
+- **Fixed:** Hijri › Ramadan could crash when tapping in the picture. Now Alif works out itself which year you tapped, and the arrow in Clock is drawn in a safer way. Every year can be tapped in all five pictures.
+
 ## 0.5.12
 - **Fixed:** Hijri › Ramadan crashed when the Clock picture was chosen (the arrow in the middle). All five pictures work now.
 

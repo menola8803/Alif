@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.13
+- **Rättat:** Hijri › Ramadan kunde krascha när man tryckte i bilden. Nu räknar Alif själv ut vilket år du tryckte på, och pilen i Klocka ritas på ett säkrare sätt. Alla år går att trycka fram i alla fem bilderna.
+
 ## 0.5.12
 - **Rättat:** Hijri › Ramadan kraschade när bilden Klocka var vald (pilen i mitten). Nu fungerar alla fem bilderna.
 
