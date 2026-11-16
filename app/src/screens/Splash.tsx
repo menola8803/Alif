@@ -3,6 +3,8 @@ import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, View,
 import Svg, { Circle, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { Pic, pictureFor } from '../pictures';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusShade } from '../today';
 import { useApp } from '../store';
 import { Spaced } from '../spaced';
 
@@ -391,6 +393,7 @@ const SAL_TR = 'Allāhumma ṣalli ʿalā sayyidinā Muḥammadin wa ʿalā āli
 
 /** The start screen with a picture (chosen in Settings › Pictures): the picture, ALIF above and the ṣalawāt below. */
 function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
+  const ins = useSafeAreaInsets();
   const { width: W, height: H } = useWindowDimensions();
   const fade = useRef(new Animated.Value(1)).current;
   const show = useRef(new Animated.Value(0)).current;
@@ -412,7 +415,7 @@ function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
     <Animated.View style={[StyleSheet.absoluteFill, { opacity: fade, backgroundColor: C.bg, zIndex: 100, elevation: 100 }]}>
       <StatusBar style="light" />
       <Pressable style={StyleSheet.absoluteFill} onPress={() => { if (Date.now() - born.current > MIN_SKIP_MS) finish(); }}>
-        <Animated.Image source={pic.src} resizeMode="cover" style={{ position: 'absolute', width: W, height: H, opacity: show, transform: [{ scale: lerp(show, 1.06, 1) }] }} />
+        <Animated.Image source={pic.src} resizeMode="cover" style={{ position: 'absolute', top: ins.top, width: W, height: H - ins.top, opacity: show, transform: [{ scale: lerp(show, 1.06, 1) }] }} />
         <Svg width={W} height={H} style={StyleSheet.absoluteFill}>
           <Defs>
             <LinearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
@@ -424,6 +427,7 @@ function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
           </Defs>
           <Rect x={0} y={0} width={W} height={H} fill="url(#sf)" />
         </Svg>
+        <StatusShade inset={ins.top} color={C.bg} />
         <Animated.View style={{ position: 'absolute', top: H * 0.1, left: 0, right: 0, alignItems: 'center', opacity: show }}>
           <Text style={{ fontFamily: ARABIC_BOLD, fontSize: 60, lineHeight: 100, color: C.goldPale, ...shadow }}>أَلِف</Text>
           <Spaced text="ALIF" style={{ fontFamily: DISPLAY, fontSize: 28, color: C.goldPale, ...shadow }} spacing={8} />

@@ -154,6 +154,26 @@ export function HomeArt({ index, height }: { index: number; height: number }) {
 }
 
 /**
+ * A band behind the status bar (clock, battery): the page colour at the very top, fading into the picture below it,
+ * so the clock and battery always read well and the top of a picture is not hidden behind them.
+ */
+export function StatusShade({ inset, color }: { inset: number; color: string }) {
+  const h = inset + 44;
+  return (
+    <Svg width="100%" height={h} style={{ position: 'absolute', left: 0, right: 0, top: 0 }} preserveAspectRatio="none" viewBox="0 0 100 100" pointerEvents="none">
+      <Defs>
+        <LinearGradient id="ss" x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0" stopColor={color} stopOpacity={1} />
+          <Stop offset={String(Math.max(0.3, (inset * 0.7) / h))} stopColor={color} stopOpacity={0.92} />
+          <Stop offset="1" stopColor={color} stopOpacity={0} />
+        </LinearGradient>
+      </Defs>
+      <Rect x={0} y={0} width={100} height={100} fill="url(#ss)" />
+    </Svg>
+  );
+}
+
+/**
  * A picture from edge to edge (the page's ScrollView must reach the screen's edges and pad its content by 16), cropped
  * around its subject and fading into the page colour at the top and the bottom.
  */

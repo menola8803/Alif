@@ -15,7 +15,7 @@ import { qibla, compassPoint } from '../core/qibla';
 import { AWRAD, countFor, dayKey } from '../core/awrad';
 import { hijriText, longDate, shortDate } from '../dates';
 import { askPermission } from '../reminder';
-import { HomeArt, PrayerClock, TimesRow, untilText } from '../today';
+import { HomeArt, PrayerClock, StatusShade, TimesRow, untilText } from '../today';
 import { Arabic, Card, PageTitle, TAB_SPACE, Text } from '../ui';
 
 const SHADOW = { textShadowColor: 'rgba(0,0,0,0.7)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 8 };
@@ -73,7 +73,8 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
       {top ? (
         // The chosen picture behind the title and the next prayer, fading into the page colour.
         <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470) + lift, marginBottom: -8 }}>
-          <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }} />
+          {/* The picture starts just under the status bar, so a picture with little room at the top is not hidden behind the clock */}
+          <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: ins.top, bottom: 0, width: '100%' }} />
           <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
             <Defs>
               <LinearGradient id="tt" x1="0" y1="0" x2="0" y2="1">
@@ -94,6 +95,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
             <Rect x={0} y={0} width={100} height={100} fill="url(#tt)" />
             <Rect x={0} y={0} width={100} height={100} fill="url(#tc)" />
           </Svg>
+          <StatusShade inset={ins.top} color={theme.bg} />
           <View style={{ paddingHorizontal: 16, paddingTop: lift }}>
             <PageTitle title={t.tabToday} sub={`${longDate(now, lang)} · ${hijriText(h)}`} onGear={onGear} glow={glow} />
           </View>

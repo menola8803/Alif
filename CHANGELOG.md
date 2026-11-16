@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.14
+- **Toning under klockan och batteriet:** på Idag och startskärmen tonas sidans färg in längst upp, och bilden börjar strax under statusraden – så klockan syns och bilder med lite plats upptill inte döljs.
 - **Justera bönetiderna efter din moské:** under Inställningar › Bönetider lägger du till eller drar ifrån minuter per bön, så att Alif visar samma tider som moskén. Gäller tiderna, påminnelserna, widgeten och låsskärmen. Manualen förklarar varför moskéns tider kan skilja.
 
 ## 0.5.13
