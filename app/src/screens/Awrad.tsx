@@ -24,16 +24,18 @@ function Step({ s, n, need, onTap, onUndo }: { s: AwradStep; n: number; need: nu
   const meaning = ihda ? ihdaMeaning(ihdaShaykh, lang) : s.meaning?.[lang] ?? (ayahs && ayahs.some(a => a.translation) ? ayahs.map(a => a.translation).join(' ') : '');
 
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={`${s.title[lang]} ${n}/${need}`} onPress={onTap} onLongPress={onUndo}
+    <Pressable accessibilityRole="button" accessibilityLabel={`${s.title[lang]} ${n}/${need}`} onPress={onTap}
       style={({ pressed }) => ({ backgroundColor: theme.card, borderRadius: 22, borderWidth: 1, borderColor: done ? theme.good : theme.line, padding: 16, gap: 10, opacity: pressed ? 0.85 : 1 })}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{s.title[lang]}</Text>
           {s.optional ? <Text style={{ fontSize: 12, color: theme.muted }}>{t.optional}</Text> : null}
         </View>
-        <View style={{ minWidth: 74, paddingHorizontal: 10, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? theme.good : theme.chip }}>
+        {/* Hold the counter itself to reset it (a long press elsewhere on the card just counts) */}
+        <Pressable accessibilityRole="button" accessibilityLabel={`${n} / ${need} · ${t.holdToReset}`} onPress={onTap} onLongPress={onUndo} delayLongPress={600} hitSlop={6}
+          style={{ minWidth: 74, paddingHorizontal: 10, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? theme.good : theme.chip }}>
           <Text style={{ fontSize: 14, fontWeight: '700', color: done ? theme.onPrimary : theme.ink }}>{done ? `✓ ${need}` : `${n} / ${need}`}</Text>
-        </View>
+        </Pressable>
       </View>
       {arabic ? <Arabic size={s.quran || ihda ? undefined : 28}>{arabic}</Arabic> : s.quran ? <Text style={{ color: theme.muted }}>{t.loadingQuran}</Text> : null}
       {translit ? <Text selectable style={{ fontSize: 15, lineHeight: 22, color: theme.accent, fontWeight: '500' }}>{translit}</Text> : null}

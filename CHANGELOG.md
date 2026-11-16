@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.16
+- **Daily Awrad:** nollställ genom att hålla fingret på själva räknaren (t.ex. 0 / 1500). Ett långt tryck på resten av kortet räknar bara – så man nollställer inte av misstag.
 - **Mjukare toning under klockan:** den lilla skarven där bilden börjar är borta – toningen täcker bildens kant och mjuknar gradvis.
 
 ## 0.5.15
