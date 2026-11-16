@@ -418,9 +418,12 @@ function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
         <Svg width={W} height={H} style={StyleSheet.absoluteFill}>
           <Defs>
             <LinearGradient id="ss" x1="0" y1="0" x2="0" y2={ins.top + 56} gradientUnits="userSpaceOnUse">
-              <Stop offset="0" stopColor={C.bg} stopOpacity={1} />
-              <Stop offset={Math.min(0.9, (ins.top * 0.9) / (ins.top + 56))} stopColor={C.bg} stopOpacity={0.95} />
-              <Stop offset="1" stopColor={C.bg} stopOpacity={0} />
+              {(() => {
+                const m = Math.min(0.9, (ins.top + 3) / (ins.top + 56)), at = (f: number) => m + (1 - m) * f;
+                return [[0, 1], [m, 1], [at(0.2), 0.86], [at(0.4), 0.62], [at(0.6), 0.36], [at(0.8), 0.14], [1, 0]].map(([o, a]) => (
+                  <Stop key={o} offset={o} stopColor={C.bg} stopOpacity={a} />
+                ));
+              })()}
             </LinearGradient>
             <LinearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
               <Stop offset="0" stopColor="#0A0E10" stopOpacity={0.6} />

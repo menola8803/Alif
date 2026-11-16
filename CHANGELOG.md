@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.16
+- **Mjukare toning under klockan:** den lilla skarven där bilden börjar är borta – toningen täcker bildens kant och mjuknar gradvis.
+
 ## 0.5.15
 - **Rättat:** toningen under klockan och batteriet syntes inte – det blev en skarp kant mot bilden. Nu tonas sidans färg mjukt över i bildens översta del på Idag och startskärmen.
 - **Inlästa och egna bilder visas från sin överkant** i stället för mitten, så det som finns ovanför t.ex. ett huvud inte klipps bort.

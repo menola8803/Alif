@@ -46,8 +46,9 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const headH = Math.min(width * 1.15, 470) + lift;
   // Behind the clock and battery: the page colour; the picture begins just under them and its first ~36 points fade in
   // (on a picture with a little room above a head, that is the upper half of that room). In picture units (0–100).
-  const shadeTo = Math.min(40, ((ins.top + 36) / headH) * 100);
-  const shadeMid = (ins.top / headH) * 100;
+  // The shade stays full a little past the picture's edge (so the edge itself never shows) and then eases out.
+  const shadeTo = Math.min(40, ((ins.top + 42) / headH) * 100);
+  const shadeMid = ((ins.top + 3) / headH) * 100;
   // The picture's own size (bundled or read in), to crop it around its focus instead of the middle
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   useEffect(() => {
@@ -110,9 +111,13 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
                 <Stop offset="1" stopColor={theme.bg} stopOpacity={1} />
               </LinearGradient>
               <LinearGradient id="ts" x1="0" y1="0" x2="0" y2={shadeTo} gradientUnits="userSpaceOnUse">
-                <Stop offset="0" stopColor={theme.bg} stopOpacity={1} />
-                <Stop offset={Math.min(0.9, shadeMid / shadeTo)} stopColor={theme.bg} stopOpacity={1} />
-                <Stop offset="1" stopColor={theme.bg} stopOpacity={0} />
+                {(() => {
+                  // ease out (no visible line where the fade begins): full until just past the edge, then softer and softer
+                  const m = Math.min(0.9, shadeMid / shadeTo), at = (f: number) => m + (1 - m) * f;
+                  return [[0, 1], [m, 1], [at(0.2), 0.86], [at(0.4), 0.62], [at(0.6), 0.36], [at(0.8), 0.14], [1, 0]].map(([o, a]) => (
+                    <Stop key={o} offset={o} stopColor={theme.bg} stopOpacity={a} />
+                  ));
+                })()}
               </LinearGradient>
               {/* a soft shade behind the next prayer, so the time reads well on any picture */}
               <RadialGradient id="tc" cx="50" cy="78" rx="42" ry="20" gradientUnits="userSpaceOnUse">

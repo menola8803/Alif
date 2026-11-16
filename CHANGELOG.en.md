@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.16
+- **Softer fade under the clock:** the small seam where the picture begins is gone – the fade covers the picture’s edge and softens gradually.
+
 ## 0.5.15
 - **Fixed:** the fade under the clock and battery did not show – there was a sharp edge against the picture. Now the page colour fades softly into the top of the picture on Today and the start screen.
 - **Read-in and own pictures are shown from their top** instead of the middle, so what is above e.g. a head is not cut away.

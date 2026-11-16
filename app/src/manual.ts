@@ -1,6 +1,6 @@
 // The manual inside the app, in Swedish and English. Update it with EVERY release (see AGENTS.md):
 // set MANUAL_VERSION to the new version in package.json – the tests fail otherwise.
-export const MANUAL_VERSION = '0.5.15';
+export const MANUAL_VERSION = '0.5.16';
 
 export type ManualSection = { title: string; items: string[] };
 
