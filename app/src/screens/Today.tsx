@@ -15,7 +15,7 @@ import { qibla, compassPoint } from '../core/qibla';
 import { AWRAD, countFor, dayKey } from '../core/awrad';
 import { hijriText, longDate, shortDate } from '../dates';
 import { askPermission } from '../reminder';
-import { HomeArt, PrayerClock, StatusShade, TimesRow, untilText } from '../today';
+import { HomeArt, PrayerClock, TimesRow, untilText } from '../today';
 import { Arabic, Card, PageTitle, TAB_SPACE, Text } from '../ui';
 
 const SHADOW = { textShadowColor: 'rgba(0,0,0,0.7)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 8 };
@@ -41,9 +41,12 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const { t, theme, lang, place, school, prayerNotify, setPrefs, awradDay, awradCounts, awradLevel, todayImg } = app;
   const top = todayImg === 'none' ? null : pictureFor(todayImg);
   const ins = useSafeAreaInsets();
-  const lift = ins.top + 12; // the Screen's top padding: the picture reaches up behind the status bar
-  const { today, next, now, source, hijriOffset } = usePrayer();
   const { width } = useWindowDimensions();
+  const lift = ins.top + 12; // the Screen's top padding: the picture reaches up behind the status bar
+  const headH = Math.min(width * 1.15, 470) + lift;
+  const shadeTo = Math.min(40, ((ins.top + 56) / headH) * 100); // the shade behind the clock and battery, in picture units
+  const shadeMid = ((ins.top * 0.9) / headH) * 100;
+  const { today, next, now, source, hijriOffset } = usePrayer();
   const h = toHijri(now, hijriOffset);
   const month = MONTHS[h.m - 1];
   const sacred = nextSacredMonth(now, hijriOffset);
@@ -72,7 +75,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
       contentContainerStyle={{ gap: 12, paddingBottom: TAB_SPACE, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
       {top ? (
         // The chosen picture behind the title and the next prayer, fading into the page colour.
-        <View style={{ marginHorizontal: -16, height: Math.min(width * 1.15, 470) + lift, marginBottom: -8 }}>
+        <View style={{ marginHorizontal: -16, height: headH, marginBottom: -8 }}>
           {/* The picture starts just under the status bar, so a picture with little room at the top is not hidden behind the clock */}
           <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: ins.top, bottom: 0, width: '100%' }} />
           <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
@@ -85,6 +88,11 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
                 <Stop offset="0.85" stopColor={theme.bg} stopOpacity={0.85} />
                 <Stop offset="1" stopColor={theme.bg} stopOpacity={1} />
               </LinearGradient>
+              <LinearGradient id="ts" x1="0" y1="0" x2="0" y2={shadeTo} gradientUnits="userSpaceOnUse">
+                <Stop offset="0" stopColor={theme.bg} stopOpacity={1} />
+                <Stop offset={Math.min(0.9, shadeMid / shadeTo)} stopColor={theme.bg} stopOpacity={0.95} />
+                <Stop offset="1" stopColor={theme.bg} stopOpacity={0} />
+              </LinearGradient>
               {/* a soft shade behind the next prayer, so the time reads well on any picture */}
               <RadialGradient id="tc" cx="50" cy="78" rx="42" ry="20" gradientUnits="userSpaceOnUse">
                 <Stop offset="0" stopColor={theme.bg} stopOpacity={0.6} />
@@ -94,8 +102,9 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
             </Defs>
             <Rect x={0} y={0} width={100} height={100} fill="url(#tt)" />
             <Rect x={0} y={0} width={100} height={100} fill="url(#tc)" />
+            {/* behind the clock and battery: the page colour, fading softly into the picture */}
+            <Rect x={0} y={0} width={100} height={shadeTo} fill="url(#ts)" />
           </Svg>
-          <StatusShade inset={ins.top} color={theme.bg} />
           <View style={{ paddingHorizontal: 16, paddingTop: lift }}>
             <PageTitle title={t.tabToday} sub={`${longDate(now, lang)} · ${hijriText(h)}`} onGear={onGear} glow={glow} />
           </View>

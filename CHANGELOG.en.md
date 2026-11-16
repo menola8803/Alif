@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.15
+- **Fixed:** the fade under the clock and battery did not show – there was a sharp edge against the picture. Now the page colour fades softly into the picture on Today and the start screen.
+
 ## 0.5.14
 - **Fade under the clock and battery:** on Today and the start screen the page colour fades in at the very top, and the picture begins just under the status bar – so the clock can be read and pictures with little room at the top are not hidden.
 - **Adjust the prayer times to your mosque:** under Settings › Prayer times you add or take away minutes per prayer, so that Alif shows the same times as the mosque. Applies to the times, the reminders, the widget and the lock screen. The manual explains why the mosque’s times can differ.

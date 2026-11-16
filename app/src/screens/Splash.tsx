@@ -4,7 +4,6 @@ import Svg, { Circle, Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop 
 import { Pic, pictureFor } from '../pictures';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StatusShade } from '../today';
 import { useApp } from '../store';
 import { Spaced } from '../spaced';
 
@@ -418,6 +417,11 @@ function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
         <Animated.Image source={pic.src} resizeMode="cover" style={{ position: 'absolute', top: ins.top, width: W, height: H - ins.top, opacity: show, transform: [{ scale: lerp(show, 1.06, 1) }] }} />
         <Svg width={W} height={H} style={StyleSheet.absoluteFill}>
           <Defs>
+            <LinearGradient id="ss" x1="0" y1="0" x2="0" y2={ins.top + 56} gradientUnits="userSpaceOnUse">
+              <Stop offset="0" stopColor={C.bg} stopOpacity={1} />
+              <Stop offset={Math.min(0.9, (ins.top * 0.9) / (ins.top + 56))} stopColor={C.bg} stopOpacity={0.95} />
+              <Stop offset="1" stopColor={C.bg} stopOpacity={0} />
+            </LinearGradient>
             <LinearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
               <Stop offset="0" stopColor="#0A0E10" stopOpacity={0.6} />
               <Stop offset="0.3" stopColor="#0A0E10" stopOpacity={0} />
@@ -426,8 +430,9 @@ function PictureSplash({ pic, onDone }: { pic: Pic; onDone: () => void }) {
             </LinearGradient>
           </Defs>
           <Rect x={0} y={0} width={W} height={H} fill="url(#sf)" />
+          {/* behind the clock and battery: the page colour, fading softly into the picture */}
+          <Rect x={0} y={0} width={W} height={ins.top + 56} fill="url(#ss)" />
         </Svg>
-        <StatusShade inset={ins.top} color={C.bg} />
         <Animated.View style={{ position: 'absolute', top: H * 0.1, left: 0, right: 0, alignItems: 'center', opacity: show }}>
           <Text style={{ fontFamily: ARABIC_BOLD, fontSize: 60, lineHeight: 100, color: C.goldPale, ...shadow }}>أَلِف</Text>
           <Spaced text="ALIF" style={{ fontFamily: DISPLAY, fontSize: 28, color: C.goldPale, ...shadow }} spacing={8} />
