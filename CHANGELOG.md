@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.5.15
-- **Rättat:** toningen under klockan och batteriet syntes inte – det blev en skarp kant mot bilden. Nu tonas sidans färg mjukt över i bilden på Idag och startskärmen.
+- **Rättat:** toningen under klockan och batteriet syntes inte – det blev en skarp kant mot bilden. Nu tonas sidans färg mjukt över i bildens översta del på Idag och startskärmen.
+- **Inlästa och egna bilder visas från sin överkant** i stället för mitten, så det som finns ovanför t.ex. ett huvud inte klipps bort.
 
 ## 0.5.14
 - **Toning under klockan och batteriet:** på Idag och startskärmen tonas sidans färg in längst upp, och bilden börjar strax under statusraden – så klockan syns och bilder med lite plats upptill inte döljs.

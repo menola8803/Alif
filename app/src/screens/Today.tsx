@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import { isNewer } from '../update';
 import { Image, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
@@ -44,8 +44,26 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
   const { width } = useWindowDimensions();
   const lift = ins.top + 12; // the Screen's top padding: the picture reaches up behind the status bar
   const headH = Math.min(width * 1.15, 470) + lift;
-  const shadeTo = Math.min(40, ((ins.top + 56) / headH) * 100); // the shade behind the clock and battery, in picture units
-  const shadeMid = ((ins.top * 0.9) / headH) * 100;
+  // Behind the clock and battery: the page colour; the picture begins just under them and its first ~36 points fade in
+  // (on a picture with a little room above a head, that is the upper half of that room). In picture units (0–100).
+  const shadeTo = Math.min(40, ((ins.top + 36) / headH) * 100);
+  const shadeMid = (ins.top / headH) * 100;
+  // The picture's own size (bundled or read in), to crop it around its focus instead of the middle
+  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+  useEffect(() => {
+    setSize(null);
+    if (!top) return;
+    if (typeof top.src === 'number') { const d = Image.resolveAssetSource(top.src); if (d?.width && d.height) setSize({ w: d.width, h: d.height }); return; }
+    const uri = (top.src as { uri?: string }).uri;
+    if (uri) Image.getSize(uri, (w, h) => setSize({ w, h }), () => {});
+  }, [top?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const crop = (() => {
+    const area = headH - ins.top; // the picture's room, from just under the status bar
+    const ratio = size && size.w > 0 ? size.h / size.w : area / width;
+    let w = width, h = width * ratio;
+    if (h < area) { h = area; w = area / ratio; }
+    return { w, h, left: -(w - width) / 2, top: ins.top - (h - area) * (top?.focus ?? 0.5) };
+  })();
   const { today, next, now, source, hijriOffset } = usePrayer();
   const h = toHijri(now, hijriOffset);
   const month = MONTHS[h.m - 1];
@@ -76,8 +94,11 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
       {top ? (
         // The chosen picture behind the title and the next prayer, fading into the page colour.
         <View style={{ marginHorizontal: -16, height: headH, marginBottom: -8 }}>
-          {/* The picture starts just under the status bar, so a picture with little room at the top is not hidden behind the clock */}
-          <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: 0, right: 0, top: ins.top, bottom: 0, width: '100%' }} />
+          {/* The picture fills the width from just under the clock and battery, cropped around its focus (read-in pictures:
+              from their top, so the room above a head is kept). */}
+          <View style={{ position: 'absolute', left: 0, right: 0, top: ins.top, bottom: 0, overflow: 'hidden' }}>
+            <Image source={top.src} resizeMode="cover" style={{ position: 'absolute', left: crop.left, top: crop.top - ins.top, width: crop.w, height: crop.h }} />
+          </View>
           <Svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="none" viewBox="0 0 100 100">
             <Defs>
               <LinearGradient id="tt" x1="0" y1="0" x2="0" y2="1">
@@ -90,7 +111,7 @@ export default function Today({ go, onGear, glow, image }: { go: (r: Route) => v
               </LinearGradient>
               <LinearGradient id="ts" x1="0" y1="0" x2="0" y2={shadeTo} gradientUnits="userSpaceOnUse">
                 <Stop offset="0" stopColor={theme.bg} stopOpacity={1} />
-                <Stop offset={Math.min(0.9, shadeMid / shadeTo)} stopColor={theme.bg} stopOpacity={0.95} />
+                <Stop offset={Math.min(0.9, shadeMid / shadeTo)} stopColor={theme.bg} stopOpacity={1} />
                 <Stop offset="1" stopColor={theme.bg} stopOpacity={0} />
               </LinearGradient>
               {/* a soft shade behind the next prayer, so the time reads well on any picture */}

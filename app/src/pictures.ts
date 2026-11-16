@@ -22,11 +22,11 @@ export const OWN_TODAY = 'own-today.jpg';
 export function pictureFor(id: string): Pic | null {
   if (id.startsWith('lib:')) {
     const f = new File(libDir(), id.slice(4));
-    return f.exists ? { id, src: { uri: f.uri }, focus: 0.5 } : null;
+    return f.exists ? { id, src: { uri: f.uri }, focus: 0 } : null; // show the top of the picture (a head, a dome …)
   }
   if (id.startsWith('own:')) {
     const f = new File(Paths.document, id.slice(4));
-    return f.exists ? { id, src: { uri: `${f.uri}?v=${f.modificationTime ?? 0}` }, focus: 0.5 } : null;
+    return f.exists ? { id, src: { uri: `${f.uri}?v=${f.modificationTime ?? 0}` }, focus: 0 } : null;
   }
   return PICTURES.find(p => p.id === id) ?? null;
 }

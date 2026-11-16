@@ -3,7 +3,8 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.15
-- **Fixed:** the fade under the clock and battery did not show – there was a sharp edge against the picture. Now the page colour fades softly into the picture on Today and the start screen.
+- **Fixed:** the fade under the clock and battery did not show – there was a sharp edge against the picture. Now the page colour fades softly into the top of the picture on Today and the start screen.
+- **Read-in and own pictures are shown from their top** instead of the middle, so what is above e.g. a head is not cut away.
 
 ## 0.5.14
 - **Fade under the clock and battery:** on Today and the start screen the page colour fades in at the very top, and the picture begins just under the status bar – so the clock can be read and pictures with little room at the top are not hidden.
