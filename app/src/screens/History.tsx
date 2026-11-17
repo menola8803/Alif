@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, FlatList, Pressable, ScrollView, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import { showDialog } from '../dialog';
 import { useApp } from '../store';
 import { SURAHS } from '../core/quran';
 import { stripHarakat } from '../core/translit';
@@ -15,7 +16,7 @@ export default function History({ open, hideTitle }: { open: (id: string) => voi
     <View style={{ flex: 1, gap: 12 }}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 12 }}>
         <View style={{ flex: 1 }}>{hideTitle ? null : <><H1>{t.historyTitle}</H1><Sub>{t.historySub}</Sub></>}</View>
-        {history.length ? <SmallBtn title={t.clear} onPress={() => Alert.alert(t.clearHistory, t.clearHistoryConfirm, [{ text: t.cancel, style: 'cancel' }, { text: t.delete, style: 'destructive', onPress: clearHistory }])} /> : null}
+        {history.length ? <SmallBtn title={t.clear} onPress={() => showDialog(t.clearHistory, t.clearHistoryConfirm, [{ text: t.cancel, style: 'cancel' }, { text: t.delete, style: 'destructive', onPress: clearHistory }])} /> : null}
       </View>
       {!history.length ? <Body muted>{t.noHistory}</Body> : null}
       <FlatList

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Linking, Pressable, View } from 'react-native';
+import { ActivityIndicator, FlatList, Linking, Pressable, View } from 'react-native';
+import { showDialog } from '../dialog';
 import Svg, { Circle, Path } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
@@ -86,7 +87,7 @@ export default function MosquesScreen({ onBack, go }: { onBack: () => void; go: 
     setAdding(null); setNewName(''); setNewAddr('');
     setSel((list?.length ?? 0));
   };
-  const remove = (m: Mosque) => Alert.alert(t.removeMosque, t.removeMosqueQ.replace('{m}', m.name), [
+  const remove = (m: Mosque) => showDialog(t.removeMosque, t.removeMosqueQ.replace('{m}', m.name), [
     { text: t.cancel, style: 'cancel' },
     { text: t.removeMosque, style: 'destructive', onPress: () => {
       setSel(-1);

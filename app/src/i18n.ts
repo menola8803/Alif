@@ -436,6 +436,7 @@ const en3: typeof sv3 = {
 // ---- 0.5.1: mosque map, Listen (microphone), widget, volume buttons ----
 const sv4 = {
   monthTab: 'Månad', ramTab: 'Ramadan', ramTitle: 'Ramadan år för år · {a}–{b}', ramHoursTitle: 'Hur lång blir fastan? · {place}',
+  ok: 'OK', resetYes: 'Nollställ',
   adjustTitle: 'Justera efter din moské', minShort: 'min', adjustReset: 'Nollställ justeringen',
   adjustSub: 'Moskéer lägger ofta till några minuter (t.ex. Ẓuhr några minuter efter solens högsta punkt, Maghrib några minuter efter solnedgång) och räknar Fajr och ʿIshāʾ på sitt eget sätt långt norrut. Lägg till eller dra ifrån minuter per bön så att Alif visar samma tider som din moské. Tryck − + för en minut, håll för tio. Gäller visningen, påminnelserna, widgeten och låsskärmen.',
   updatedTitle: 'Alif är uppdaterad till {v}', updatedBody: 'Tryck för att öppna Alif.', updateChannel: 'Uppdatering av Alif',
@@ -523,6 +524,7 @@ const sv4 = {
 };
 const en4: typeof sv4 = {
   monthTab: 'Month', ramTab: 'Ramadan', ramTitle: 'Ramadan year by year · {a}–{b}', ramHoursTitle: 'How long is the fast? · {place}',
+  ok: 'OK', resetYes: 'Reset',
   adjustTitle: 'Adjust to your mosque', minShort: 'min', adjustReset: 'Reset the adjustment',
   adjustSub: 'Mosques often add a few minutes (e.g. Ẓuhr a few minutes after the sun’s highest point, Maghrib a few minutes after sunset) and calculate Fajr and ʿIshāʾ their own way far north. Add or take away minutes per prayer so that Alif shows the same times as your mosque. Tap − + for one minute, hold for ten. Applies to the times shown, the reminders, the widget and the lock screen.',
   updatedTitle: 'Alif is updated to {v}', updatedBody: 'Tap to open Alif.', updateChannel: 'Alif update',

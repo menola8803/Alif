@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, Vibration, View, useWindowDimensions } from 'react-native';
+import { Pressable, ScrollView, Vibration, View, useWindowDimensions } from 'react-native';
+import { showDialog } from '../dialog';
 import { useApp } from '../store';
 import { pictureFor } from '../pictures';
 import { PictureBand } from '../today';
@@ -85,7 +86,7 @@ export default function Awrad({ onBack, onReminder }: { onBack: () => void; onRe
           </View>
           <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
             <SmallBtn title={`${t.reminder}: ${reminderOn ? formatTime(reminderHour, reminderMinute, uses12h()) : t.off}`} tone="accent" onPress={onReminder} />
-            <SmallBtn title={t.awradReset} onPress={() => Alert.alert(t.awradReset, t.awradResetConfirm, [{ text: t.cancel, style: 'cancel' }, { text: 'OK', onPress: () => setPrefs({ awradDay: today, awradCounts: {} }) }])} />
+            <SmallBtn title={t.awradReset} onPress={() => showDialog(t.awradReset, t.awradResetConfirm, [{ text: t.cancel, style: 'cancel' }, { text: t.resetYes, style: 'destructive', onPress: () => setPrefs({ awradDay: today, awradCounts: {} }) }])} />
           </View>
         </Card>
         {steps.map((s, i) => {

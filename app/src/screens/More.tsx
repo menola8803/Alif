@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Image, Linking, Modal, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Image, Linking, Modal, Platform, Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
+import { showDialog } from '../dialog';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import { File, Paths } from 'expo-file-system';
@@ -275,7 +276,7 @@ export function PicturesScreen({ onBack }: { onBack: () => void }) {
     if (ids.length === 1) setMenu(ids[0]);
     else if (ids.length) setMsg(t.picReadDone.replace('{n}', String(ids.length)));
   };
-  const remove = (id: string) => Alert.alert(t.picRemove, t.picRemoveQ, [
+  const remove = (id: string) => showDialog(t.picRemove, t.picRemoveQ, [
     { text: t.cancel, style: 'cancel' },
     { text: t.picRemove, style: 'destructive', onPress: () => { clear(id); removeLibraryPicture(id); setMenu(null); setVer(v => v + 1); } },
   ]);

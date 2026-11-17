@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { showDialog } from './dialog';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { useApp } from './store';
 import { TAJWEED_COLORS, TajweedRule } from './core/tajweed';
@@ -37,7 +38,7 @@ export function SurahDownload({ n }: { n: number }) {
   const busy = !!prog && !prog.error;
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={done ? t.onPhone : busy ? t.cancel : t.downloadSurah} disabled={done} hitSlop={8}
-      onPress={async () => { if (busy) { rec.cancel(n); return; } const r = await rec.download(n); if (r === 'wifi' || r === 'error') Alert.alert(t.downloadSurah, r === 'wifi' ? t.needWifi : t.downloadFail); }} style={{ padding: 6 }}>
+      onPress={async () => { if (busy) { rec.cancel(n); return; } const r = await rec.download(n); if (r === 'wifi' || r === 'error') showDialog(t.downloadSurah, r === 'wifi' ? t.needWifi : t.downloadFail); }} style={{ padding: 6 }}>
       <DownloadIcon state={done ? 'done' : busy ? 'busy' : 'idle'} part={prog ? prog.done / prog.total : 0} />
     </Pressable>
   );

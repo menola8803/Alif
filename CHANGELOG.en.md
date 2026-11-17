@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.17
+- **Question boxes in Alif’s theme:** "Start today over", remove mosque, remove picture, clear history and download errors are now shown in the app’s own colours and buttons instead of Android’s grey box.
+
 ## 0.5.16
 - **Daily Awrad:** reset by holding your finger on the counter itself (e.g. 0 / 1500). A long press on the rest of the card only counts – so you do not reset by mistake.
 - **Softer fade under the clock:** the small seam where the picture begins is gone – the fade covers the picture’s edge and softens gradually.

@@ -6,6 +6,7 @@ import { PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_
 import { Cinzel_700Bold } from '@expo-google-fonts/cinzel';
 import { Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import { StatusBar } from 'expo-status-bar';
+import { DialogHost } from './src/dialog';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
@@ -156,6 +157,7 @@ function Root() {
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
       <Content splashDone={splashDone} />
       {!splashDone && <Splash onDone={() => setSplashDone(true)} />}
+      <DialogHost />
     </View>
   );
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.17
+- **Frågerutor i Alifs tema:** "Börja om idag", ta bort moské, ta bort bild, rensa historik och nedladdningsfel visas nu i appens egna färger och knappar i stället för Androids grå ruta.
+
 ## 0.5.16
 - **Daily Awrad:** nollställ genom att hålla fingret på själva räknaren (t.ex. 0 / 1500). Ett långt tryck på resten av kortet räknar bara – så man nollställer inte av misstag.
 - **Mjukare toning under klockan:** den lilla skarven där bilden börjar är borta – toningen täcker bildens kant och mjuknar gradvis.
