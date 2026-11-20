@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.18
+- **Scroll staff in the Qur’an:** a slim grey staff at the far right of a sūra or juzʾ. Drag it to get to the right verse quickly – the verse number is shown beside your finger.
+
 ## 0.5.17
 - **Question boxes in Alif’s theme:** "Start today over", remove mosque, remove picture, clear history and download errors are now shown in the app’s own colours and buttons instead of Android’s grey box.
 

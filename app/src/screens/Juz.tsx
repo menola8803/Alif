@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
+import { useFastScroll } from '../fastScroll';
 import { useApp } from '../store';
 import { useQuran } from '../library';
 import { useRecitation } from '../recitation';
@@ -33,6 +34,8 @@ export default function JuzScreen({ n, onBack, go }: { n: number; onBack: () => 
   }, [lib.arabicReady, lib.translationReady, n]);
   const playing = rec.now ? `${rec.now.surah}:${rec.now.ayah}` : '';
   const list = useRef<FlatList<Item>>(null);
+  // The scroll bar's bubble shows sūra:verse at that place
+  const fast = useFastScroll(list, items?.length ?? 0, i => { const x = items?.[i]; return !x ? '' : x.k === 'ayah' ? `${x.surah}:${x.a.n}` : `${x.surah}:1`; });
   const setPrefsRef = useRef(setPrefs); setPrefsRef.current = setPrefs;
   const onViewable = useRef(({ viewableItems }: { viewableItems: { item: Item }[] }) => {
     const first = viewableItems.find(v => v.item.k === 'ayah')?.item;
@@ -52,8 +55,10 @@ export default function JuzScreen({ n, onBack, go }: { n: number; onBack: () => 
           {lib.status === 'error' ? <><Body>{t.libError}</Body><Btn title={t.libDownload} onPress={lib.ensure} /></> : <><ActivityIndicator color={theme.primary} /><Text style={{ color: theme.muted }}>{t.loading}</Text></>}
         </Card>
       ) : (
+        <View style={{ flex: 1 }}>
         <FlatList
           ref={list}
+          {...fast.listProps}
           data={items}
           keyExtractor={x => (x.k === 'head' ? `h${x.surah}` : `${x.surah}:${x.a.n}`)}
           showsVerticalScrollIndicator={false}
@@ -75,6 +80,8 @@ export default function JuzScreen({ n, onBack, go }: { n: number; onBack: () => 
             <Verse a={x.a} surah={x.surah} current={playing === `${x.surah}:${x.a.n}`} onPlay={() => rec.play(x.surah, x.a.n)} />
           )}
         />
+        {fast.bar}
+        </View>
       )}
     </Screen>
   );

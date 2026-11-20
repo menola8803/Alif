@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text as RNText, View } from 'react-native';
+import { useFastScroll } from '../fastScroll';
 import * as Clipboard from 'expo-clipboard';
 import { useApp } from '../store';
 import { Ayah, SURAHS, SurahText, fetchSurah, pickEdition } from '../core/quran';
@@ -200,6 +201,7 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
   const [err, setErr] = useState('');
   const [cached, setCached] = useState(false);
   const list = useRef<FlatList<Ayah>>(null);
+  const fast = useFastScroll(list, data?.ayahs.length ?? 0, i => `${data?.ayahs[i]?.n ?? i + 1}`);
   // Remembers where you are, for "Continue reading".
   const setPrefsRef = useRef(setPrefs); setPrefsRef.current = setPrefs;
   const onViewable = useRef(({ viewableItems }: { viewableItems: { item: Ayah }[] }) => {
@@ -240,8 +242,10 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
       {!data && !err ? <Card style={{ alignItems: 'center', paddingVertical: 28 }}><ActivityIndicator color={theme.primary} /><Text style={{ color: theme.muted }}>{t.loading}</Text></Card> : null}
       {err ? <Card><Body>{err}</Body><Btn title={t.retry} onPress={load} /></Card> : null}
       {data ? (
+        <View style={{ flex: 1 }}>
         <FlatList
           ref={list}
+          {...fast.listProps}
           data={data.ayahs}
           keyExtractor={a => String(a.n)}
           showsVerticalScrollIndicator={false}
@@ -276,6 +280,8 @@ export default function Surah({ n, ayah, onBack, go }: { n: number; ayah?: numbe
           extraData={`${playing}:${words ? 1 : 0}:${tajweed}:${hifz}`}
           renderItem={({ item }) => <Verse a={item} surah={n} current={playing === item.n} words={wbw ? words?.[item.n] : undefined} onPlay={() => rec.play(n, item.n)} />}
         />
+        {fast.bar}
+        </View>
       ) : null}
       {data ? <Player n={n} /> : null}
     </Screen>
