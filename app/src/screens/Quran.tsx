@@ -69,16 +69,17 @@ export default function Quran({ open, openJuz, onAwrad, onGear, glow }: { open: 
         </View>
         <Text style={{ fontFamily: theme.fonts.arabic, fontSize: 18, lineHeight: 32, color: theme.arabicInk }}>أَوْرَاد</Text>
       </Pressable>
-      <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 }}>
-        {lib.status === 'loading' ? <ActivityIndicator color={theme.primary} /> : <View style={{ width: 10, height: 10, backgroundColor: lib.status === 'ready' ? theme.good : theme.danger, transform: [{ rotate: '45deg' }] }} />}
+      {/* Only while the Qur'an is being fetched, or if that failed – once it is on the phone, the manual says so */}
+      {lib.status !== 'ready' ? <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 }}>
+        {lib.status === 'loading' ? <ActivityIndicator color={theme.primary} /> : <View style={{ width: 10, height: 10, backgroundColor: lib.status === 'idle' ? theme.muted : theme.danger, transform: [{ rotate: '45deg' }] }} />}
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 13, color: theme.ink, lineHeight: 18 }}>
-            {lib.status === 'ready' ? t.libReady : lib.status === 'loading' ? (lib.arabicReady ? t.libArabicOnly : t.libLoading) : t.libError}
+            {lib.status === 'loading' || lib.status === 'idle' ? (lib.arabicReady ? t.libArabicOnly : t.libLoading) : t.libError}
           </Text>
           <Text style={{ fontSize: 11, color: theme.muted }}>{lib.edition} · {t.libSource}</Text>
         </View>
         {lib.status === 'error' ? <SmallBtn title={t.libDownload} tone="accent" onPress={lib.ensure} /> : null}
-      </Card>
+      </Card> : null}
       <Segmented<'surah' | 'juz'> options={[['surah', t.bySurah], ['juz', t.byJuz]]} value={quranView} onChange={v => setPrefs({ quranView: v })} />
       {quranView === 'juz' ? (
         <FlatList

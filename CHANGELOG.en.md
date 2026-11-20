@@ -3,6 +3,7 @@
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
 ## 0.5.18
+- **Qurʾān page:** the note that the whole Qurʾān is on the phone has moved to the manual. The card is only shown while the Qurʾān is fetched or if that failed.
 - **Scroll staff in the Qur’an:** a slim grey staff at the far right of a sūra or juzʾ. Drag it to get to the right verse quickly – the verse number is shown beside your finger.
 
 ## 0.5.17

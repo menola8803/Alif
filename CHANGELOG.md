@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.5.18
+- **Koran-sidan:** beskedet att hela Koranen finns på telefonen har flyttat till manualen. Kortet visas bara medan Koranen hämtas eller om hämtningen misslyckades.
 - **Rullningsstav i Koranen:** en smal grå stav längst till höger i en sura eller juzʾ. Dra i den för att snabbt komma till rätt vers – versnumret visas bredvid fingret.
 
 ## 0.5.17

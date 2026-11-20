@@ -59,6 +59,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Koranen', items: [
       'Alla 114 suror med arabisk text, svensk (Bernström) och engelsk (Saheeh International) översättning finns i appen från början och fungerar utan nät. Translitterationen räknas ut på telefonen enligt tajwīd.',
+      'Hela Koranen finns på telefonen och kan läsas utan nät. Arabisk text: Tanzil (uthmanisk). Översättning: AlQuran Cloud. Bara medan Koranen hämtas första gången – eller om hämtningen misslyckades – visas ett kort om det på Koran-sidan, med knappen Hämta igen.',
       'Välj Suror eller Juz överst. Juz visar Koranens 30 delar med namn, var de börjar och slutar och hur många sajda de har; en juz läses i ett svep över surorna. I suran visar en guldlinje var en ny juz börjar.',
       'Sajda: vid de 15 verser där man faller ned i sujūd står tecknet ۩ i guld efter versen och "Sajda – här faller man ned" under den, både i suror och juz. (22:77 är märkt som i muṣḥafen men räknas inte som sajda i Ḥanafī-skolan.)',
       'I en sura eller en juzʾ finns en smal grå stav längst till höger. Dra i den för att snabbt komma till rätt vers – medan du drar visas versnumret (i en juzʾ sura:vers) bredvid fingret.',
@@ -171,6 +172,7 @@ export const MANUAL: Record<'sv' | 'en', ManualSection[]> = {
     ] },
     { title: 'Qur’an', items: [
       'All 114 sūras with the Arabic text and the Swedish (Bernström) and English (Saheeh International) translations are in the app from the start and work offline. The transliteration is worked out on the phone with the tajwīd rules.',
+      'The whole Qurʾān is on the phone and can be read offline. Arabic text: Tanzil (Uthmani). Translation: AlQuran Cloud. Only while the Qurʾān is fetched the first time – or if that failed – a card about it is shown on the Qurʾān page, with the button Try again.',
       'Choose Surahs or Juz at the top. Juz shows the 30 parts of the Qur’an with their names, where they begin and end and how many sajdas they have; a juz is read straight through across the sūras. In a sūra a gold line shows where a new juz begins.',
       'Sajda: at the 15 verses where one prostrates, the sign ۩ is shown in gold after the verse and "Sajda – prostrate here" below it, in both sūras and juz. (22:77 is marked as in the muṣḥaf but is not a sajda in the Ḥanafī school.)',
       'In a sūra or a juzʾ there is a slim grey staff at the far right. Drag it to get to the right verse quickly – while you drag, the verse number (in a juzʾ sūra:verse) is shown beside your finger.',
