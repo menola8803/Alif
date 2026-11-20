@@ -7,6 +7,7 @@ import { Cinzel_700Bold } from '@expo-google-fonts/cinzel';
 import { Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import { StatusBar } from 'expo-status-bar';
 import { DialogHost } from './src/dialog';
+import { AlifNativeModule } from './modules/alif-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/store';
 import { QuranProvider } from './src/library';
@@ -66,6 +67,8 @@ function Content({ splashDone }: { splashDone: boolean }) {
   useEffect(() => { if (ready && image < 0) newImage(); }, [ready, image, newImage]);
   const setTab = useCallback((k: TabName) => { if (k === 'today') newImage(); setTabState(k); }, [newImage]);
 
+  // Alif is open: the "Alif is updated – tap to open" notification is not needed any more (as in CamOne)
+  useEffect(() => { try { AlifNativeModule?.clearUpdateNotice(); } catch {} }, []);
   // Look for a new version now and then; the gear glows when there is one.
   useEffect(() => {
     if (!ready || !updateAuto || Date.now() - updateChecked < UPDATE_EVERY) return;

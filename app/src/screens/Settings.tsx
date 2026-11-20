@@ -8,9 +8,10 @@ import { Route } from '../nav';
 import { MODELS, askClaude, textBlock } from '../core/engine';
 import { Edition, listEditions, pickEdition } from '../core/quran';
 import { transliterate } from '../core/translit';
-import { isNewer, latestRelease, notesFor, Release } from '../update';
-import { downloadAndInstall } from '../updateInstall';
-import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview, Toggle } from '../ui';
+import { isNewer, latestRelease, notesList, Release } from '../update';
+import { Downloaded, UpdateError, UpdateFail, downloadUpdate, installUpdate } from '../updateInstall';
+import { AlifMark, Arabic, Body, Btn, Card, Choice, H1, Header, Label, Row, Screen, Segmented, Sub, Text, TextInput, ThemePreview, Toggle, useButtonLook } from '../ui';
+import { shortDate } from '../dates';
 import { themes, ThemeName } from '../theme';
 import { Pressable } from 'react-native';
 import { formatTime } from '../core/awrad';
@@ -230,56 +231,120 @@ export function AiScreen({ onBack }: { onBack: () => void }) {
 }
 
 export function UpdateScreen({ onBack, auto }: { onBack: () => void; auto?: boolean }) {
-  const { theme, t, lang, updateAuto, setPrefs } = useApp();
+  const { theme, t, lang, updateAuto, updateChecked, setPrefs } = useApp();
+  const look = useButtonLook();
   const cur = Constants.expoConfig?.version ?? '0.0.0';
-  const [msg, setMsg] = useState(''); const [rel, setRel] = useState<Release | null>(null); const [busy, setBusy] = useState(false);
-  const [part, setPart] = useState<number | null>(null);
-  const install = async (r = rel) => {
+  type Check = 'idle' | 'checking' | 'latest' | 'none' | 'failed';
+  const [state, setState] = useState<Check>('idle');
+  const [rel, setRel] = useState<Release | null>(null);
+  const [part, setPart] = useState<number | null>(null);        // 0–1 while downloading
+  const [file, setFile] = useState<Downloaded | null>(null);    // downloaded and checked
+  const [err, setErr] = useState<UpdateError | null>(null);
+  const note = (r: Release) => ({ title: t.updatedTitle.replace('{v}', r.tag.replace(/^v/i, '')), body: t.updatedBody, channel: t.updateChannel });
+  const errText: Record<UpdateError, string> = {
+    network: t.updErrNetwork, checksum: t.updErrChecksum, package: t.updErrPackage, older: t.updErrOlder,
+    signature: t.updErrSignature, install: t.updErrInstall, allow: t.updAllow,
+  };
+
+  const install = async (r: Release, f: Downloaded) => {
+    setErr(null);
+    try { await installUpdate(f, note(r)); } catch (e) { setErr(e instanceof UpdateFail ? e.kind : 'install'); }
+  };
+  /** "Download and install": downloads, checks and then installs straight away. */
+  const downloadAndInstall = async (r = rel) => {
     if (!r) return;
     if (!r.apk) { Linking.openURL(r.page).catch(() => {}); return; }
-    setBusy(true); setMsg(t.downloading); setPart(0);
-    try {
-      await downloadAndInstall(r, { title: t.updatedTitle.replace('{v}', r.tag.replace(/^v/, '')), body: t.updatedBody, channel: t.updateChannel }, setPart);
-      setMsg(t.installAllow);
-    } catch { setMsg(t.installFail); }
-    setBusy(false); setPart(null);
+    setErr(null); setFile(null); setPart(0);
+    try { const f = await downloadUpdate(r, setPart); setFile(f); setPart(null); await install(r, f); }
+    catch (e) { setPart(null); setErr(e instanceof UpdateFail ? e.kind : 'network'); }
   };
   const check = async (andInstall = false) => {
-    setBusy(true); setRel(null); setMsg(t.checking);
+    if (part != null) return;
+    setState('checking'); setErr(null);
     try {
       const r = await latestRelease();
       setPrefs({ updateChecked: Date.now(), updateTag: r && isNewer(r.tag, cur) ? r.tag : '' });
-      if (!r) setMsg(t.noRelease);
-      else if (isNewer(r.tag, cur)) { setRel(r); setMsg(`${t.newVersion}: ${r.tag}`); if (andInstall) { setBusy(false); return install(r); } }
-      else setMsg(t.upToDate);
-    } catch { setMsg(t.updateFail); }
-    setBusy(false);
+      if (!r) { setRel(null); setState('none'); return; }
+      if (isNewer(r.tag, cur)) {
+        if (r.tag !== rel?.tag) setFile(null); // a downloaded file only counts for the same version
+        setRel(r); setState('idle');
+        if (andInstall) downloadAndInstall(r);
+      } else { setRel(null); setState('latest'); }
+    } catch { setState('failed'); }
   };
   // Opened from the card on Today: look and start right away
   useEffect(() => { if (auto) check(true); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const when = (ms: number) => {
+    const d = new Date(ms), today = new Date().toDateString() === d.toDateString();
+    const hm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    return today ? hm : `${shortDate(d, lang)} ${hm}`;
+  };
+  const mb = (b: number) => (b > 0 ? `${(b / 1e6).toFixed(0)} MB` : '');
+  const notes = rel ? notesList(rel.notes, lang) : [];
+  const downloading = part != null;
   return (
     <Screen>
       <Header title={t.update} sub={t.updateSub} onBack={onBack} />
-      <ScrollView contentContainerStyle={{ gap: 12 }}>
+      <ScrollView contentContainerStyle={{ gap: 12, paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
+        {/* The installed version and when Alif last looked */}
         <Card style={{ gap: 6 }}>
-          <Text style={{ color: theme.ink }}>{t.version} {cur}</Text>
-          {msg ? <Text style={{ color: theme.muted }}>{msg}</Text> : null}
-          {part != null ? (
-            <View style={{ gap: 4 }}>
-              <View style={{ height: 8, borderRadius: 4, backgroundColor: theme.line, overflow: 'hidden' }}>
-                <View style={{ width: `${Math.round(part * 100)}%`, height: 8, borderRadius: 4, backgroundColor: theme.tabActive }} />
-              </View>
-              <Text style={{ fontSize: 12, color: theme.muted }}>{`${Math.round(part * 100)} %`}</Text>
-            </View>
-          ) : null}
-          {rel && notesFor(rel.notes, lang) ? <Text style={{ color: theme.muted, fontSize: 13, lineHeight: 19 }}>{notesFor(rel.notes, lang)}</Text> : null}
+          <Text style={{ fontSize: 16, fontWeight: '700', color: theme.ink }}>{`${t.version} ${cur}`}</Text>
+          <Text style={{ fontSize: 14, color: state === 'failed' ? theme.danger : theme.muted }}>
+            {state === 'checking' ? t.checking : state === 'failed' ? t.updateFail : state === 'none' ? t.noRelease : rel ? t.updNewFound.replace('{v}', rel.tag.replace(/^v/i, '')) : t.upToDate}
+          </Text>
+          <Text style={{ fontSize: 12.5, color: theme.muted }}>{updateChecked ? t.updCheckedAt.replace('{t}', when(updateChecked)) : t.updNeverChecked}</Text>
         </Card>
-        <Btn title={busy && part == null ? t.checking : t.checkUpdate} onPress={() => check()} disabled={busy} />
-        {rel ? <Btn title={t.installUpdate} onPress={() => install()} disabled={busy} /> : null}
-        {rel ? <Btn title={t.download} kind="secondary" onPress={() => Linking.openURL(rel.page).catch(() => {})} /> : null}
+
+        {/* A new version: what it is, what is new, download and install */}
+        {rel ? (
+          <Card style={{ gap: 10, borderColor: look.border }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Label>{t.updNew}</Label>
+              <View style={{ flex: 1 }} />
+              <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, borderWidth: 1, borderColor: rel.prerelease ? theme.danger : theme.good }}>
+                <Text style={{ fontSize: 11.5, fontWeight: '700', color: rel.prerelease ? theme.danger : theme.good }}>{rel.prerelease ? t.updPrerelease : t.updStable}</Text>
+              </View>
+            </View>
+            <Text style={{ fontSize: 22, fontWeight: '800', color: look.fg }}>{`Alif ${rel.tag.replace(/^v/i, '')}`}</Text>
+            <Text style={{ fontSize: 12.5, color: theme.muted }}>{[t.updYouHave.replace('{v}', cur), mb(rel.size), rel.published ? t.updReleased.replace('{d}', `${shortDate(new Date(rel.published), lang)} ${new Date(rel.published).getFullYear()}`) : ''].filter(Boolean).join(' · ')}</Text>
+            {notes.length ? (
+              <View style={{ gap: 6, marginTop: 2 }}>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: theme.accent, letterSpacing: 1 }}>{t.updWhatsNew.toUpperCase()}</Text>
+                {notes.map((n, i) => (
+                  <View key={i} style={{ flexDirection: 'row', gap: 8 }}>
+                    <Text style={{ color: look.fg, fontSize: 14 }}>•</Text>
+                    <Text style={{ flex: 1, fontSize: 14, lineHeight: 20, color: theme.muted }}>{n}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+            {downloading ? (
+              <View style={{ gap: 4 }}>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: theme.ink }}>{t.updDownloadingPct.replace('{p}', String(Math.round((part ?? 0) * 100)))}</Text>
+                <View style={{ height: 8, borderRadius: 4, backgroundColor: theme.line, overflow: 'hidden' }}>
+                  <View style={{ width: `${Math.round((part ?? 0) * 100)}%`, height: 8, borderRadius: 4, backgroundColor: theme.tabActive }} />
+                </View>
+              </View>
+            ) : file ? (
+              <>
+                <Text style={{ fontSize: 13, color: theme.good }}>{file.verified ? t.updVerified : t.updDownloaded}</Text>
+                <Btn title={t.updInstall.replace('{v}', rel.tag.replace(/^v/i, ''))} onPress={() => install(rel, file)} />
+              </>
+            ) : (
+              <Btn title={t.updDownloadInstall} onPress={() => downloadAndInstall()} />
+            )}
+            {err ? <Text style={{ fontSize: 13, lineHeight: 19, color: err === 'allow' ? look.fg : theme.danger }}>{errText[err]}</Text> : null}
+            <Text style={{ fontSize: 12, lineHeight: 17, color: theme.muted }}>{t.updInstallNote}</Text>
+            {err && err !== 'allow' ? <Btn kind="secondary" title={t.updOpenPage} onPress={() => Linking.openURL(rel.page).catch(() => {})} /> : null}
+          </Card>
+        ) : null}
+
+        <Btn title={state === 'checking' ? t.checking : t.checkUpdate} onPress={() => check()} disabled={state === 'checking' || downloading} />
         <Card style={{ gap: 6 }}>
           <Toggle title={t.updateAutoLabel} on={updateAuto} onChange={v => setPrefs({ updateAuto: v })} />
           <Text style={{ fontSize: 12.5, color: theme.muted, lineHeight: 18 }}>{t.updateHow}</Text>
+          <Text style={{ fontSize: 12, color: theme.muted, lineHeight: 17 }}>{t.updPrivacy}</Text>
         </Card>
       </ScrollView>
     </Screen>

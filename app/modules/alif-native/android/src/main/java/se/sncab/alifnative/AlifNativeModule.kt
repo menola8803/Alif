@@ -113,6 +113,10 @@ class AlifNativeModule : Module() {
 
     // ---- Update: open Alif again after an update started from Alif ----
     Function("markUpdatePending") { title: String, body: String, channel: String -> AlifUpdate.markPending(ctx, title, body, channel) }
+    AsyncFunction("verifyUpdate") { path: String, sha256: String? -> AlifUpdate.verify(ctx, path, sha256) }
+    Function("canInstallPackages") { AlifUpdate.canInstall(ctx) }
+    Function("openInstallPermission") { AlifUpdate.openInstallPermission(ctx) }
+    Function("clearUpdateNotice") { AlifUpdate.clearNotice(ctx) }
 
     // ---- Pictures: choose a folder (opens in Download/Alif/Pictures) and copy its pictures in ----
     AsyncFunction("pickPictureFolder") { initial: String, promise: Promise ->
