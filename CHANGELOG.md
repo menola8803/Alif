@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.19
+- **Om Alif:** står nu "Utvecklat av: Shakoor".
+
 ## 0.5.18
 - **Uppdateringar som i CamOne:** Alif kontrollerar den nedladdade filen (kontrollsumma, rätt app, nyare version, samma nyckel) innan Android installerar. Skärmen visar när Alif senast kontrollerade, Stabil/Förhandsversion, storlek, datum och "Nytt i versionen", tydliga felmeddelanden och hjälp att tillåta installation. Aviseringen "Alif är uppdaterad" försvinner när appen öppnas.
 - **Koran-sidan:** beskedet att hela Koranen finns på telefonen har flyttat till manualen. Kortet visas bara medan Koranen hämtas eller om hämtningen misslyckades.

@@ -64,4 +64,4 @@ utan dem signeras APK:n med den publika debug-nyckeln.
 Koranens text och översättningar: [AlQuran Cloud](https://alquran.cloud/api). En översättning av Koranen är alltid en tolkning av betydelsen.
 
 ## Utvecklare
-Claes Sundman S.N.C AB - 2026
+Utvecklat av: Shakoor

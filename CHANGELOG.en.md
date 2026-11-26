@@ -2,6 +2,9 @@
 
 The app shows the section for a new version in the language chosen in Settings. Keep this file in step with CHANGELOG.md.
 
+## 0.5.19
+- **About Alif:** now says "Developed by: Shakoor".
+
 ## 0.5.18
 - **Updates as in CamOne:** Alif checks the downloaded file (checksum, right app, newer version, same key) before Android installs it. The screen shows when Alif last checked, Stable/Pre-release, size, date and "What’s new", clear error messages and help to allow installing. The "Alif is updated" notification goes away when the app is opened.
 - **Qurʾān page:** the note that the whole Qurʾān is on the phone has moved to the manual. The card is only shown while the Qurʾān is fetched or if that failed.

@@ -46,5 +46,5 @@ Docs: https://docs.expo.dev/eas/index.md
 - Add the release notes to `CHANGELOG.md` (Swedish) and `CHANGELOG.en.md` (English); the app shows them in the
   language chosen in Settings.
 - All new text in the app goes into `src/i18n.ts` in Swedish and English; no hard-coded text in screens.
-- The word "GitHub" is not shown anywhere in the app. Developer credit: Claes Sundman · Scandinavian Nexum Consulting.
+- The word "GitHub" is not shown anywhere in the app. Developer credit: "Utvecklat av: Shakoor" / "Developed by: Shakoor" – nothing else.
 - Privacy: the microphone is off by default and only used after the person turns it on in Settings.

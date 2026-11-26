@@ -14,7 +14,7 @@ const svKeys = Object.keys(dict.sv).sort(), enKeys = Object.keys(dict.en).sort()
 ok(JSON.stringify(svKeys) === JSON.stringify(enKeys), 'i18n sv/en keys match');
 const all = JSON.stringify([dict, MANUAL]);
 ok(!/github/i.test(all), 'the word GitHub is not shown in the app');
-ok(dict.sv.developer.includes('Claes Sundman · Scandinavian Nexum Consulting') && dict.en.developer.includes('Claes Sundman · Scandinavian Nexum Consulting'), 'developer credit');
+ok(dict.sv.developer === 'Utvecklat av: Shakoor' && dict.en.developer === 'Developed by: Shakoor', 'developer credit');
 const changelog = readFileSync(join(__dirname, '..', '..', 'CHANGELOG.md'), 'utf8'), changelogEn = readFileSync(join(__dirname, '..', '..', 'CHANGELOG.en.md'), 'utf8');
 ok(changelog.includes(pkg.version) && changelogEn.includes(pkg.version), 'both changelogs have the version');
 if (fail) process.exit(1);

@@ -79,7 +79,7 @@ const sv = {
   update: 'Uppdateringar', updateSub: 'Söker efter en ny version av Alif', checkUpdate: 'Sök efter uppdatering', upToDate: 'Du har senaste versionen', newVersion: 'Ny version',
   download: 'Öppna releasesidan', installUpdate: 'Ladda ner och installera', downloading: 'Laddar ner…', installAllow: 'Godkänn installationen i Android. Första gången kan du behöva tillåta installation från Alif.',
   installFail: 'Kunde inte installera. Öppna releasesidan och ladda ner APK-filen där.', noRelease: 'Ingen release hittades än.', checking: 'Söker…', updateFail: 'Kunde inte kontrollera uppdatering.', version: 'Version',
-  about: 'Om Alif', aboutSub: 'Utvecklare: Claes Sundman · Scandinavian Nexum Consulting',
+  about: 'Om Alif', aboutSub: 'Utvecklat av: Shakoor',
   aboutBody: 'Alif hjälper dig att läsa klassisk arabiska och Koranen: kameran läser texten, appen vokaliserar, translittererar enligt tajwīd och översätter till svenska eller engelska. Du kan också skriva svenska eller engelska och få det på arabiska.',
   aboutQuran: 'Koranens arabiska text är Tanzils uthmaniska text (tanzil.net). Översättningarna hämtas från AlQuran Cloud (alquran.cloud) och sparas på telefonen. En översättning av Koranen är alltid en tolkning av betydelsen.',
   aboutAi: 'Översättningar från Claude kan innehålla fel. Kontrollera viktiga texter mot en lärd källa.',
@@ -208,7 +208,7 @@ const en: Base = {
   update: 'Updates', updateSub: 'Looks for a new version of Alif', checkUpdate: 'Check for update', upToDate: 'You have the latest version', newVersion: 'New version',
   download: 'Open the release page', installUpdate: 'Download and install', downloading: 'Downloading…', installAllow: 'Approve the installation in Android. The first time you may need to allow installing from Alif.',
   installFail: 'Could not install. Open the release page and download the APK there.', noRelease: 'No release found yet.', checking: 'Checking…', updateFail: 'Could not check for an update.', version: 'Version',
-  about: 'About Alif', aboutSub: 'Developer: Claes Sundman · Scandinavian Nexum Consulting',
+  about: 'About Alif', aboutSub: 'Developed by: Shakoor',
   aboutBody: 'Alif helps you read Classical Arabic and the Qurʾān: the camera reads the text, the app vocalizes it, transliterates it by the rules of tajwīd and translates it into Swedish or English. You can also write Swedish or English and get it in Arabic.',
   aboutQuran: 'The Arabic text of the Qurʾān is the Tanzil Uthmani text (tanzil.net). Translations come from AlQuran Cloud (alquran.cloud) and are kept on the phone. A translation of the Qurʾān is always an interpretation of its meaning.',
   aboutAi: 'Translations by Claude can contain mistakes. Check important texts against a learned source.',
@@ -268,7 +268,7 @@ const en: Base = {
 // ---- 0.4.0: tabs, Today, prayer times, Hijri, Qibla, Translate, Learn, Dhikr, manual ----
 const sv2 = {
   tabToday: 'Idag', tabTranslate: 'Översätt', tabLearn: 'Lär dig', tabDhikr: 'Dhikr',
-  developer: 'Utvecklare: Claes Sundman · Scandinavian Nexum Consulting',
+  developer: 'Utvecklat av: Shakoor',
   updateReady: 'Tryck här för att ladda ner och installera.',
   // Today
   today: 'Idag', nextPrayer: 'Nästa bön', todayIs: 'Idag:', inDays: 'om {n} dagar', sacredMonth: 'Helig månad', hijriMonth: 'Hijri-månad',
@@ -335,7 +335,7 @@ const sv2 = {
 
 const en2: typeof sv2 = {
   tabToday: 'Today', tabTranslate: 'Translate', tabLearn: 'Learn', tabDhikr: 'Dhikr',
-  developer: 'Developer: Claes Sundman · Scandinavian Nexum Consulting',
+  developer: 'Developed by: Shakoor',
   updateReady: 'Tap here to download and install.',
   today: 'Today', nextPrayer: 'Next prayer', todayIs: 'Today:', inDays: 'in {n} days', sacredMonth: 'Sacred month', hijriMonth: 'Hijri month',
   awradStepsDone: 'steps done today', notifOn: 'notification on', notifOff: 'notification off',
